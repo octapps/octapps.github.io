@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>statistics (OctApps Reference Manual)</title>
+
+<meta name="description" content="statistics (OctApps Reference Manual)">
+<meta name="keywords" content="statistics (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html#Directory-Index" rel="up" title="Directory Index">
+<link href="text_002dhandling.html#text_002dhandling" rel="next" title="text-handling">
+<link href="plotting.html#plotting" rel="prev" title="plotting">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="statistics"></a>
+<div class="header">
+<p>
+Next: <a href="text_002dhandling.html#text_002dhandling" accesskey="n" rel="next"><samp>text-handling</samp></a>, Previous: <a href="plotting.html#plotting" accesskey="p" rel="prev"><samp>plotting</samp></a>, Up: <a href="Directory-Index.html#Directory-Index" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="statistics-1"></a>
+<h3 class="section">2.19 <samp>statistics</samp></h3>
+
+<dl>
+<dt><a name="index-binomialConfidenceInterval"></a>Function File: <em>[ <var>fLower</var>, <var>fUpper</var> ] =</em> <strong>binomialConfidenceInterval</strong> <em>( <var>N</var>, <var>K</var>, <var>confidence</var> )</em></dt>
+<dd>
+<p>Compute the posterior <var>confidence</var> interval [<var>fLower</var>, <var>fUpper</var>] for the true rate f
+given a drawing experiment with <var>K</var> &quot;successful&quot; results out of <var>N</var> trials.
+The <var>confidence</var> interval satisfies
+confidence = int_{fLower}^{fUpper} pdf(f|<var>N</var>,<var>K</var>) df,
+where pdf(f|<var>N</var>,<var>K</var>) is the posterior pdf for the rate f, which
+is computed using the function binomialRatePDF(f,<var>N</var>,<var>K</var>).
+</p>
+<p>The <var>confidence</var>-interval is constructed with iso-probability endpoints
+(if possible), namely
+P(<var>fLower</var>) = P(<var>fUpper</var>), which is guaranteed to bracket the maximum of the pdf.
+In the special cases where <var>K</var> = 0 or <var>K</var> = <var>N</var>, we return the &quot;single-sided&quot; intervals
+[0,<var>fUpper</var>] or [<var>fLower</var>,1], respectively.
+</p>
+<a name="Note-47"></a>
+<h3 class="heading">Note</h3>
+
+<p>all inputs must be scalars! <var>confidence</var> must be in (0,1)
+</p>
+<a name="Examples-185"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">binomialConfidenceInterval(10, 0, 0.9545);
+mo if 1
+function plot_this ( N, K )
+  conf2sigma = 0.9545;
+  [fLower, fUpper] = binomialConfidenceInterval ( N, K, conf2sigma );
+  fMPE = K / N;
+  fE = (K+1)/(N+2);
+  sigf = sqrt ( fE * ( 1 - fE ) / (N+3) );
+  fMin = max(0, fMPE - 3.5 * sigf );
+  fMax = min(1, fMPE + 3.5 * sigf );
+  fLowerGauss = fE - 2*sigf;
+  fUpperGauss = fE + 2*sigf;
+  fi = linspace ( fMin, fMax, 100);
+  pdf_f = binomialRatePDF ( fi, N, K );
+  PMax = max ( pdf_f );
+  ylim([0,1.05 * PMax]);
+  set ( 0, &quot;defaultlinemarkersize&quot;, 10 );
+  plot ( fi, pdf_f, fMPE, PMax, &quot;rx&quot;, [fLower, fUpper], [PMax,PMax], &quot;r+-&quot;,
+        fLower*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;--&quot;, fUpper*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;--&quot;,
+        fMPE*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;:&quot;,
+        [fLowerGauss, fUpperGauss], 1.02*[PMax,PMax], &quot;m+-&quot;
+        );
+  xlabel(&quot;f&quot;); ylabel(&quot;pdf(f|N,K)&quot;);
+  tstr = sprintf (&quot;N=%d, K=%d, confidence=%.2f%%&quot;, N, K, conf2sigma * 100.0 );
+  title ( tstr );
+endfunction
+figure(1); clf;
+subplot(2,3,1); plot_this ( 10, 0 );
+subplot(2,3,2); plot_this ( 10, 1 );
+subplot(2,3,3); plot_this ( 500, 300 );
+subplot(2,3,4); plot_this ( 5000, 4999 );
+subplot(2,3,5); plot_this ( 50000, 25000 );
+subplot(2,3,6); plot_this ( 50000, 10000 );
+## red shows the exact posterior 95.45% confidence intervals
+## magenta shows the Gaussian +-2sigma intervals centered on the expectation value of f
+endif
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-binomialRatePDF"></a>Function File: <em><var>pdf</var> =</em> <strong>binomialRatePDF</strong> <em>( <var>f</var>, <var>N</var>, <var>K</var> )</em></dt>
+<dd>
+<p>Return the posterior pdf(<var>f</var>|<var>N</var>,<var>K</var>) for the true &rsquo;rate&rsquo; <var>f</var> given a drawing
+experiment with <var>K</var> &quot;successful&quot; results out of <var>N</var> trials, assuming a
+uniform prior on <var>f</var> in [0,1], which yields
+</p>
+<p>pdf(<var>f</var>|<var>N</var>,<var>K</var>) = (<var>N</var>+1)!/(<var>K</var>! (<var>N</var>-<var>K</var>)!) * <var>f</var>^<var>K</var> * (1-<var>f</var>)^(<var>N</var>-<var>K</var>)
+</p>
+<p>This expression would be numerically overflowing very
+easily when <var>N</var>,<var>K</var>&gt;&gt;1, and so we use the fact that
+</p>
+<p>K!(<var>N</var>-<var>K</var>)!/(<var>N</var>+1)! = beta(<var>K</var>+1,<var>N</var>-<var>K</var>+1)
+</p>
+<p>and the numerically robust octave-function betaln()=ln(beta()):
+</p>
+<p>ln pdf(<var>f</var>|<var>N</var>,<var>K</var>) = -betaln(<var>K</var>+1,<var>N</var>-<var>K</var>+1) + <var>K</var> ln(<var>f</var>) + (<var>N</var>-<var>K</var>) ln(1-<var>f</var>)
+</p>
+<p>Some useful properties of this posterior PDF are:
+</p><ul>
+<li> the maximum-posterior estimate (MPE) for the rate <var>f</var> is
+fMPE = <var>K</var>/<var>N</var>,
+
+</li><li> the expectation is
+fE = E[<var>f</var>|<var>N</var>,<var>K</var>] = (<var>K</var>+1)/(<var>N</var>+2)
+
+</li><li> and the variance
+var[<var>f</var>] = (<var>K</var>+1)*(<var>N</var>-<var>K</var>+1)/( (<var>N</var>+3)*(<var>N</var>+2)^2)
+= Ef * (1-Ef) / (<var>N</var>+3)
+which in the large-<var>N</var> limit leads to
+fE ~ fMPE,
+var[<var>f</var>] ~ 1/<var>N</var> * fMPE * (1 - fMPE)
+</li></ul>
+
+<a name="Examples-186"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(binomialRatePDF(0:0.1:1, 10, 7), [0.000 0.000 0.009 0.099 0.467 1.289 2.365 2.935 2.215 0.631 0.000], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ChiSquare_005fcdf"></a>Function File: <em><var>p</var> =</em> <strong>ChiSquare_cdf</strong> <em>( <var>x</var>, <var>k</var>, <var>lambda</var> )</em></dt>
+<dd>
+<p>Compute the cumulative density function of the
+non-central chi^2 distribution.
+</p>
+<a name="Arguments-82"></a>
+<h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>x</var></dt>
+<dd><p>value of the non-central chi^2 variable
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>number of degrees of freedom
+</p>
+</dd>
+<dt><var>lambda</var></dt>
+<dd><p>non-centrality parameter
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ChiSquare_005fpdf"></a>Function File: <em><var>p</var> =</em> <strong>ChiSquare_pdf</strong> <em>( <var>x</var>, <var>k</var>, <var>lambda</var> )</em></dt>
+<dd>
+<p>Compute the probability density function of the
+non-central chi^2 distribution.
+</p>
+<a name="Arguments-83"></a>
+<h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>x</var></dt>
+<dd><p>value of the non-central chi^2 variable
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>number of degrees of freedom
+</p>
+</dd>
+<dt><var>lambda</var></dt>
+<dd><p>non-centrality parameter
+</p>
+</dd>
+</dl>
+
+<a name="Examples-187"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^-2, 10^-2, 1), 0.44224, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^+2, 10^+2, 2), 0.027895, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^10, 10^10, 3), 2.8209e-06, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^30, 10^30, 4), 2.8209e-16, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-erfcinv_005fasym"></a>Function File: <em><var>y</var> =</em> <strong>erfcinv_asym</strong> <em>( <var>X</var> )</em></dt>
+<dd><p>Compute the inverse complementary error function, i.e., <var>Y</var> such that
+</p>
+<div class="example">
+<pre class="example">erfc(<var>y</var>) == <var>x</var>
+</pre></div>
+
+<p>An asymptotic expression is used for small <var>X</var>.
+</p><a name="Examples-188"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(erfcinv_asym(logspace(-4, -20, 17)), [2.751 3.123 3.459 3.767 4.052 4.320 4.573 4.813 5.042 5.261 5.473 5.676 5.872 6.063 6.247 6.427 6.602], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-estimateFAThreshold"></a>Function File: <em>[ <var>threshold</var>, <var>pFA_MPE</var>, <var>pFA_Lower</var>, <var>pFA_Upper</var>, <var>threshold_Lower</var>, <var>threshold_Upper</var> ] =</em> <strong>estimateFAThreshold</strong> <em>( <var>DATA</var>, <var>pFA</var>, <var>confidence=0.95</var> )</em></dt>
+<dd>
+<p>Compute <var>threshold</var> for desired false-alarm probablity on samples <var>DATA</var>, returns the resulting maximum-posterior
+estimate <var>pFA_MPE</var>, and <var>confidence</var> interval [<var>pFA_Lower</var>, <var>pFA_Upper</var>].
+Also returns the corresponding <var>confidence</var> interval in thresholds [<var>threshold</var>_Lower, <var>threshold</var>_Upper],
+obtained by simply re-computing <var>threshold</var> on [<var>pFA_Lower</var>, <var>pFA_Upper</var>].
+</p>
+<a name="Note-48"></a>
+<h3 class="heading">Note</h3>
+
+<p>the input <var>pFA</var> is allowed to be a vector, returns corresponding vectors
+</p>
+<a name="Examples-189"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.1), 900)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.5), 500)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.9), 100)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-estimateRateFromSamples"></a>Function File: <em>[ <var>fMPE</var>, <var>fE</var>, <var>fLower</var>, <var>fUpper</var> ] =</em> <strong>estimateRateFromSamples</strong> <em>( <var>DATA</var>, <var>threshold</var>, <var>confidence</var> )</em></dt>
+<dd>
+<p>Compute maximum-posterior rate estimate <var>fMPE</var> and <var>confidence</var>-interval [<var>fLower</var>, <var>fUpper</var>].
+</p>
+<p>This is a simple helper function:
+estimate the &rsquo;rate&rsquo; f of <var>threshold</var>-crossings from the samples <var>DATA</var>, namely via
+K = length( <var>DATA</var> &gt; <var>threshold</var> ), N = length(<var>DATA</var>)
+The maximum-posteror estimate is <var>fMPE</var> = K/N,
+and the <var>confidence</var> interval [<var>fLower</var>, <var>fUpper</var>] is given by binomialConfidenceInterval(N,K,<var>confidence</var>)
+</p>
+<a name="Note-49"></a>
+<h3 class="heading">Note</h3>
+
+<p><var>threshold</var> is allowed to be a vector, returns corresponding rate vectors
+</p>
+<a name="Examples-190"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ntrials = 100;
+DATA = normrnd ( 0, 1, 1, Ntrials );
+threshold = linspace ( 0, 1, 10 );
+[fMPE0, fLower0, fUpper0] = estimateRateFromSamples ( DATA, threshold, confidence=0.95 );
+for i = 1:length(threshold)
+   [fMPE1(i), fLower1(i), fUpper1(i)] = estimateRateFromSamples ( DATA, threshold(i), confidence=0.95 );
+endfor
+assert ( fMPE0 = fMPE1 );
+assert ( fLower0 = fLower1 );
+assert ( fUpper0 = fUpper1 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-estimateROC"></a>Function File: <em>[ <var>pDet_MPE</var>, <var>pDet_Lower</var>, <var>pDet_Upper</var>, <var>pFA_MPE</var>, <var>pFA_Lower</var>, <var>pFA_Upper</var> ] =</em> <strong>estimateROC</strong> <em>( <var>DATA_noise</var>, <var>DATA_signal</var>, <var>pFA</var>, <var>confidence</var> = 0.95 )</em></dt>
+<dd>
+<p>Compute the Receiver Operator Characteristic (ROC) function pDet(<var>pFA</var>) on given samples drawn under
+the noise hypothesis, <var>DATA_noise</var>, and under the signal hypothesis, <var>DATA_signal</var>.
+Returns estimates for the detection-probability and false-alarm probability for the given DATA samples and
+a vector of desired false-alarm probabilities <var>pFA</var>.
+</p>
+<a name="Note-50"></a>
+<h3 class="heading">Note</h3>
+
+<p>this function replaces the deprecated <code>estimateFalseDismissal()</code>
+</p>
+<a name="Examples-191"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ntrials_N = 600; Ntrials_S = 300;
+stat_S = normrnd ( 1, 1, 1, Ntrials_S );
+stat_N = normrnd ( 0, 1, 1, Ntrials_N );
+pFA = linspace ( 0, 1, 15 );
+[pDet_MPE, pDet_Lower, pDet_Upper, pFA_MPE, pFA_Lower, pFA_Upper] = estimateROC ( stat_N, stat_S, pFA, confidence=0.9545 );
+mo
+Ntrials_N = 600; Ntrials_S = 300;
+stat_S = normrnd ( 1, 1, 1, Ntrials_S );
+stat_N = normrnd ( 0, 1, 1, Ntrials_N );
+pFA = linspace ( 0, 1, 15 );
+[pFD0, dpDet0] = estimateFalseDismissal ( pFA, stat_N, stat_S );
+[pDet_MPE, pDet_Lower, pDet_Upper, pFA_MPE, pFA_Lower, pFA_Upper] = estimateROC ( stat_N, stat_S, pFA, confidence=0.9545 );
+figure(1);
+set ( 0, &quot;defaultlinemarkersize&quot;, 5 );
+set ( 0, &quot;defaultaxesfontsize&quot;, 15 );
+clf; hold on;
+hax = errorbar ( pFA, 1 - pFD0, 2*dpDet0, &quot;~x;estimateFalseDismissal();&quot;,
+                 pFA_MPE, pDet_MPE, (pFA_MPE - pFA_Lower), (pFA_Upper-pFA_MPE), (pDet_MPE - pDet_Lower), (pDet_Upper-pDet_MPE), &quot;#~&gt;or;estimateROC();&quot; );
+line ( [0, 1, 1, 0, 0 ], [ 0, 0, 1, 1, 0 ], &quot;linestyle&quot;, &quot;:&quot; );
+hold off;
+set ( hax, &quot;markersize&quot;, 10 );
+xlim([-0.05, 1.05]); ylim([-0.1, 1.15]);
+legend (&quot;location&quot;, &quot;northwest&quot; ); legend(&quot;boxoff&quot;);
+xlabel(&quot;pFA&quot;); ylabel(&quot;pDet&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-falseAlarm_005fchi2"></a>Function File: <em><var>fA</var> =</em> <strong>falseAlarm_chi2</strong> <em>( <var>thresh</var>, <var>dof</var> )</em></dt>
+<dd>
+<p>compute the false-alarm probability for given threshold <var>thresh</var>&rsquo;
+for a (central) chi-squared distribution with <var>dof</var> degrees-of-freedom
+</p>
+<a name="Examples-192"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_chi2([23.513 28.473 33.377 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 4), logspace(-4, -20, 17), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-falseAlarm_005fHoughF"></a>Function File: <em><var>fAH</var> =</em> <strong>falseAlarm_HoughF</strong> <em>( <var>nth</var>, <var>Nseg</var>, <var>Fth</var> )</em></dt>
+<dd>
+<p>compute Hough-on-Fstat false-alarm probability fAH for given number of segments <var>Nseg</var>,
+a threshold on segment-crossings <var>nth</var>, and an F-statistic threshold per segment <var>Fth</var>.
+A false-alarm is defined as n &gt;= <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+absence of a signal
+</p>
+<a name="Note-51"></a>
+<h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use <code>arrayfun()</code> or <code>cellfun()</code> to iterate thisover vectors of arguments
+</p>
+<a name="Examples-193"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_HoughF(11, 100, 5.5), 7.5e-05, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_HoughF(18, 100, 5.5), 1.7e-10, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-falseDismissal_005fHoughF"></a>Function File: <em><var>fDH</var> =</em> <strong>falseDismissal_HoughF</strong> <em>( <var>nth</var>, <var>Nseg</var>, <var>Fth</var>, <var>SNR0sq</var> )</em></dt>
+<dd>
+<p>compute Hough-on-Fstat false-dismissal probability fDH for given number of segments <var>Nseg</var>,
+a threshold on segment-crossings <var>nth</var>, an F-statistic threshold per segment <var>Fth</var>,
+and the optimal signal SNR^2 per segment <var>SNR0sq</var>, which is assumed constant across all segments.
+</p>
+<p>A false-dismissal is defined as n &lt; <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+presence of a signal
+</p>
+<a name="Note-52"></a>
+<h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use <code>arrayfun()</code> or <code>cellfun()</code> to iterate thisover vectors of arguments
+</p>
+<a name="Examples-194"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseDismissal_HoughF(11, 100, 5.5, 2.2), 0.303, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(falseDismissal_HoughF(18, 100, 5.5, 2.2), 0.939, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-invFalseAlarm_005fchi2"></a>Function File: <em><var>thresh</var> =</em> <strong>invFalseAlarm_chi2</strong> <em>( <var>fA</var>, <var>dof</var> )</em></dt>
+<dd>
+<p>compute the threshold on a central chi^2 distribution with <var>dof</var>
+degrees of freedom, corresponding to a false-alarm probability
+of <var>fA</var>
+</p>
+<a name="Examples-195"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_chi2(logspace(-4, -20, 17), 4), [23.513 28.473 33.377 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-invFalseAlarm_005fchi2_005fasym"></a>Function File: <em><var>sa</var> =</em> <strong>invFalseAlarm_chi2_asym</strong> <em>( <var>pa</var>, <var>k</var> )</em></dt>
+<dd>
+<p>Calculate the threshold of a central chi^2 distribution which gives
+a certain false alarm probability. Uses an analytic, asymptotic
+inversion of the chi^2 CDF that is accurate for very small
+false alarm probabilities and very large degrees of freedom.
+</p>
+<a name="Arguments-84"></a>
+<h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>sa</var></dt>
+<dd><p>threshold
+</p>
+</dd>
+<dt><var>pa</var></dt>
+<dd><p>false alarm probability
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>degrees of freedom of the chi^2 distribution
+</p>
+</dd>
+</dl>
+
+<a name="Examples-196"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_chi2_asym(logspace(-4, -20, 17), 4), [23.467 28.411 33.557 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-invFalseAlarm_005fHoughF"></a>Function File: <em>[ <var>nth</var>, <var>fAH</var> ] =</em> <strong>invFalseAlarm_HoughF</strong> <em>( <var>fAH</var>, <var>Nseg</var>, <var>Fth</var> )</em></dt>
+<dd>
+<p>&rsquo;invert&rsquo; false-alarm function to obtain discrete numer-count threshold <var>nth</var> which comes
+closest to the desired false-alarm probability fAH0 for Hough-on-Fstat,
+for given number of segments <var>Nseg</var>, and an F-statistic threshold per segment <var>Fth</var>.
+A false-alarm is defined as n &gt;= <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+absence of a signal
+</p>
+<p>returns <var>nth</var> and corresponding actual false-alarm probability fAH
+</p>
+<a name="Note-53"></a>
+<h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use arrayfun() or cellfun() to iterate thisover vectors of arguments
+</p>
+<a name="Examples-197"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_HoughF(1e-4, 100, 5.5), 11)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_HoughF(1e-10, 100, 5.5), 18)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-kde"></a>Function File: <em>[ <var>bandwidth</var>, <var>density</var>, <var>xmesh</var> ] =</em> <strong>kde</strong> <em>( <var>data</var>, <var>n</var>, <var>MIN</var>, <var>MAX</var> )</em></dt>
+<dd>
+<p>Reliable and extremely fast kernel <var>density</var> estimator for one-dimensional <var>data</var>;
+Gaussian kernel is assumed and the <var>bandwidth</var> is chosen automatically;
+Unlike many other implementations, this one is immune to problems
+caused by multimodal densities with widely separated modes (see example). The
+estimation does not deteriorate for multimodal densities, because we never assume
+a parametric model for the <var>data</var>.
+</p>
+<a name="Inputs"></a>
+<h3 class="heading">Inputs</h3>
+
+<dl compact="compact">
+<dt><var>data</var></dt>
+<dd><p>a vector of <var>data</var> from which the <var>density</var> estimate is constructed;
+</p>
+</dd>
+<dt><var>n</var></dt>
+<dd><p>the number of mesh points used in the uniform discretization of the
+interval [<var>MIN</var>, <var>MAX</var>]; <var>n</var> has to be a power of two; if <var>n</var> is not a power of two, then
+<var>n</var> is rounded up to the next power of two, i.e., <var>n</var> is set to <var>n</var> = 2^ceil(log2(<var>n</var>));
+the default value of <var>n</var> is <var>n</var> = 2^12;
+</p>
+</dd>
+<dt><var>MIN</var></dt>
+<dt><var>MAX</var></dt>
+<dd><p>defines the interval [<var>MIN</var>,<var>MAX</var>] on which the <var>density</var>
+estimate is constructed; the default values of <var>MIN</var> and <var>MAX</var> are:
+<var>MIN</var> = min(<var>data</var>)-Range/10 and <var>MAX</var> = max(<var>data</var>)+Range/10,
+where Range=max(<var>data</var>)-min(<var>data</var>);
+</p>
+</dd>
+</dl>
+
+<a name="Outputs-3"></a>
+<h3 class="heading">Outputs</h3>
+
+<dl compact="compact">
+<dt><var>bandwidth</var></dt>
+<dd><p>the optimal <var>bandwidth</var> (Gaussian kernel assumed);
+</p>
+</dd>
+<dt><var>density</var></dt>
+<dd><p>column vector of length <var>n</var> with the values of the density
+estimate at the grid points;
+</p>
+</dd>
+<dt><var>xmesh</var></dt>
+<dd><p>the grid over which the <var>density</var> estimate is computed;
+if no output is requested, then the code automatically plots a graph of
+the <var>density</var> estimate.
+</p>
+</dd>
+</dl>
+
+<a name="Reference"></a>
+<h3 class="heading">Reference</h3>
+<p>Please cite in your work:
+</p><blockquote class="indentedblock">
+<p>Z. I. Botev, J. F. Grotowski and D. P. Kroese
+&quot;Kernel Density Estimation Via Diffusion&quot;, Annals of Statistics, 2010, to appear
+[Download from: http://www.maths.uq.edu.au/~kroese/ps/AOS799.pdf]
+</p></blockquote>
+
+<a name="Example-4"></a>
+<h3 class="heading">Example</h3>
+<div class="example">
+<pre class="example">data=[randn(100,1);randn(100,1)*2+35 ;randn(100,1)+55];
+kde(data,2^14,min(data)-5,max(data)+5);
+</pre></div>
+
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-function"></a>Function File: <em></em> <strong>function</strong> <em>p ( <var>x</var> ) = maxChi2FromNdraws_pdf ( <var>x</var>, <var>Ndraws</var>, <var>dof = 4</var> )</em></dt>
+<dd>
+<p>Probability density (pdf) for the maximum out of <var>Ndraws</var> independent draws from a
+(central) chi2 distribution with <var>dof</var> degrees of freedom.
+</p>
+<p>Return p(<var>x</var>): pdf over (vector of) maxChi2 statistics values <var>x</var>&rsquo;
+</p>
+<a name="Examples-198"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">max2F = linspace ( 30, 60, 100 );
+p = maxChi2FromNdraws_pdf ( max2F, 2e7, dof=4 );
+dFmax = mean(diff(max2F));
+Emax2F = sum ( max2F .* p ) * dFmax;
+assert ( Emax2F, 40.901, -1e-3 );    ## 1e-3 relative tolerance
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-maxStatFromNdraws_005fpdf"></a>Function File: <em><var>p</var> =</em> <strong>maxStatFromNdraws_pdf</strong> <em>( <var>x</var>, <var>Ndraws</var>, <var>statHgrm</var> )</em></dt>
+<dd>
+<p>Probability density (pdf) for the maximum out of <var>Ndraws</var> independent draws from an
+arbitrary statistic, defined via its empirical probability density <var>statHgrm</var> as a histogram object.
+</p>
+<p>Return p(<var>x</var>): pdf over (vector of) max(Statistic) statistics values <var>x</var>&rsquo;
+</p>
+<a name="Examples-199"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ndraws = 1e3;
+twoF = linspace ( 10, 40, 100 );
+pdf0 = maxChi2FromNdraws_pdf ( twoF, Ndraws, dof=4 );
+hgrm = Hist ( 1, {&quot;lin&quot;, &quot;dbin&quot;, 0.05, &quot;bin0&quot;, 0 } );
+F = @(x) chi2pdf(x, 4);
+hgrm = initHistFromFunc(hgrm, F, [0, 50] );
+pdf1 = maxStatFromNdraws_pdf ( twoF, Ndraws, hgrm );
+relerr = max ( abs ( pdf0 - pdf1 ) ./ pdf0 );
+assert ( relerr &lt; 2e-3 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-meanNaN"></a>Function File: <em><var>y</var> =</em> <strong>meanNaN</strong> <em>( <var>x</var>, <var>dim</var> )</em></dt>
+<dd>
+<p>Compute the mean of <var>x</var> over the dimension <var>dim</var>, ignoring NaNs.
+</p><a name="Examples-200"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(meanNaN([1:5, NaN, 6:10]), mean(1:10))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-normHist"></a>Function File: <em>[ <var>NN</var>, <var>XX</var> ] =</em> <strong>normHist</strong> <em>( <var>data</var>, <var>bins</var> )</em></dt>
+<dd>
+<p>compute a pdf-normalized histogram (i.e. the *integral* is 1)
+</p>
+<p>With one vector input argument, plot a histogram of the values with
+10 <var>bins</var>.  The range of the histogram <var>bins</var> is determined by the
+range of the <var>data</var>.  With one matrix input argument, plot a
+histogram where each bin contains a bar per input column.
+</p>
+<p>Given a second scalar argument, use that as the number of <var>bins</var>.
+</p>
+<p>Given a second vector argument, use that as the centers of the
+bins, with the width of the <var>bins</var> determined from the adjacent
+values in the vector.
+</p>
+<a name="Examples-201"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(normHist(0:0.001:100), 0.011 * ones(1, 10), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-pickFromRange"></a>Function File: <em><var>ret</var> =</em> <strong>pickFromRange</strong> <em>( <var>range</var>, [ <var>num</var> ] )</em></dt>
+<dd>
+<p>function to return a number of random-values (specified by the optional
+argument <var>num</var>, default is 1. Return is a column-vector) from within &rsquo;range&rsquo;,
+which can be a single number, or a vector with [min, max] entries
+</p>
+<a name="Examples-202"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">pickFromRange([10,20],5);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-randPointInNSphere"></a>Function File: <em><var>p</var> =</em> <strong>randPointInNSphere</strong> <em>( <var>n</var>, <var>u</var> )</em></dt>
+<dd>
+<p>Generate random points (with)in a <var>n</var>-dimensional sphere
+</p>
+<a name="Arguments-85"></a>
+<h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>n</var></dt>
+<dd><p>dimensionality of sphere
+</p>
+</dd>
+<dt><var>u</var></dt>
+<dd><p>vector of numbers used to chose the radius; set
+</p>
+<dl compact="compact">
+<dt>u = rand(1, m)</dt>
+<dd><p>to generate m points uniformly within the sphere, or
+</p>
+</dd>
+<dt>u = ones(1, m)</dt>
+<dd><p>to generate m points uniformly over the sphere&rsquo;s surface
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<a name="Examples-203"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(1, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(2, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(3, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(4, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(5, 1)), 1.0, 1e-4)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-rngmed"></a>Function File: <em><var>ret</var> =</em> <strong>rngmed</strong> <em>( <var>data</var>, <var>window</var> )</em></dt>
+<dd>
+<p>return a &rsquo;smoothed&rsquo; vector using a
+running-median of the given <var>window</var>-size.
+output-vector has same number of entries, with <var>window</var>/2 bins
+at the borders filled with identical values
+</p>
+<a name="Note-54"></a>
+<h3 class="heading">Note</h3>
+
+<p>this is the most &rsquo;naive&rsquo; implementation, not optimized at all!
+</p><a name="Examples-204"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(rngmed(1:10, 3), [1.5 2.0 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.0])
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="text_002dhandling.html#text_002dhandling" accesskey="n" rel="next"><samp>text-handling</samp></a>, Previous: <a href="plotting.html#plotting" accesskey="p" rel="prev"><samp>plotting</samp></a>, Up: <a href="Directory-Index.html#Directory-Index" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

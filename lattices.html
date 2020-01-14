@@ -1,0 +1,1316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>lattices (OctApps Reference Manual)</title>
+
+<meta name="description" content="lattices (OctApps Reference Manual)">
+<meta name="keywords" content="lattices (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html#Directory-Index" rel="up" title="Directory Index">
+<link href="mathematical.html#mathematical" rel="next" title="mathematical">
+<link href="histograms_002f_0040Hist.html#histograms_002f_0040Hist" rel="prev" title="histograms/@Hist">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="lattices"></a>
+<div class="header">
+<p>
+Next: <a href="mathematical.html#mathematical" accesskey="n" rel="next"><samp>mathematical</samp></a>, Previous: <a href="histograms_002f_0040Hist.html#histograms_002f_0040Hist" accesskey="p" rel="prev"><samp>histograms/@Hist</samp></a>, Up: <a href="Directory-Index.html#Directory-Index" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="lattices-1"></a>
+<h3 class="section">2.16 <samp>lattices</samp></h3>
+
+<dl>
+<dt><a name="index-AnCoveringRadius"></a>Function File: <em><var>coveringRadius</var> =</em> <strong>AnCoveringRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return covering-radius for the An lattice in n dimensions
+referring to lattice-definition corresponding to the generator
+returned by getAnsLatticeGenerator.m, i.e. Chap.4, Eq.(52) in Conway&amp;Sloane(1999):
+</p>
+<a name="Note-15"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-136"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnCoveringRadius(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnCoveringRadius(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnCoveringRadius(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnCoveringRadius(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnCoveringRadius(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnFindClosestPoint"></a>Function File: <em><var>closest</var> =</em> <strong>AnFindClosestPoint</strong> <em>( <var>x</var>, <var>embedded</var> )</em></dt>
+<dd>
+<p>return the closest point of the An-lattice to the given point <var>x</var> in R^n
+based on Chap.20.2 &rsquo;Algorithm 3&rsquo; in Conway&amp;Sloane (1999)
+</p><a name="Note-16"></a>
+<h3 class="heading">Note</h3>
+<p>this function can handle vector input
+</p>
+<p>The boolean option input <var>embedded</var> (default=false) governs whether
+the input vectors are interpreted as vectors in the (n+1) dimensional
+embedding space of the lattice, otherwise they are interpreted as
+n-dimensional vectors in an n-dimensional lattice
+</p>
+<a name="Note-17"></a>
+<h3 class="heading">Note</h3>
+
+<p>The returned lattice vectors use the same representation asthe input-vectors (i.e. <var>embedded</var> or not)
+</p>
+<a name="Note-18"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-137"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = rand(3, 100000);
+dx = x - AnFindClosestPoint(x);
+assert(max(sqrt(dot(dx, dx))) &lt;= AnCoveringRadius(3));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnGenerator"></a>Function File: <em>[ <var>generator</var>, <var>rotator</var> ] =</em> <strong>AnGenerator</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>return an nxn full-rank generating matrix for an An lattice,
+based on the (n+1)xn <var>generator</var> of Chap.4,Eq.(52) in Conway&amp;Sloane(1999)
+</p>
+<p>also returns the rotation-matrix that takes the nxn <var>generator</var> back to the
+(n+1)x n representation of the lattice space in n+1 dimensions,
+which is simply obtained by QR-decomposition of the (n+1)x n dimensional <var>generator</var>.
+</p>
+<a name="Examples-138"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(1)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(2)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(3)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(4)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(5)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnPackingRadius"></a>Function File: <em><var>packingRadius</var> =</em> <strong>AnPackingRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the packing-radius for An* lattice in n dimensions,
+from Chap.4, Eq.(79) in Conway&amp;Sloane(1999)
+referring to lattice-definition corresponding to the generator
+returned by <code>AnLatticeGenerator()</code>, i.e. Chap.4, Eq.(76) of CS99
+</p>
+<a name="Note-19"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-139"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnPackingRadius(1) == 1/sqrt(2))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnPackingRadius(5) == 1/sqrt(2))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsCoveringRadius"></a>Function File: <em><var>coveringRadius</var> =</em> <strong>AnsCoveringRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return covering-radius for An* lattice in n dimensions
+referring to lattice-definition corresponding to the generator
+returned by getAnsLatticeGenerator.m, i.e. Chap.4, Eq.(76) in Conway&amp;Sloane(1999):
+</p>
+<a name="Note-20"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-140"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsCoveringRadius(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsCoveringRadius(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsCoveringRadius(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsCoveringRadius(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsCoveringRadius(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsFindClosestPoint"></a>Function File: <em><var>closest</var> =</em> <strong>AnsFindClosestPoint</strong> <em>( <var>x</var>, <var>embedded</var> )</em></dt>
+<dd>
+<p>return the closest point of the An*-lattice to the given point <var>x</var> in R^n
+based on Chap.20.3 &rsquo;Algorithm 4&rsquo; in Conway&amp;Sloane (1999)
+</p>
+<p>The boolean option input <var>embedded</var> (default=false) governs whether
+the input vectors are interpreted as vectors in the (n+1) dimensional
+embedding space of the lattice, otherwise they are interpreted as
+n-dimensional vectors in an n-dimensional lattice
+</p>
+<a name="Note-21"></a>
+<h3 class="heading">Note</h3>
+
+<p>The returned lattice vectors use the same representation asthe input-vectors (i.e. <var>embedded</var> or not)
+</p>
+<a name="Note-22"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-141"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = rand(3, 100000);
+dx = x - AnsFindClosestPoint(x);
+assert(max(sqrt(dot(dx, dx))) &lt;= AnsCoveringRadius(3));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsGenerator"></a>Function File: <em>[ <var>generator</var>, <var>rotator</var> ] =</em> <strong>AnsGenerator</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>return an nxn full-rank generating matrix for an An* lattice,
+based on the (n+1)xn <var>generator</var> of Chap.4, Eq.(76) in Conway&amp;Sloane(1999),
+</p>
+<p>also returns a rotation-matrix that takes the nxn <var>generator</var> back to the
+(n+1)x n dimensional representation of the lattice space in n+1 dimensions.
+This is simply obtained by QR-decomposition of the (n+1)xn <var>generator</var>.
+</p>
+<a name="Examples-142"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(1)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(2)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(3)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(4)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(AnsGenerator(5)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsKissingNumber"></a>Function File: <em><var>ret</var> =</em> <strong>AnsKissingNumber</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the &quot;kissing number&quot;, i.e. number of touching spheres to one lattice cell
+for an An* lattice in n dimensions, Sect.6.6 in Conway&amp;Sloane(1999)
+</p>
+<a name="Note-23"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-143"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsKissingNumber(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsKissingNumber(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsKissingNumber(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsKissingNumber(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsKissingNumber(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsMinimalVectors"></a>Function File: <em><var>ret</var> =</em> <strong>AnsMinimalVectors</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>return matrix containing the tau/2=(n+1) &rsquo;minimal&rsquo; vectors for An*,
+(tau is the kissing number) in n dimensions. The second half of minimal
+vectors is simply obtained by multiplying these by (-1).
+From Conway&amp;Sloane(1991) &quot;The cell Structure of Certain Lattices&quot;
+</p>
+<a name="Examples-144"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(size(AnsMinimalVectors(1)), [1, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(size(AnsMinimalVectors(2)), [2, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(size(AnsMinimalVectors(3)), [3, 4])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(size(AnsMinimalVectors(4)), [4, 5])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(size(AnsMinimalVectors(5)), [5, 6])
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsNormalizedThickness"></a>Function File: <em><var>ret</var> =</em> <strong>AnsNormalizedThickness</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>normalized thickness (=center density) of An* lattice,
+from Chap.4, Eq.(82) in Conway&amp;Sloane(1999)
+</p>
+<a name="Note-24"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-145"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsNormalizedThickness(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNormalizedThickness(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNormalizedThickness(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNormalizedThickness(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNormalizedThickness(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsNumVoronoiFacets"></a>Function File: <em><var>ret</var> =</em> <strong>AnsNumVoronoiFacets</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the number of Voronoi-facets for An* lattice, which corresponds
+to the maximal number of facets of an n-dimension parallelohedron (see CS99),
+namely 2 ( 2^<var>dim</var> - 1 )
+</p>
+<a name="Note-25"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-146"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsNumVoronoiFacets(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNumVoronoiFacets(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNumVoronoiFacets(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNumVoronoiFacets(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsNumVoronoiFacets(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsPackingRadius"></a>Function File: <em><var>packingRadius</var> =</em> <strong>AnsPackingRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the packing-radius for An* lattice in n dimensions,
+from Chap.4, Eq.(79) in Conway&amp;Sloane(1999)
+referring to lattice-definition corresponding to the generator
+returned by <code>AnsLatticeGenerator()</code>, i.e. Chap.4, Eq.(76) of CS99
+</p>
+<a name="Note-26"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-147"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsPackingRadius(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsPackingRadius(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsPackingRadius(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsPackingRadius(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsPackingRadius(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsThickness"></a>Function File: <em><var>ret</var> =</em> <strong>AnsThickness</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>covering thickness of An* lattice for dimension <var>n</var>,
+from Chap.4, Eq.(82) in Conway&amp;Sloane (1999)
+</p>
+<a name="Note-27"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-148"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsThickness(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsThickness(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsThickness(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsThickness(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsThickness(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnsVolume"></a>Function File: <em><var>vol</var> =</em> <strong>AnsVolume</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the &quot;lattice-volume&quot; (i.e. the volume of an elementary lattice-cell)
+for an An* lattice in <var>dim</var> dimensions.
+This is referring to the lattice-definition used by AnsGenerator.m,
+i.e. Chap.4, Eq.(76) of Conway&amp;Sloane(1999).
+</p>
+<a name="Note-28"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-149"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnsVolume(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsVolume(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsVolume(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsVolume(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnsVolume(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-AnVolume"></a>Function File: <em><var>vol</var> =</em> <strong>AnVolume</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the &quot;lattice-volume&quot; (i.e. the volume of an elementary lattice-cell)
+for an An lattice in <var>dim</var> dimensions.
+This is referring to the lattice-definition used by AnGenerator.m,
+</p>
+<a name="Note-29"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-150"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnVolume(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnVolume(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnVolume(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnVolume(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(AnVolume(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-CoxeterFewRogersBound"></a>Function File: <em><var>ret</var> =</em> <strong>CoxeterFewRogersBound</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>returns Coxter-Few-Rogers bound on thickness in dimension n
+taken from Conway&amp;Sloane (1999), Chap.2, Eq.(17)
+</p>
+<a name="Note-30"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-151"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBound(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBound(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBound(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBound(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBound(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-CoxeterFewRogersBoundNormalized"></a>Function File: <em><var>ret</var> =</em> <strong>CoxeterFewRogersBoundNormalized</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>returns Coxter-Few-Rogers bound on normalized thickness in dimension n
+taken from Conway&amp;Sloane (1999), Chap.2, Eq.(17)
+</p>
+<a name="Note-31"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-152"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBoundNormalized(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBoundNormalized(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBoundNormalized(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBoundNormalized(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(CoxeterFewRogersBoundNormalized(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-getAnsLatticeProperties"></a>Function File: <em><var>ret</var> =</em> <strong>getAnsLatticeProperties</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return a struct holding important properties of An* lattice in n-dimensions
+from Chap.4, Sect.6.6 in Conway&amp;Sloane(1999):
+</p>
+<a name="Examples-153"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isstruct(getAnsLatticeProperties(1)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isstruct(getAnsLatticeProperties(2)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isstruct(getAnsLatticeProperties(3)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isstruct(getAnsLatticeProperties(4)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isstruct(getAnsLatticeProperties(5)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeCoveringRadius"></a>Function File: <em><var>R</var> =</em> <strong>LatticeCoveringRadius</strong> <em>( <var>dim</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>return the covering radius for the given lattice
+lattice is one of the strings {<code>Zn</code>, <code>An</code>, <code>Ans</code>}
+</p>
+<a name="Note-32"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<a name="Examples-154"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(1, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(1, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(1, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(2, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(2, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(2, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(3, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(3, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeCoveringRadius(3, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeFindClosestPoint"></a>Function File: <em><var>closest</var> =</em> <strong>LatticeFindClosestPoint</strong> <em>( <var>x</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>return the closest point of the <var>lattice</var> to the given point <var>x</var> in R^n
+This is just a wrapper to the lower-level <var>lattice</var>-specific functions.
+lattice is one of the strings {<code>Zn</code>, <code>An</code>, <code>Ans</code>}
+</p>
+<a name="Note-33"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input in <var>x</var>
+</p>
+<a name="Examples-155"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isvector(LatticeFindClosestPoint(rand(4, 1), &quot;Zn&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isvector(LatticeFindClosestPoint(rand(4, 1), &quot;An&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(isvector(LatticeFindClosestPoint(rand(4, 1), &quot;Ans&quot;)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeGenerator"></a>Function File: <em>[ <var>gen</var>, <var>rot</var> ] =</em> <strong>LatticeGenerator</strong> <em>( <var>dim</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>return an nxn full-rank generating matrix for the specified lattice
+This is just a wrapper to the lower-level <var>lattice</var>-specific functions.
+lattice is one of the strings {<code>Zn</code>, <code>An</code>, <code>Ans</code>}
+</p>
+<a name="Examples-156"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(1, &quot;Zn&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(1, &quot;An&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(1, &quot;Ans&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(2, &quot;Zn&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(2, &quot;An&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(2, &quot;Ans&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(3, &quot;Zn&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(3, &quot;An&quot;)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(LatticeGenerator(3, &quot;Ans&quot;)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeMismatchHist"></a>Function File: <em><var>hgrm</var> =</em> <strong>LatticeMismatchHist</strong> <em>( <var>dim</var>, <var>lattice</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Generates a normalised mismatch histogram for the given lattice
+</p>
+<a name="Arguments-73"></a>
+<h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>returned mismatch histogram
+</p>
+</dd>
+<dt><var>dim</var></dt>
+<dd><p>number of <var>lattice</var> dimensions
+</p>
+</dd>
+<dt><var>lattice</var></dt>
+<dd><p><var>lattice</var> type; see e.g. <code>LatticeFindClosestPoint()</code>
+</p>
+</dd>
+</dl>
+
+<a name="Options-27"></a>
+<h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>N</code></dt>
+<dd><p>number of points to use in generating histogram [default:1e6]
+</p>
+</dd>
+<dt><code>dbin</code></dt>
+<dd><p>bin size of histogram [default: 0.01]
+</p>
+</dd>
+<dt><code>mu_max</code></dt>
+<dd><p>use this maximum mismatch [default: 1.0]
+</p>
+</dd>
+<dt><code>use_cache</code></dt>
+<dd><p>if true [default], use a cached version of the <var>lattice</var> mismatch
+histogram, if available. Note that the cached histogram will
+probably contain more points than requested in <var>N</var>.
+</p>
+</dd>
+</dl>
+
+<a name="Examples-157"></a>
+<h3 class="heading">Examples</h3>
+
+<p>See the <a href="LatticeMismatchHist_0028_0029.html#LatticeMismatchHist_0028_0029">tutorial on <code>LatticeMismatchHist()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeNormalizedThickness"></a>Function File: <em><var>R</var> =</em> <strong>LatticeNormalizedThickness</strong> <em>( <var>dim</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>returns normalized thicknesses in n dimensions
+lattice is one of the strings { &quot;Zn&quot;, &quot;Ans&quot; }
+</p>
+<a name="Note-34"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<a name="Examples-158"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(1, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(1, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(2, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(2, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(3, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeNormalizedThickness(3, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticePackingRadius"></a>Function File: <em><var>R</var> =</em> <strong>LatticePackingRadius</strong> <em>( <var>dim</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>return the packing radius for the given lattice
+lattice is one of the strings {<code>Zn</code>, <code>An</code>, <code>Ans</code>}
+</p>
+<a name="Note-35"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<a name="Examples-159"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(1, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(1, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(1, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(2, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(2, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(2, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(3, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(3, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticePackingRadius(3, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-LatticeVolume"></a>Function File: <em><var>vol</var> =</em> <strong>LatticeVolume</strong> <em>( <var>dim</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>return the <var>lattice</var> volume (ie volume of the fundamental cell) of given <var>lattice</var>&rsquo;
+lattice is one of the strings { &quot;Zn&quot;, &quot;An&quot;, &quot;Ans&quot; }
+</p>
+<a name="Note-36"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<a name="Examples-160"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(1, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(1, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(1, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(2, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(2, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(2, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(3, &quot;Zn&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(3, &quot;An&quot;) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(LatticeVolume(3, &quot;Ans&quot;) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-RegularSimplexVolume"></a>Function File: <em><var>ret</var> =</em> <strong>RegularSimplexVolume</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>volume of regular simplex in <var>n</var> dimensions with unit side-length,
+Chap.21, Eq.(12) in Conway&amp;Sloane (1999)
+</p>
+<a name="Note-37"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-161"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(RegularSimplexVolume(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RegularSimplexVolume(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RegularSimplexVolume(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RegularSimplexVolume(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RegularSimplexVolume(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-RogersBoundNormalized"></a>Function File: <em><var>ret</var> =</em> <strong>RogersBoundNormalized</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>Rogers&rsquo; upper bound on (normalized) packing density in <var>n</var> dimensions
+from Chap.1, Conway&amp;Sloane(1999)
+</p>
+<a name="Note-38"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-162"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(RogersBoundNormalized(1:5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-UnitHypersphereVolume"></a>Function File: <em><var>ret</var> =</em> <strong>UnitHypersphereVolume</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>Volume of unit hypersphere in <var>n</var> dimensions: Vn = pi^(<var>n</var>/2) / (<var>n</var>/2)!,
+from Chap.21, Eq.(7) in Conway&amp;Sloane(1999)
+</p>
+<a name="Note-39"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-163"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(UnitHypersphereVolume(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(UnitHypersphereVolume(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(UnitHypersphereVolume(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(UnitHypersphereVolume(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(UnitHypersphereVolume(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnCoveringRadius"></a>Function File: <em><var>coveringRadius</var> =</em> <strong>ZnCoveringRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return covering-radius for the Zn lattice in n dimensions
+</p>
+<a name="Note-40"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-164"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ZnCoveringRadius(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnCoveringRadius(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnCoveringRadius(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnCoveringRadius(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnCoveringRadius(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnFindClosestPoint"></a>Function File: <em><var>close</var> =</em> <strong>ZnFindClosestPoint</strong> <em>( <var>x</var> )</em></dt>
+<dd>
+<p>return the closest point of the (hypercubic) Zn-lattice to the given point <var>x</var> in R^n
+based on Chap.20.2 in Conway&amp;Sloane (1999). This is the most trivial case.
+</p>
+<a name="Note-41"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-165"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = rand(3, 100000);
+dx = x - ZnFindClosestPoint(x);
+assert(max(sqrt(dot(dx, dx))) &lt;= ZnCoveringRadius(3));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnGenerator"></a>Function File: <em>[ <var>generator</var>, <var>rotator</var> ] =</em> <strong>ZnGenerator</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return an nxn full-rank generating matrix for the Zn lattice;
+this is trivial, of course, but added for completeness.
+</p>
+<a name="Examples-166"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(issquare(ZnGenerator(1)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(ZnGenerator(2)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(ZnGenerator(3)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(ZnGenerator(4)))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(issquare(ZnGenerator(5)))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnNormalizedThickness"></a>Function File: <em><var>ret</var> =</em> <strong>ZnNormalizedThickness</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>returns normalized thickness of hypercubic grid in <var>n</var> dimensions
+</p>
+<a name="Note-42"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-167"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ZnNormalizedThickness(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnNormalizedThickness(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnNormalizedThickness(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnNormalizedThickness(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnNormalizedThickness(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnPackingRadius"></a>Function File: <em><var>packingRadius</var> =</em> <strong>ZnPackingRadius</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return packing-radius for the Zn lattice in n dimensions
+</p>
+<a name="Note-43"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-168"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ZnPackingRadius(1) == 1/2)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnPackingRadius(5) == 1/2)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnThickness"></a>Function File: <em><var>ret</var> =</em> <strong>ZnThickness</strong> <em>( <var>n</var> )</em></dt>
+<dd>
+<p>normalized thickness of hypercubic grid in <var>n</var> dimensions
+</p>
+<a name="Note-44"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-169"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ZnThickness(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnThickness(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnThickness(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnThickness(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnThickness(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-ZnVolume"></a>Function File: <em><var>vol</var> =</em> <strong>ZnVolume</strong> <em>( <var>dim</var> )</em></dt>
+<dd>
+<p>Return the &quot;lattice-volume&quot; (i.e. the volume of an elementary lattice-cell)
+for a Zn lattice in <var>dim</var> dimensions.
+This is referring to the lattice-definition used by ZnGenerator.m,
+</p>
+<a name="Note-45"></a>
+<h3 class="heading">Note</h3>
+<p>can handle vector input
+</p>
+<a name="Examples-170"></a>
+<h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ZnVolume(1) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnVolume(2) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnVolume(3) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnVolume(4) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ZnVolume(5) &gt; 0)
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="mathematical.html#mathematical" accesskey="n" rel="next"><samp>mathematical</samp></a>, Previous: <a href="histograms_002f_0040Hist.html#histograms_002f_0040Hist" accesskey="p" rel="prev"><samp>histograms/@Hist</samp></a>, Up: <a href="Directory-Index.html#Directory-Index" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
