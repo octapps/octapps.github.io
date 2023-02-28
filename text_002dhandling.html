@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>text-handling (OctApps Reference Manual)</title>
+
+<meta name="description" content="text-handling (OctApps Reference Manual)">
+<meta name="keywords" content="text-handling (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="version_002dhandling.html" rel="next" title="version-handling">
+<link href="statistics.html" rel="prev" title="statistics">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="text_002dhandling"></span><div class="header">
+<p>
+Next: <a href="version_002dhandling.html" accesskey="n" rel="next"><samp>version-handling</samp></a>, Previous: <a href="statistics.html" accesskey="p" rel="prev"><samp>statistics</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="text_002dhandling-1"></span><h3 class="section">2.20 <samp>text-handling</samp></h3>
+
+<dl>
+<dt id="index-buildTeXTable">Function File: <em><var>tex</var> =</em> <strong>buildTeXTable</strong> <em>( <var>spec</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Build a TeX table from a cell array specification.
+</p>
+<span id="Arguments-86"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>tex</var></dt>
+<dd><p>TeX table as a string
+</p>
+</dd>
+<dt><var>spec</var></dt>
+<dd><p>table specification
+</p>
+</dd>
+</dl>
+
+<span id="Options-29"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>numfmt</code></dt>
+<dd><p>num2TeX() format for formatting numbers [default: &quot;g&quot;]
+</p>
+</dd>
+<dt><code>tblwidth</code></dt>
+<dd><p>TeX command specifying table width [optional]
+</p>
+</dd>
+<dt><code>fillcols</code></dt>
+<dd><p>space-filling columns: &quot;first&quot;, &quot;all&quot;, &quot;byrow&quot; or &quot;none&quot; [default]
+</p>
+</dd>
+<dt><code>fillcolrow</code></dt>
+<dd><p>which row to use when setting space-filling columns with &quot;byrow&quot;
+</p>
+</dd>
+<dt><code>defcolsep</code></dt>
+<dd><p>default non-space-filling column separation [default: 1]
+</p>
+</dd>
+</dl>
+
+<p>The table specification <var>spec</var> is a 1-D cell array of rows, the elements of
+which are 1-D cell arrays of columns. Further nesting of cell arrays may be
+used to set up elements which span multiple columns. TeX numbers containing
+periods are split into 2 columns to align numbers at the period.
+</p>
+<p>Run <code>demo buildTeXTable</code> for some examples.
+</p>
+<span id="Examples-225"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">buildTeXTable({{1, 2, 3}, {4, 5, 6}})
+</pre></div>
+
+<div class="example">
+<pre class="example">buildTeXTable({&quot;\\hline&quot;, {1, 2.2, 3}, {4, 5, 6}, &quot;\\hline&quot;})
+</pre></div>
+
+<div class="example">
+<pre class="example">buildTeXTable({&quot;\\hline&quot;, {[], &quot;A&quot;, &quot;B&quot;}, {[], {&quot;A1&quot;, &quot;A2&quot;}, &quot;B&quot;}, &quot;\\hline&quot;, {&quot;x&quot;, {1, 2.2}, 3}, {&quot;y&quot;, {4, 5}, 6}, &quot;\\hline&quot;})
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-num2TeX">Function File: <em><var>tex</var> =</em> <strong>num2TeX</strong> <em>( <var>num</var>, <var>fmt</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Format a number in TeX format.
+</p>
+<span id="Arguments-87"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>tex</var></dt>
+<dd><p>cell array of TeX strings (or string if numel(<var>num</var>) == 1)
+</p>
+</dd>
+<dt><var>num</var></dt>
+<dd><p>any-dimensional array of numbers
+</p>
+</dd>
+<dt><var>fmt</var></dt>
+<dd><p>printf()-style format string, without the leading %
+</p>
+</dd>
+</dl>
+
+<span id="Options-30"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>prefix</code></dt>
+<dd><p>&quot;: string to add at start of TeX string (default: &quot;&quot;)
+</p>
+</dd>
+<dt><code>suffix</code></dt>
+<dd><p>&quot;: string to add at end of TeX string (default: &quot;&quot;)
+</p>
+</dd>
+<dt><code>dollar</code></dt>
+<dd><p>symbol to wrap TeX string with (default: &quot;$&quot;)
+</p>
+</dd>
+<dt><code>times</code></dt>
+<dd><p>TeX symbol to use for <var>times</var> (default: &quot;{\<var>times</var>}&quot;)
+</p>
+</dd>
+<dt><code>infstr</code></dt>
+<dd><p>TeX string to use for infinity (default: &quot;\infty&quot;)
+</p>
+</dd>
+<dt><code>nanstr</code></dt>
+<dd><p>TeX string to use for not-a-number (default: &quot;\mathrm{NaN}&quot;)
+</p>
+</dd>
+<dt><code>dbslash</code></dt>
+<dd><p>double backslash characters, i.e. replace &quot;\&quot; with &quot;\\&quot;
+</p>
+</dd>
+</dl>
+
+<span id="Examples-226"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(num2TeX([1.234, 5.67e-8], &quot;g&quot;), {&quot;$1.234$&quot;, &quot;$5.67{\\times}10^{-8}$&quot;})
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-object2json">Function File: <em><var>json</var> =</em> <strong>object2json</strong> <em>( <var>object</var> )</em></dt>
+<dd>
+<p>This function returns a valid json string that will describe <var>object</var>
+The string will be in a compact form (i.e. no spaces or line breaks)
+</p>
+<p>It will map simple octave values this way:
+</p><dl compact="compact">
+<dt>function handles</dt>
+<dd><p>String with the name of the function.
+</p></dd>
+<dt>double (numbers)</dt>
+<dd><p>depends:
+if it&rsquo;s real it will map to a string representing that number.
+if it&rsquo;s complex it will map to an <var>object</var> with the next properties:
+</p><dl compact="compact">
+<dt>real</dt>
+<dd><p>real part of the number
+</p></dd>
+<dt>imag</dt>
+<dd><p>imaginary part of the number
+</p></dd>
+</dl>
+</dd>
+<dt>char</dt>
+<dd><p>A string enclosed by double quotes representing that character
+</p></dd>
+</dl>
+
+<p>And will map more complex octave values this other way:
+</p><dl compact="compact">
+<dt>struct</dt>
+<dd><p>an <var>object</var> with properties equal to the struct&rsquo;s field names
+and value equal to the json counterpart of that field
+</p></dd>
+<dt>cell</dt>
+<dd><p>it will be mapped depending on the value of the cell (for
+example {i} will be mapped to an <var>object</var> with real=0 and imag=1)
+</p></dd>
+<dt>vectors or cell arrays</dt>
+<dd><p>it will map them to a corresponding js
+array (same size) with the values transformed to their json
+counterpart (Note: that in javascript all arrays are like octave&rsquo;s
+cells ,i.e. they can store different type and size variables)
+strings or char vectors: they will be mapped to the same string
+enclosed by double quotes
+</p></dd>
+</dl>
+
+<p>Other octave values will be mapped to a string enclosed by double
+quuotes with the value that the class() function returns
+It can handle escape sequences and special chars automatically.
+If they&rsquo;re valid in JSON it will keep them if not they&rsquo;ll be
+escaped so they can become valid
+</p>
+<span id="Examples-227"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(object2json({1.234, 2.345}), '[1.234,2.345]')
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(object2json({1.234, 2.345, &quot;abcd&quot;}), '[1.234,2.345,&quot;abcd&quot;]')
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(object2json(struct(&quot;abcd&quot;, 1.234)), '{&quot;abcd&quot;:1.234}')
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-stringify">Function File: <em><var>s</var> =</em> <strong>stringify</strong> <em>( <var>x</var> )</em></dt>
+<dd>
+<p>Convert an Octave value <var>x</var> into a string expression, which can be re-used
+as input, i.e. <code>eval(stringify(<var>x</var>))</code> should re-create <var>x</var>.
+</p><span id="Examples-228"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [1 2 3.4; 5.67 8.9 0];
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = int32([1 2 3 7]);
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = [true; false];
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = &quot;A string&quot;;
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = @(y) y*2;
+assert(x(7) == eval(stringify(x))(7));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = {1, 2, &quot;three&quot;; 4, 5, {6}};
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = {1, 2, &quot;three&quot;, {4, 5, {6}, true}, 7, false, int16(9)};
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+
+<div class="example">
+<pre class="example">x = struct(&quot;Hi&quot;,&quot;there&quot;,&quot;where&quot;, 2,&quot;cell&quot;,{1,2,3,{4*5,6,{7,true}}});
+assert(isequal(x, eval(stringify(x))));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-strjoin">Function File: <em><var>s</var> =</em> <strong>strjoin</strong> <em>( <var>cstr</var>, <var>sep</var> )</em></dt>
+<dd>
+<p>Join the cell array of strings <var>cstr</var> using the separator <var>sep</var>
+and return the joined string.
+</p><span id="Examples-229"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(strcmp(strjoin({&quot;a&quot;},&quot;,&quot;), &quot;a&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(strcmp(strjoin({&quot;a&quot;,&quot;b&quot;,&quot;c&quot;},&quot;,&quot;), &quot;a,b,c&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(strcmp(strjoin({&quot; a&quot;,&quot;b &quot;,&quot; c &quot;},&quot;,&quot;), &quot; a,b , c &quot;))
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="version_002dhandling.html" accesskey="n" rel="next"><samp>version-handling</samp></a>, Previous: <a href="statistics.html" accesskey="p" rel="prev"><samp>statistics</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

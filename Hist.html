@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Hist (OctApps Reference Manual)</title>
+
+<meta name="description" content="Hist (OctApps Reference Manual)">
+<meta name="keywords" content="Hist (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="General_002dPurpose-Functions.html" rel="up" title="General-Purpose Functions">
+<link href="Continuous_002dWave-Functions.html" rel="next" title="Continuous-Wave Functions">
+<link href="parseOptions_0028_0029.html" rel="prev" title="parseOptions()">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="Hist"></span><div class="header">
+<p>
+Previous: <a href="parseOptions_0028_0029.html" accesskey="p" rel="prev"><code>parseOptions()</code></a>, Up: <a href="General_002dPurpose-Functions.html" accesskey="u" rel="up">General-Purpose Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="Hist-1"></span><h4 class="subsection">1.1.2 <code>Hist</code></h4>
+
+<p><code>Hist</code> is a Octave class which represents a multi-dimensional histogram.
+It is useful for accumulating data of a statistical nature and determining its properties.
+</p>
+<p>A one-dimensional histogram is created with the following command:
+</p><div class="example">
+<pre class="example">octave&gt; hgrm = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.01})
+hgrm = {histogram: count=0, range=[NaN,NaN]}
+</pre></div>
+<p>This histogram will store data in bins with linear boundaries of width 0.01.
+The <code>Hist</code> class can also store data in bins with logarithmic boundaries:
+</p><div class="example">
+<pre class="example">octave&gt; Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 0.02, &quot;binsper10&quot;, 20})
+ans = {histogram: count=0, range=[NaN,NaN]}
+</pre></div>
+
+<p>To add data to a histogram, use the <code>addDataToHist()</code> function.
+Let&rsquo;s add some Gaussian-distributed data:
+</p><div class="example">
+<pre class="example">octave&gt; hgrm = addDataToHist(hgrm, normrnd(10.7, 3.42, [1e4, 1]))
+hgrm = {histogram: count=10000, range=[-1.44,22.8]}
+</pre></div>
+<p>We can call <code>addDataToHist()</code> many time to add more data to the histogram:
+</p><div class="example">
+<pre class="example">octave&gt; hgrm = addDataToHist(hgrm, normrnd(10.7, 3.42, [1e4, 1]))
+hgrm = {histogram: count=20000, range=[-1.86,24.05]}
+octave&gt; hgrm = addDataToHist(hgrm, normrnd(10.7, 3.42, [1e4, 1]))
+hgrm = {histogram: count=30000, range=[-2.05,24.05]}
+octave&gt; hgrm = addDataToHist(hgrm, normrnd(10.7, 3.42, [1e4, 1]))
+hgrm = {histogram: count=40000, range=[-2.42,24.05]}
+octave&gt; hgrm = addDataToHist(hgrm, normrnd(10.7, 3.42, [1e4, 1]))
+hgrm = {histogram: count=50000, range=[-2.42,24.05]}
+</pre></div>
+
+<p>We can now compute some basic statistical properties of the data, e.g.:
+</p><ul>
+<li> mean:
+<div class="example">
+<pre class="example">octave&gt; meanOfHist(hgrm)
+ans =  10.730
+</pre></div>
+
+</li><li> standard deviation:
+<div class="example">
+<pre class="example">octave&gt; stdvOfHist(hgrm)
+ans =  3.3879
+</pre></div>
+
+</li><li> cumulative distribution:
+<div class="example">
+<pre class="example">octave&gt; arrayfun(@(x) cumulativeDistOfHist(hgrm, x), meanOfHist(hgrm) + (-2:2)*stdvOfHist(hgrm))
+ans =
+
+   0.023173   0.157702   0.501401   0.841628   0.977569
+
+</pre></div>
+
+</li><li> quantile function:
+<div class="example">
+<pre class="example">octave&gt; arrayfun(@(p) quantileFuncOfHist(hgrm, p), 0.5 + 0.5*[-0.95, -0.68, 0, 0.68, 0.95])
+ans =
+
+    4.0630    7.3755   10.7183   14.0960   17.3700
+
+octave&gt; (ans - meanOfHist(hgrm)) / stdvOfHist(hgrm)
+ans =
+
+  -1.9679992  -0.9902454  -0.0035522   0.9934369   1.9598407
+
+</pre></div>
+
+</li></ul>
+
+<p>The histogram can also be plotted:
+</p><div class="example">
+<pre class="example">octave&gt; graphics_toolkit gnuplot
+octave&gt; plotHist(hgrm, &quot;b&quot;);
+ezprint(&quot;Hist-plot-1.png&quot;, &quot;width&quot;, 180, &quot;fontsize&quot;, 6);
+</pre></div>
+<img src="Hist-plot-1.png" alt="Hist-plot-1">
+
+<p>The bin size can be changed by resampling the histogram to a coarser bin size:
+</p><div class="example">
+<pre class="example">octave&gt; plotHist(resampleHist(hgrm, -5:0.2:25), &quot;r&quot;);
+octave&gt; ezprint(&quot;Hist-plot-2.png&quot;, &quot;width&quot;, 180, &quot;fontsize&quot;, 6);
+</pre></div>
+<img src="Hist-plot-2.png" alt="Hist-plot-2">
+
+<p>Histograms can be transformed by an arbitrary function.
+Here we plot the histogram of the squares of the samples:
+</p><div class="example">
+<pre class="example">octave&gt; plotHist(resampleHist(transformHist(hgrm, @(x) x.^2), -10:10:650), &quot;k&quot;);
+octave&gt; ezprint(&quot;Hist-plot-3.png&quot;, &quot;width&quot;, 180, &quot;fontsize&quot;, 6);
+</pre></div>
+<img src="Hist-plot-3.png" alt="Hist-plot-3">
+
+<p>Further histogram functions are documented in the <a href="histograms.html"><samp>histograms</samp></a> and <a href="histograms_002f_0040Hist.html"><samp>histograms/@Hist</samp></a> directories.
+</p>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="parseOptions_0028_0029.html" accesskey="p" rel="prev"><code>parseOptions()</code></a>, Up: <a href="General_002dPurpose-Functions.html" accesskey="u" rel="up">General-Purpose Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

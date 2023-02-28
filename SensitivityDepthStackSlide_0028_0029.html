@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>SensitivityDepthStackSlide() (OctApps Reference Manual)</title>
+
+<meta name="description" content="SensitivityDepthStackSlide() (OctApps Reference Manual)">
+<meta name="keywords" content="SensitivityDepthStackSlide() (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuous_002dWave-Functions.html" rel="up" title="Continuous-Wave Functions">
+<link href="OptimalSolution4StackSlide_005fv2_0028_0029.html" rel="next" title="OptimalSolution4StackSlide_v2()">
+<link href="LatticeMismatchHist_0028_0029.html" rel="prev" title="LatticeMismatchHist()">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="SensitivityDepthStackSlide_0028_0029"></span><div class="header">
+<p>
+Next: <a href="OptimalSolution4StackSlide_005fv2_0028_0029.html" accesskey="n" rel="next"><code>OptimalSolution4StackSlide_v2()</code></a>, Previous: <a href="LatticeMismatchHist_0028_0029.html" accesskey="p" rel="prev"><code>LatticeMismatchHist()</code></a>, Up: <a href="Continuous_002dWave-Functions.html" accesskey="u" rel="up">Continuous-Wave Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="SensitivityDepthStackSlide_0028_0029-1"></span><h4 class="subsection">1.2.4 <code>SensitivityDepthStackSlide()</code></h4>
+
+<p><code>SensitivityDepthStackSlide()</code> estimates the sensitivity of a continuous gravitational-wave search.
+Given the search parameters:
+</p><div class="example">
+<pre class="example">octave&gt; Nseg = 90;
+octave&gt; Tseg = 60 * 3600;
+octave&gt; Tdata = 12080 * 1800;
+octave&gt; avg2Fth = 6.109;
+octave&gt; sum2Fth = Nseg * avg2Fth;
+octave&gt; pFA = falseAlarm_chi2(sum2Fth, 4 * Nseg);
+octave&gt; misHistSC = createDeltaHist (0.7);
+</pre></div>
+<p>and the desired false dismissal probability, the search sensitivity is estimated as a <em>sensitivity depth</em>:
+</p><div class="example">
+<pre class="example">octave&gt; pDET = [0.95; 0.9; 0.85];
+octave&gt; Depths = SensitivityDepthStackSlide(&quot;Nseg&quot;, Nseg, &quot;Tdata&quot;, Tdata, &quot;misHist&quot;, misHistSC, &quot;pFD&quot;, 1-pDET, &quot;pFA&quot;, pFA, &quot;detectors&quot;, &quot;H1,L1&quot;)
+Depths =
+
+   38.683
+   41.919
+   44.495
+
+</pre></div>
+<p>The inverse function <code>DetectionProbabilityStackSlide()</code> instead computes the detection probabilities from the desired sensitivity depths:
+</p><div class="example">
+<pre class="example">octave&gt; detProbs = DetectionProbabilityStackSlide(&quot;Nseg&quot;, Nseg, &quot;Tdata&quot;, Tdata, &quot;misHist&quot;, misHistSC, &quot;pFA&quot;, pFA, &quot;detectors&quot;, &quot;H1,L1&quot;, &quot;Depth&quot;, Depths)
+detProbs =
+
+   0.95000
+   0.90000
+   0.85000
+
+</pre></div>
+
+
+
+
+</body>
+</html>

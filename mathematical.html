@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>mathematical (OctApps Reference Manual)</title>
+
+<meta name="description" content="mathematical (OctApps Reference Manual)">
+<meta name="keywords" content="mathematical (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="plotting.html" rel="next" title="plotting">
+<link href="lattices.html" rel="prev" title="lattices">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="mathematical"></span><div class="header">
+<p>
+Next: <a href="plotting.html" accesskey="n" rel="next"><samp>plotting</samp></a>, Previous: <a href="lattices.html" accesskey="p" rel="prev"><samp>lattices</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="mathematical-1"></span><h3 class="section">2.17 <samp>mathematical</samp></h3>
+
+<dl>
+<dt id="index-addToIntegerSet">Function File: <em><var>intset</var> =</em> <strong>addToIntegerSet</strong> <em>( <var>intset</var>, <var>ints</var> )</em></dt>
+<dd>
+<p>Add integers to an set of integers, stored as contiguous intervals.
+</p>
+<span id="Arguments-74"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>intset</var></dt>
+<dd><p>set of integers, stored as a Nx2 matrix of intervals:
+</p><div class="example">
+<pre class="example">[min1, max1; min2, max2; min3, max3; ...]
+</pre></div>
+
+</dd>
+<dt><var>ints</var></dt>
+<dd><p>integers to add to set
+</p>
+</dd>
+</dl>
+
+<span id="Examples-173"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isempty(addToIntegerSet([], [])))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([], 1:4) == [1,4])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([], [1:3, 5:9]) == [1,3; 5,9])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([], [1, 1:5, 5, 4:8, 11]) == [1,8; 11,11])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,4], []) == [1,4])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,4], 1:4) == [1,4])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,4], 6:8) == [1,4; 6,8])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,4], [1:3, 5:9]) == [1,9])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,4], [1, 1:5, 5, 4:8, 11]) == [1,8; 11,11])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(addToIntegerSet([1,3; 5,6; 8,11; 15,20], [4, 4, 13, 21]) == [1,6; 8,11; 13,13; 15,21])
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-FourierTransform">Function File: <em><var>freqSeries</var> =</em> <strong>FourierTransform</strong> <em>( <var>ti</var>, <var>xi</var>, <var>oversampleby</var> )</em></dt>
+<dd>
+<p>Computes Fourier-transform of input timeseries with timestamps {t_j}
+and data-points {x_j}, where j = 0 ... N-1
+This function complies with the LSC convention for Fourier-transforms, i.e.
+xFT(f) = dt * sum_{j=0}^{N-1} x_j * e^{-2pi i f t_j}
+</p>
+<p>The optional argument <var>oversampleby</var> specifies an INTEGER
+factor to oversample the FFT by, using zero-padding of the time-series.
+</p>
+<p>The returned &rsquo;freqSeries&rsquo; is a struct with two array-fields:
+</p><ul>
+<li> freqSeries.fk = { f_k }, the frequency-bins, and
+</li><li> freqSeries.xk = { x_k }, the (complex) Fourier bins,
+</li></ul>
+
+<p>where k = 0 ... N-1, and DFT frequency-bins f_k = k / N
+</p>
+<span id="Note-46"></span><h3 class="heading">Note</h3>
+
+<p>Matrix inputsThe input can contain several time-series data vectors <var>xi</var> over the same N time-samples,
+where each time-series is a row-vector, ie the dimension of <var>xi</var> must be Nseries x N,
+where &rsquo;Nseries&rsquo; is the number of parallel time-series.
+</p>
+<p>The FFT is therefore performed along rows of <var>xi</var>, and the resulting x_k has the same arrangement.
+</p>
+<span id="Examples-174"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">f0 = 10.0;
+t = 0:0.01:1;
+F = FourierTransform(t, sin(2*pi*f0*t));
+[~, ii] = max(abs(F.xk));
+assert(abs(F.fk(ii)), f0, 0.1);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-FourierTransformInv">Function File: <em><var>timeSeries</var> =</em> <strong>FourierTransformInv</strong> <em>( <var>fk</var>, <var>xk</var>, <var>oversampleby</var> )</em></dt>
+<dd>
+<p>Computes inverse Fourier-transform of input frequency-series with
+frequency steps <var>fk</var> and data-points <var>xk</var>. This function complies with
+the LSC convention for inverse Fourier-transforms, i.e.
+xi(t) = df * sum_{k=0}^{n-1} x_k * e^{2pi i f_k t}
+</p>
+<p>The optional argument <var>oversampleby</var> specifies an INTEGER
+factor to oversample the FFT by
+</p>
+<span id="Examples-175"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">dt = 0.1;
+ti = dt * [ 0:999 ];
+xi = zeros ( size ( ti ) );
+xi ( 555 ) = 1;
+ft = FourierTransform ( ti, xi );
+ts = FourierTransformInv ( ft.fk, ft.xk );
+err = max ( abs ( ts.xi - xi ) );
+assert ( err &lt; 1e-9 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-gsl">Loadable Module: <em></em> <strong>gsl</strong></dt>
+<dd><p>Loads the SWIG-generated module &lsquo;gsl&rsquo;.
+</p><span id="Examples-176"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">gsl;
+</pre></div>
+
+<div class="example">
+<pre class="example">gsl;
+assert(gsl_sf_gamma_inc(4.5, 0), gamma(4.5), 1e-3);
+assert(gsl_sf_gamma_inc(4.5, 2.2), 10.273, 1e-3);
+assert(gsl_sf_gamma_inc_P(4.5, 2.2), 0.11683, 1e-3);
+assert(gsl_sf_gamma_inc_Q(4.5, 2.2), 1 - 0.11683, 1e-3);
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-_0028">Function File: <em>octapps_md5sum</em> <strong>(</strong> <em><var>str</var> )</em></dt>
+<dd>
+<p>Calculate the MD5 hash value of the string <var>str</var>.
+</p>
+<span id="Examples-177"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(octapps_md5sum(&quot;octapps&quot;), &quot;ab220839eb6a31c782f1726f1031f2d3&quot;)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-possibilities">Function File: <em><var>X</var> =</em> <strong>possibilities</strong> <em>( <var>x</var>, <var>N</var> )</em></dt>
+<dd>
+<p>Build a matrix whos columns are all possible selections of N elements
+from the vector x, in the order that would be given by an N-dimensional
+nested loop. For example:
+</p>
+<div class="example">
+<pre class="example">M = [];
+for ii = possibilities(-1:1, 3);
+  M = [M, ii];
+endfor
+</pre></div>
+
+<p>will produce the same matrix M as:
+</p>
+<div class="example">
+<pre class="example">M = [];
+for i = -1:1
+  for j = -1:1
+    for k = -1:1
+      M = [M, [i;j;k]];
+    endfor
+  endfor
+endfor
+</pre></div>
+
+<p>except that the dimensionality N can be determine at run time
+</p>
+<span id="Examples-178"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">M1 = [];
+for ii = possibilities(-1:1, 3);
+  M1 = [M1, ii];
+endfor
+M2 = [];
+for i = -1:1
+  for j = -1:1
+    for k = -1:1
+      M2 = [M2, [i;j;k]];
+    endfor
+  endfor
+endfor
+assert(M1, M2);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-runningFunction">Function File: <em>[ <var>y1</var>, <var>y2</var>, &hellip; ] =</em> <strong>runningFunction</strong> <em>( <var>F</var>, <var>n</var>, <var>x1</var>, <var>x2</var>, &hellip; )</em></dt>
+<dd>
+<p>Compute the function <var>F</var> over a running window of <var>n</var> values of each &rsquo;x&rsquo;.
+</p>
+<span id="Arguments-75"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>F</var></dt>
+<dd><p>Running window function
+</p>
+</dd>
+<dt><var>n</var></dt>
+<dd><p>Running window size
+</p>
+</dd>
+<dt><var>x1</var></dt>
+<dt><var>x2</var></dt>
+<dt><var>&hellip;</var></dt>
+<dd><p>Input data
+</p>
+</dd>
+<dt><var>y1</var></dt>
+<dt><var>y2</var></dt>
+<dt><var>&hellip;</var></dt>
+<dd><p>Output data, e.g. <var>y1</var> = [<var>F</var>(<var>x1</var>(1:<var>n</var>)), <var>F</var>(<var>x1</var>(2:<var>n</var>+1)), &hellip;]
+</p>
+</dd>
+</dl>
+
+<span id="Examples-179"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(runningFunction(@mean, 3, 1.1:0.7:9.3), 1.8:0.7:8.1, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(runningFunction(@median, 3, 1:10), 2:9, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-UnitsConstants">Function File: <em></em> <strong>UnitsConstants</strong></dt>
+<dd>
+<p>Define common units and physical constants
+</p>
+<span id="Examples-180"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="plotting.html" accesskey="n" rel="next"><samp>plotting</samp></a>, Previous: <a href="lattices.html" accesskey="p" rel="prev"><samp>lattices</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

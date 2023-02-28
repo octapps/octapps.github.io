@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-line-veto (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-line-veto (OctApps Reference Manual)">
+<meta name="keywords" content="cw-line-veto (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002dmetric_002dtemplate_002dbanks.html" rel="next" title="cw-metric-template-banks">
+<link href="cw_002ddata_002danalysis.html" rel="prev" title="cw-data-analysis">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002dline_002dveto"></span><div class="header">
+<p>
+Next: <a href="cw_002dmetric_002dtemplate_002dbanks.html" accesskey="n" rel="next"><samp>cw-metric-template-banks</samp></a>, Previous: <a href="cw_002ddata_002danalysis.html" accesskey="p" rel="prev"><samp>cw-data-analysis</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002dline_002dveto-1"></span><h3 class="section">2.6 <samp>cw-line-veto</samp></h3>
+
+<dl>
+<dt id="index-computeFveto">Function File: <em><var>Fveto</var> =</em> <strong>computeFveto</strong> <em>( <var>inFstats</var> )</em></dt>
+<dd>
+<p>compute &quot;F+veto&quot; stat from input vector with columns [2F, 2F_1, 2F_2, ...]
+vetoed candidates are set to Fveto=-1, otherwise Fveto&gt;=0
+</p>
+<p>F+veto is defined as F+veto = { 2F  if 2F &gt; max(2F_1, 2F_2,...); -1 otherwise }
+</p>
+<span id="Examples-29"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(computeFveto([10, 6, 5]), 10, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(computeFveto([10, 10, 5]), 10, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(computeFveto([10, 6, 11]), -1, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ComputeLineRobustStat">Function File: <em><var>LRstat</var> =</em> <strong>ComputeLineRobustStat</strong> <em>( <var>twoF_multi</var>, <var>twoF_single</var>, <var>Fstar0</var>, <var>oLGX</var>, <var>useAllTerms</var> )</em></dt>
+<dd>
+<p>function to calculate line-robust statistic for multiple detectors
+</p>
+<p>this is actually the log-Bayes-factor:
+</p>
+<p>LRstat = log10(B_{SGL}) = log10(O_{SGL})-log10(o_{SGL})
+</p>
+<p>see Eq. (36) of Keitel, Prix, Papa, Leaci, Siddiqi, PR D 89, 064023 (2014)
+and Eq. (55) for the semicoherent case
+</p>
+<span id="Notes-1"></span><h3 class="heading">Notes</h3>
+
+<ol>
+<li> input should be 2F, NOT F! Summed, not averaged, over segments!
+
+</li><li> Fstar0 is therefore reinterpreted as &quot;semicoherent rho&quot;, Nseg exponent must already be included from caller
+(compare Eq. (57), Fstar0^=ln(cstar^Nseg) )
+
+</li><li> pure line-veto statistic log10(BSL) is obtained in the limit Fstar0 -&gt; -Inf
+
+</li></ol>
+
+<span id="Original-formula"></span><h3 class="heading">Original formula</h3>
+
+<p>log10(B_SGL) = log10(e) * ( F_multi - log( (1-pL)*exp(Fstar0) + pL*&lt;rX*exp(FX)&gt; ) )
+= log10(e) * ( F_multi - log( (1-pL)*exp(Fstar0) + (pL/Ndet)*sum(rX*exp(FX)) ) )
+</p>
+<p>with
+</p><ul>
+<li> line-to-Gauss prior odds oLG = sumX oLGX
+</li><li> line prior weights       rX = oLGX*Ndet/oLG
+</li><li> detector-average         &lt;QX&gt; = (1/Ndet) * sumX QX
+</li><li> total line probability   pL = oLG/(1+oLG)
+</li></ul>
+
+<p>implementation here is optimized to avoid underflows (&quot;log-sum-exp formula&quot;)
+should be compatible with current implementation in lalpulsar/src/LineRobustStats.c
+</p>
+<span id="Examples-30"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ComputeLineRobustStat(10, [6, 5], 0.1, [0.5, 0.5], false), 1.4706, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ComputeSFTPowerFAFromThreshold">Function File: <em><var>SFTpower_fA</var> =</em> <strong>ComputeSFTPowerFAFromThreshold</strong> <em>( <var>SFTpower_thresh</var>, <var>num_SFTs</var> )</em></dt>
+<dd>
+<p>Compute SFT power false alarm rate from a SFT power threshold.
+</p>
+<span id="Examples-31"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ComputeSFTPowerFAFromThreshold(1.2326, 100), 0.01, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ComputeSFTPowerThresholdFromFA">Function File: <em><var>SFTpower_thresh</var> =</em> <strong>ComputeSFTPowerThresholdFromFA</strong> <em>( <var>SFTpower_fA</var>, <var>num_SFTs</var> )</em></dt>
+<dd>
+<p>Compute SFT power threshold from a SFT power false alarm rate.
+</p>
+<span id="Examples-32"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ComputeSFTPowerThresholdFromFA(0.01, 100), 1.2326, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ConvertLRStransitionScaleParams">Function File: <em><var>outvalue</var> =</em> <strong>ConvertLRStransitionScaleParams</strong> <em>( <var>outname</var>, <var>inname</var>, <var>invalue</var>, <var>Nseg</var> )</em></dt>
+<dd>
+<p>function to convert between various parametrisations of the line-robust statistic transition scale
+reference: Keitel, Prix, Papa, Leaci, Siddiq, PRD 89(6):064023 (2014)
+</p>
+<p>outname/inname can be any of:
+&quot;Fstar0&quot; as defined in Eq. (38), not to be confused with the semicoherent Fstar0hat
+&quot;Fstar0hat&quot; as defined in Eq. (57)
+&quot;pFAstar0&quot; as defined in Eq. (67)
+&quot;cstar&quot; as defined in Eq. (11)
+&quot;LVrho&quot; (deprecated) as defined in footnote 1 (p4)
+</p>
+<p>Nseg is optional and will be assumed 1 by default
+</p>
+<span id="Examples-33"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ConvertLRStransitionScaleParams(&quot;Fstar0&quot;, &quot;LVrho&quot;, 1.23), -3.4204, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CountSFTPowerOutliers">Function File: <em>[ <var>num_outliers</var>, <var>max_outlier</var>, <var>freqbins</var> ] =</em> <strong>CountSFTPowerOutliers</strong> <em>( <var>params_psd</var>, <var>thresh</var>, <var>lalpath</var>, <var>debug</var> )</em></dt>
+<dd>
+<p>function to compute the number of outliers of the SFT power statistic
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CWSignalCoveringBand">Function File: <em>[ <var>minCoverFreq</var>, <var>maxCoverFreq</var> ] =</em> <strong>CWSignalCoveringBand</strong> <em>( <var>fkdot_starttime</var>, <var>fkdotband_starttime</var>, <var>fkdot_endtime</var>, <var>fkdotband_endtime</var> )</em></dt>
+<dd>
+<p>based on <code>XLALCWSignalCoveringBand()</code> by K. Wette, R. Prix
+Determines a frequency band which covers the frequency evolution of a band of CW signals between two GPS times.
+The calculation accounts for the spin evolution of the signals, and the maximum possible Dopper modulation due to detector motion.
+binary orbital motion, which is supported by <code>XLALCWSignalCoveringBand()</code>, is dropped here.
+contrary to XLALCWSignalCoveringBand, fkdot and fkdotband must be pre-extrapolated to starttime, endtime
+</p>
+<span id="Examples-34"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[minCoverFreq, maxCoverFreq] = CWSignalCoveringBand([100, -1e-8], [1e-2, 1e-11], [99, -1e-8], [1e-2, 1e-11]);
+assert([minCoverFreq, maxCoverFreq], [98.990, 100.02], 1e-2)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-EstimateLinePriors">Function File: <em><var>ret</var> =</em> <strong>EstimateLinePriors</strong> <em>( <var>varargin</var> )</em></dt>
+<dd>
+<p>Script to estimate oLGX priors from some SFTs
+based on compute_lX_from_SFTs from LineVetoBstat repository, but with simpler SFTs and timestamps handling
+this is different from TuneAdaptiveLVPriors which is more EatH-centric, assuming a given run setup
+command-line parameters can be taken from parseOptions call below
+example call: octapps_run EstimateLinePriors &ndash;SFTs=h1*
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-EstimateLinePriorsFromNormSFT">Function File: <em>[ <var>lX</var>, <var>freqmin</var>, <var>freqmax</var>, <var>freqbins</var>, <var>num_outliers</var>, <var>max_outlier</var> ] =</em> <strong>EstimateLinePriorsFromNormSFT</strong> <em>( <var>psdfiles</var>, <var>thresh</var>, <var>LVlmin</var>, <var>LVlmax</var> )</em></dt>
+<dd>
+<p>function to estimate line priors from normalized SFT power values in files computed by <code>lalapps_ComputePSD</code>
+psdfiles must be a cell array of existing files of length numDet
+thresh must be a numDet*T matrix, where T is an arbitrary number of thresh values per IFO, so that lX will be returned as a numDet*T matrix also
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ExtrapolatePulsarSpinRange">Function File: <em>[ <var>fkdot_epoch1</var>, <var>fkdotband_epoch1</var> ] =</em> <strong>ExtrapolatePulsarSpinRange</strong> <em>( <var>epoch0</var>, <var>epoch1</var>, <var>fkdot_epoch0</var>, <var>fkdotband_epoch0</var>, <var>numSpins</var> )</em></dt>
+<dd>
+<p>function to translate spin-values \f$\f^{(l)}\f$ and bands from epoch0 to epoch1
+based on LALSuite programs/functions HierarchSearchGCT and LALExtrapolatePulsarSpinRange
+</p>
+<span id="Note-3"></span><h3 class="heading">Note</h3>
+
+<p>different index conventions between lalapps and octave - (k) here corresponds to [k-1] in LALExtrapolatePulsarSpinRange, i.e. fkdot(1)=fkdot[0]=freq, fkdot(2)=fkdot(1)=f1dot, ...
+</p>
+<span id="Examples-35"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ExtrapolatePulsarSpinRange(800000000, 900000000, [100, -1e-8], [1e-2, 1e-8], 1), [99, 1e-8], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-GetNormSFTPowerFiles">Function File: <em><var>ret</var> =</em> <strong>GetNormSFTPowerFiles</strong> <em>( <var>varargin</var> )</em></dt>
+<dd>
+<p>function to produce files of normalized SFT power over a large set of frequency bands (input sft files) for a single IFO
+</p>
+<p>command-line parameters can be taken from parseOptions call below
+</p>
+<span id="Example"></span><h3 class="heading">Example</h3>
+
+<div class="example">
+<pre class="example">octapps_run GetNormSFTPowerFiles --sftdir=sfts --sft_filenamebit=S6GC1 --IFO=h1 --freqmin=50.5
+</pre></div>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-GetNumSFTsFromFile">Function File: <em><var>num_SFTs</var> =</em> <strong>GetNumSFTsFromFile</strong> <em>( <var>sftfile</var> )</em></dt>
+<dd>
+<p>safety measure to work around <code>lalapps_dumpSFT</code> bug: check if sftfile is a pattern matching several files, and if it is, just use the first one.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-get_005fEatH_005fsft_005fpaths">Function File: <em>[ <var>sfts</var>, <var>firstsft</var>, <var>sfts_cell</var> ] =</em> <strong>get_EatH_sft_paths</strong> <em>( <var>sftdir</var>, <var>filenamebit</var>, <var>sft_width</var>, <var>sftstartfreq</var>, <var>num_sfts_to_load</var>, <var>IFO</var> )</em></dt>
+<dd>
+<p>function to get the full SFT paths (assuming Atlas-like directory structure)
+and cat them into argument strings for, e.g., <code>lalapps_ComputePSD</code>
+and also return first single SFT file path
+and a cell array of all SFT paths
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-PredictGCTFreqband">Function File: <em>[ <var>gct_freq_min</var>, <var>gct_freq_band</var>, <var>gct_phys_freq_min</var>, <var>gct_phys_freq_band</var> ] =</em> <strong>PredictGCTFreqband</strong> <em>( <var>freq</var>, <var>freqband</var>, <var>dFreq</var>, <var>f1dot</var>, <var>f1dotband</var>, <var>df1dot</var>, <var>f2dot</var>, <var>f2dotband</var>, <var>df2dot</var>, <var>starttime</var>, <var>duration</var>, <var>reftime</var>, <var>Tsft</var>, <var>blocksRngMed</var>, <var>Dterms</var> )</em></dt>
+<dd>
+<p>function to predict the frequency band required by a HSGCT search
+based on code snippets from LALSuite program HierarchSearchGCT and on <code>XLALCreateFstatInput()</code> from lalpulsar
+for older freqband convention (e.g. S6Bucket, S6LV1 runs), see PredictGCTFreqbandLegacy.m
+</p>
+<span id="Note-4"></span><h3 class="heading">Note</h3>
+
+<p>this is for laldemod only, resampling is somewhat different
+</p><span id="Examples-36"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[gct_freq_min, gct_freq_band, gct_phys_freq_min, gct_phys_freq_band] = PredictGCTFreqband(100, 0.1, 1e-7, -1e-8, 1e-8, 1e-11, 0, 0, 0, 800000000, 23*3600, 800000000, 1800, 101, 8);
+assert([gct_freq_min, gct_freq_band, gct_phys_freq_min, gct_phys_freq_band], [99.956, 0.18897, 99.984, 0.13175], 1e-2)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-TuneAdaptiveLVPriors">Function File: <em><var>ret</var> =</em> <strong>TuneAdaptiveLVPriors</strong> <em>( <var>varargin</var> )</em></dt>
+<dd>
+<p>function to count outliers in SFT power statistic over a large set of frequency bands (input sft files) and derive LV priors from that
+command-line parameters can be taken from parseOptions call below
+</p>
+<span id="Example-1"></span><h3 class="heading">Example</h3>
+
+<div class="example">
+<pre class="example">octapps_run TuneAdaptiveLVPriors --sftdir=sfts --sft_filenamebit=S6GC1 --freqmin=50 --freqmax=50.5
+</pre></div>
+
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002dmetric_002dtemplate_002dbanks.html" accesskey="n" rel="next"><samp>cw-metric-template-banks</samp></a>, Previous: <a href="cw_002ddata_002danalysis.html" accesskey="p" rel="prev"><samp>cw-data-analysis</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

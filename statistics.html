@@ -1,0 +1,1397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>statistics (OctApps Reference Manual)</title>
+
+<meta name="description" content="statistics (OctApps Reference Manual)">
+<meta name="keywords" content="statistics (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="text_002dhandling.html" rel="next" title="text-handling">
+<link href="plotting.html" rel="prev" title="plotting">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="statistics"></span><div class="header">
+<p>
+Next: <a href="text_002dhandling.html" accesskey="n" rel="next"><samp>text-handling</samp></a>, Previous: <a href="plotting.html" accesskey="p" rel="prev"><samp>plotting</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="statistics-1"></span><h3 class="section">2.19 <samp>statistics</samp></h3>
+
+<dl>
+<dt id="index-binomialConfidenceInterval">Function File: <em>[ <var>fLower</var>, <var>fUpper</var> ] =</em> <strong>binomialConfidenceInterval</strong> <em>( <var>N</var>, <var>K</var>, <var>confidence</var> )</em></dt>
+<dd>
+<p>Compute the posterior <var>confidence</var> interval [<var>fLower</var>, <var>fUpper</var>] for the true rate f
+given a drawing experiment with <var>K</var> &quot;successful&quot; results out of <var>N</var> trials.
+The <var>confidence</var> interval satisfies
+confidence = int_{fLower}^{fUpper} pdf(f|<var>N</var>,<var>K</var>) df,
+where pdf(f|<var>N</var>,<var>K</var>) is the posterior pdf for the rate f, which
+is computed using the function binomialRatePDF(f,<var>N</var>,<var>K</var>).
+</p>
+<p>The <var>confidence</var>-interval is constructed with iso-probability endpoints
+(if possible), namely
+P(<var>fLower</var>) = P(<var>fUpper</var>), which is guaranteed to bracket the maximum of the pdf.
+In the special cases where <var>K</var> = 0 or <var>K</var> = <var>N</var>, we return the &quot;single-sided&quot; intervals
+[0,<var>fUpper</var>] or [<var>fLower</var>,1], respectively.
+</p>
+<span id="Note-47"></span><h3 class="heading">Note</h3>
+
+<p>all inputs must be scalars! <var>confidence</var> must be in (0,1)
+</p>
+<span id="Examples-188"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">binomialConfidenceInterval(10, 0, 0.9545);
+mo if 1
+function plot_this ( N, K )
+  conf2sigma = 0.9545;
+  [fLower, fUpper] = binomialConfidenceInterval ( N, K, conf2sigma );
+  fMPE = K / N;
+  fE = (K+1)/(N+2);
+  sigf = sqrt ( fE * ( 1 - fE ) / (N+3) );
+  fMin = max(0, fMPE - 3.5 * sigf );
+  fMax = min(1, fMPE + 3.5 * sigf );
+  fLowerGauss = fE - 2*sigf;
+  fUpperGauss = fE + 2*sigf;
+  fi = linspace ( fMin, fMax, 100);
+  pdf_f = binomialRatePDF ( fi, N, K );
+  PMax = max ( pdf_f );
+  ylim([0,1.05 * PMax]);
+  set ( 0, &quot;defaultlinemarkersize&quot;, 10 );
+  plot ( fi, pdf_f, fMPE, PMax, &quot;rx&quot;, [fLower, fUpper], [PMax,PMax], &quot;r+-&quot;,
+        fLower*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;--&quot;, fUpper*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;--&quot;,
+        fMPE*[1,1], ylim(), &quot;color&quot;, &quot;black&quot;, &quot;linestyle&quot;, &quot;:&quot;,
+        [fLowerGauss, fUpperGauss], 1.02*[PMax,PMax], &quot;m+-&quot;
+        );
+  xlabel(&quot;f&quot;); ylabel(&quot;pdf(f|N,K)&quot;);
+  tstr = sprintf (&quot;N=%d, K=%d, confidence=%.2f%%&quot;, N, K, conf2sigma * 100.0 );
+  title ( tstr );
+endfunction
+figure(1); clf;
+subplot(2,3,1); plot_this ( 10, 0 );
+subplot(2,3,2); plot_this ( 10, 1 );
+subplot(2,3,3); plot_this ( 500, 300 );
+subplot(2,3,4); plot_this ( 5000, 4999 );
+subplot(2,3,5); plot_this ( 50000, 25000 );
+subplot(2,3,6); plot_this ( 50000, 10000 );
+## red shows the exact posterior 95.45% confidence intervals
+## magenta shows the Gaussian +-2sigma intervals centered on the expectation value of f
+endif
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-binomialRatePDF">Function File: <em><var>pdf</var> =</em> <strong>binomialRatePDF</strong> <em>( <var>f</var>, <var>N</var>, <var>K</var> )</em></dt>
+<dd>
+<p>Return the posterior pdf(<var>f</var>|<var>N</var>,<var>K</var>) for the true &rsquo;rate&rsquo; <var>f</var> given a drawing
+experiment with <var>K</var> &quot;successful&quot; results out of <var>N</var> trials, assuming a
+uniform prior on <var>f</var> in [0,1], which yields
+</p>
+<p>pdf(<var>f</var>|<var>N</var>,<var>K</var>) = (<var>N</var>+1)!/(<var>K</var>! (<var>N</var>-<var>K</var>)!) * <var>f</var>^<var>K</var> * (1-<var>f</var>)^(<var>N</var>-<var>K</var>)
+</p>
+<p>This expression would be numerically overflowing very
+easily when <var>N</var>,<var>K</var>&gt;&gt;1, and so we use the fact that
+</p>
+<p>K!(<var>N</var>-<var>K</var>)!/(<var>N</var>+1)! = beta(<var>K</var>+1,<var>N</var>-<var>K</var>+1)
+</p>
+<p>and the numerically robust octave-function betaln()=ln(beta()):
+</p>
+<p>ln pdf(<var>f</var>|<var>N</var>,<var>K</var>) = -betaln(<var>K</var>+1,<var>N</var>-<var>K</var>+1) + <var>K</var> ln(<var>f</var>) + (<var>N</var>-<var>K</var>) ln(1-<var>f</var>)
+</p>
+<p>Some useful properties of this posterior PDF are:
+</p><ul>
+<li> the maximum-posterior estimate (MPE) for the rate <var>f</var> is
+fMPE = <var>K</var>/<var>N</var>,
+
+</li><li> the expectation is
+fE = E[<var>f</var>|<var>N</var>,<var>K</var>] = (<var>K</var>+1)/(<var>N</var>+2)
+
+</li><li> and the variance
+var[<var>f</var>] = (<var>K</var>+1)*(<var>N</var>-<var>K</var>+1)/( (<var>N</var>+3)*(<var>N</var>+2)^2)
+= Ef * (1-Ef) / (<var>N</var>+3)
+which in the large-<var>N</var> limit leads to
+fE ~ fMPE,
+var[<var>f</var>] ~ 1/<var>N</var> * fMPE * (1 - fMPE)
+</li></ul>
+
+<span id="Examples-189"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(binomialRatePDF(0:0.1:1, 10, 7), [0.000 0.000 0.009 0.099 0.467 1.289 2.365 2.935 2.215 0.631 0.000], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ChiSquare_005fcdf">Function File: <em><var>p</var> =</em> <strong>ChiSquare_cdf</strong> <em>( <var>x</var>, <var>k</var>, <var>lambda</var> )</em></dt>
+<dd>
+<p>Compute the cumulative density function of the
+non-central chi^2 distribution.
+</p>
+<span id="Arguments-82"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>x</var></dt>
+<dd><p>value of the non-central chi^2 variable
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>number of degrees of freedom
+</p>
+</dd>
+<dt><var>lambda</var></dt>
+<dd><p>non-centrality parameter
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-ChiSquare_005fpdf">Function File: <em><var>p</var> =</em> <strong>ChiSquare_pdf</strong> <em>( <var>x</var>, <var>k</var>, <var>lambda</var> )</em></dt>
+<dd>
+<p>Compute the probability density function of the
+non-central chi^2 distribution.
+</p>
+<span id="Arguments-83"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>x</var></dt>
+<dd><p>value of the non-central chi^2 variable
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>number of degrees of freedom
+</p>
+</dd>
+<dt><var>lambda</var></dt>
+<dd><p>non-centrality parameter
+</p>
+</dd>
+</dl>
+
+<span id="Examples-190"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^-2, 10^-2, 1), 0.44224, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^+2, 10^+2, 2), 0.027895, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^10, 10^10, 3), 2.8209e-06, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(ChiSquare_pdf(10^30, 10^30, 4), 2.8209e-16, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-erfcinv_005fasym">Function File: <em><var>y</var> =</em> <strong>erfcinv_asym</strong> <em>( <var>X</var> )</em></dt>
+<dd><p>Compute the inverse complementary error function, i.e., <var>Y</var> such that
+</p>
+<div class="example">
+<pre class="example">erfc(<var>y</var>) == <var>x</var>
+</pre></div>
+
+<p>An asymptotic expression is used for small <var>X</var>.
+</p><span id="Examples-191"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(erfcinv_asym(logspace(-4, -20, 17)), [2.751 3.123 3.459 3.767 4.052 4.320 4.573 4.813 5.042 5.261 5.473 5.676 5.872 6.063 6.247 6.427 6.602], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-estimateFAThreshold">Function File: <em>[ <var>threshold</var>, <var>pFA_MPE</var>, <var>pFA_Lower</var>, <var>pFA_Upper</var>, <var>threshold_Lower</var>, <var>threshold_Upper</var> ] =</em> <strong>estimateFAThreshold</strong> <em>( <var>DATA</var>, <var>pFA</var>, <var>confidence=0.95</var> )</em></dt>
+<dd>
+<p>Compute <var>threshold</var> for desired false-alarm probablity on samples <var>DATA</var>, returns the resulting maximum-posterior
+estimate <var>pFA_MPE</var>, and <var>confidence</var> interval [<var>pFA_Lower</var>, <var>pFA_Upper</var>].
+Also returns the corresponding <var>confidence</var> interval in thresholds [<var>threshold</var>_Lower, <var>threshold</var>_Upper],
+obtained by simply re-computing <var>threshold</var> on [<var>pFA_Lower</var>, <var>pFA_Upper</var>].
+</p>
+<span id="Note-48"></span><h3 class="heading">Note</h3>
+
+<p>the input <var>pFA</var> is allowed to be a vector, returns corresponding vectors
+</p>
+<span id="Examples-192"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.1), 900)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.5), 500)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(estimateFAThreshold(0:1000, 0.9), 100)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-estimateRateFromSamples">Function File: <em>[ <var>fMPE</var>, <var>fE</var>, <var>fLower</var>, <var>fUpper</var> ] =</em> <strong>estimateRateFromSamples</strong> <em>( <var>DATA</var>, <var>threshold</var>, <var>confidence</var> )</em></dt>
+<dd>
+<p>Compute maximum-posterior rate estimate <var>fMPE</var> and <var>confidence</var>-interval [<var>fLower</var>, <var>fUpper</var>].
+</p>
+<p>This is a simple helper function:
+estimate the &rsquo;rate&rsquo; f of <var>threshold</var>-crossings from the samples <var>DATA</var>, namely via
+K = length( <var>DATA</var> &gt; <var>threshold</var> ), N = length(<var>DATA</var>)
+The maximum-posteror estimate is <var>fMPE</var> = K/N,
+and the <var>confidence</var> interval [<var>fLower</var>, <var>fUpper</var>] is given by binomialConfidenceInterval(N,K,<var>confidence</var>)
+</p>
+<span id="Note-49"></span><h3 class="heading">Note</h3>
+
+<p><var>threshold</var> is allowed to be a vector, returns corresponding rate vectors
+</p>
+<span id="Examples-193"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ntrials = 100;
+DATA = octforge_normrnd ( 0, 1, 1, Ntrials );
+threshold = linspace ( 0, 1, 10 );
+[fMPE0, fLower0, fUpper0] = estimateRateFromSamples ( DATA, threshold, confidence=0.95 );
+for i = 1:length(threshold)
+   [fMPE1(i), fLower1(i), fUpper1(i)] = estimateRateFromSamples ( DATA, threshold(i), confidence=0.95 );
+endfor
+assert ( fMPE0 = fMPE1 );
+assert ( fLower0 = fLower1 );
+assert ( fUpper0 = fUpper1 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-estimateROC">Function File: <em>[ <var>pDet_MPE</var>, <var>pDet_Lower</var>, <var>pDet_Upper</var>, <var>pFA_MPE</var>, <var>pFA_Lower</var>, <var>pFA_Upper</var> ] =</em> <strong>estimateROC</strong> <em>( <var>DATA_noise</var>, <var>DATA_signal</var>, <var>pFA</var>, <var>confidence</var> = 0.95 )</em></dt>
+<dd>
+<p>Compute the Receiver Operator Characteristic (ROC) function pDet(<var>pFA</var>) on given samples drawn under
+the noise hypothesis, <var>DATA_noise</var>, and under the signal hypothesis, <var>DATA_signal</var>.
+Returns estimates for the detection-probability and false-alarm probability for the given DATA samples and
+a vector of desired false-alarm probabilities <var>pFA</var>.
+</p>
+<span id="Note-50"></span><h3 class="heading">Note</h3>
+
+<p>this function replaces the deprecated <code>estimateFalseDismissal()</code>
+</p>
+<span id="Examples-194"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ntrials_N = 600; Ntrials_S = 300;
+stat_S = octforge_normrnd ( 1, 1, 1, Ntrials_S );
+stat_N = octforge_normrnd ( 0, 1, 1, Ntrials_N );
+pFA = linspace ( 0, 1, 15 );
+[pDet_MPE, pDet_Lower, pDet_Upper, pFA_MPE, pFA_Lower, pFA_Upper] = estimateROC ( stat_N, stat_S, pFA, confidence=0.9545 );
+mo
+Ntrials_N = 600; Ntrials_S = 300;
+stat_S = octforge_normrnd ( 1, 1, 1, Ntrials_S );
+stat_N = octforge_normrnd ( 0, 1, 1, Ntrials_N );
+pFA = linspace ( 0, 1, 15 );
+[pFD0, dpDet0] = estimateFalseDismissal ( pFA, stat_N, stat_S );
+[pDet_MPE, pDet_Lower, pDet_Upper, pFA_MPE, pFA_Lower, pFA_Upper] = estimateROC ( stat_N, stat_S, pFA, confidence=0.9545 );
+figure(1);
+set ( 0, &quot;defaultlinemarkersize&quot;, 5 );
+set ( 0, &quot;defaultaxesfontsize&quot;, 15 );
+clf; hold on;
+hax = errorbar ( pFA, 1 - pFD0, 2*dpDet0, &quot;~x;estimateFalseDismissal();&quot;,
+                 pFA_MPE, pDet_MPE, (pFA_MPE - pFA_Lower), (pFA_Upper-pFA_MPE), (pDet_MPE - pDet_Lower), (pDet_Upper-pDet_MPE), &quot;#~&gt;or;estimateROC();&quot; );
+line ( [0, 1, 1, 0, 0 ], [ 0, 0, 1, 1, 0 ], &quot;linestyle&quot;, &quot;:&quot; );
+hold off;
+set ( hax, &quot;markersize&quot;, 10 );
+xlim([-0.05, 1.05]); ylim([-0.1, 1.15]);
+legend (&quot;location&quot;, &quot;northwest&quot; ); legend(&quot;boxoff&quot;);
+xlabel(&quot;pFA&quot;); ylabel(&quot;pDet&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-falseAlarm_005fchi2">Function File: <em><var>fA</var> =</em> <strong>falseAlarm_chi2</strong> <em>( <var>thresh</var>, <var>dof</var> )</em></dt>
+<dd>
+<p>compute the false-alarm probability for given threshold <var>thresh</var>&rsquo;
+for a (central) chi-squared distribution with <var>dof</var> degrees-of-freedom
+</p>
+<span id="Examples-195"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_chi2([23.513 28.473 33.377 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 4), logspace(-4, -20, 17), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-falseAlarm_005fHoughF">Function File: <em><var>fAH</var> =</em> <strong>falseAlarm_HoughF</strong> <em>( <var>nth</var>, <var>Nseg</var>, <var>Fth</var> )</em></dt>
+<dd>
+<p>compute Hough-on-Fstat false-alarm probability fAH for given number of segments <var>Nseg</var>,
+a threshold on segment-crossings <var>nth</var>, and an F-statistic threshold per segment <var>Fth</var>.
+A false-alarm is defined as n &gt;= <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+absence of a signal
+</p>
+<span id="Note-51"></span><h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use <code>arrayfun()</code> or <code>cellfun()</code> to iterate thisover vectors of arguments
+</p>
+<span id="Examples-196"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_HoughF(11, 100, 5.5), 7.5e-05, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(falseAlarm_HoughF(18, 100, 5.5), 1.7e-10, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-falseDismissal_005fHoughF">Function File: <em><var>fDH</var> =</em> <strong>falseDismissal_HoughF</strong> <em>( <var>nth</var>, <var>Nseg</var>, <var>Fth</var>, <var>SNR0sq</var> )</em></dt>
+<dd>
+<p>compute Hough-on-Fstat false-dismissal probability fDH for given number of segments <var>Nseg</var>,
+a threshold on segment-crossings <var>nth</var>, an F-statistic threshold per segment <var>Fth</var>,
+and the optimal signal SNR^2 per segment <var>SNR0sq</var>, which is assumed constant across all segments.
+</p>
+<p>A false-dismissal is defined as n &lt; <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+presence of a signal
+</p>
+<span id="Note-52"></span><h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use <code>arrayfun()</code> or <code>cellfun()</code> to iterate thisover vectors of arguments
+</p>
+<span id="Examples-197"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(falseDismissal_HoughF(11, 100, 5.5, 2.2), 0.303, 1e-3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(falseDismissal_HoughF(18, 100, 5.5, 2.2), 0.939, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-invFalseAlarm_005fchi2">Function File: <em><var>thresh</var> =</em> <strong>invFalseAlarm_chi2</strong> <em>( <var>fA</var>, <var>dof</var> )</em></dt>
+<dd>
+<p>compute the threshold on a central chi^2 distribution with <var>dof</var>
+degrees of freedom, corresponding to a false-alarm probability
+of <var>fA</var>
+</p>
+<span id="Examples-198"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_chi2(logspace(-4, -20, 17), 4), [23.513 28.473 33.377 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-invFalseAlarm_005fchi2_005fasym">Function File: <em><var>sa</var> =</em> <strong>invFalseAlarm_chi2_asym</strong> <em>( <var>pa</var>, <var>k</var> )</em></dt>
+<dd>
+<p>Calculate the threshold of a central chi^2 distribution which gives
+a certain false alarm probability. Uses an analytic, asymptotic
+inversion of the chi^2 CDF that is accurate for very small
+false alarm probabilities and very large degrees of freedom.
+</p>
+<span id="Arguments-84"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>sa</var></dt>
+<dd><p>threshold
+</p>
+</dd>
+<dt><var>pa</var></dt>
+<dd><p>false alarm probability
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>degrees of freedom of the chi^2 distribution
+</p>
+</dd>
+</dl>
+
+<span id="Examples-199"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_chi2_asym(logspace(-4, -20, 17), 4), [23.467 28.411 33.557 38.442 43.258 48.051 52.827 57.590 62.341 67.082 71.816 76.539 81.257 85.968 90.675 95.376 100.074], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-invFalseAlarm_005fHoughF">Function File: <em>[ <var>nth</var>, <var>fAH</var> ] =</em> <strong>invFalseAlarm_HoughF</strong> <em>( <var>fAH</var>, <var>Nseg</var>, <var>Fth</var> )</em></dt>
+<dd>
+<p>&rsquo;invert&rsquo; false-alarm function to obtain discrete numer-count threshold <var>nth</var> which comes
+closest to the desired false-alarm probability fAH0 for Hough-on-Fstat,
+for given number of segments <var>Nseg</var>, and an F-statistic threshold per segment <var>Fth</var>.
+A false-alarm is defined as n &gt;= <var>nth</var> segments crossing the threshold <var>Fth</var> in the
+absence of a signal
+</p>
+<p>returns <var>nth</var> and corresponding actual false-alarm probability fAH
+</p>
+<span id="Note-53"></span><h3 class="heading">Note</h3>
+
+<p>all arguments need to be scalars, use arrayfun() or cellfun() to iterate thisover vectors of arguments
+</p>
+<span id="Examples-200"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_HoughF(1e-4, 100, 5.5), 11)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(invFalseAlarm_HoughF(1e-10, 100, 5.5), 18)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-kde">Function File: <em>[ <var>bandwidth</var>, <var>density</var>, <var>xmesh</var> ] =</em> <strong>kde</strong> <em>( <var>data</var>, <var>n</var>, <var>MIN</var>, <var>MAX</var> )</em></dt>
+<dd>
+<p>Reliable and extremely fast kernel <var>density</var> estimator for one-dimensional <var>data</var>;
+Gaussian kernel is assumed and the <var>bandwidth</var> is chosen automatically;
+Unlike many other implementations, this one is immune to problems
+caused by multimodal densities with widely separated modes (see example). The
+estimation does not deteriorate for multimodal densities, because we never assume
+a parametric model for the <var>data</var>.
+</p>
+<span id="Inputs"></span><h3 class="heading">Inputs</h3>
+
+<dl compact="compact">
+<dt><var>data</var></dt>
+<dd><p>a vector of <var>data</var> from which the <var>density</var> estimate is constructed;
+</p>
+</dd>
+<dt><var>n</var></dt>
+<dd><p>the number of mesh points used in the uniform discretization of the
+interval [<var>MIN</var>, <var>MAX</var>]; <var>n</var> has to be a power of two; if <var>n</var> is not a power of two, then
+<var>n</var> is rounded up to the next power of two, i.e., <var>n</var> is set to <var>n</var> = 2^ceil(log2(<var>n</var>));
+the default value of <var>n</var> is <var>n</var> = 2^12;
+</p>
+</dd>
+<dt><var>MIN</var></dt>
+<dt><var>MAX</var></dt>
+<dd><p>defines the interval [<var>MIN</var>,<var>MAX</var>] on which the <var>density</var>
+estimate is constructed; the default values of <var>MIN</var> and <var>MAX</var> are:
+<var>MIN</var> = min(<var>data</var>)-Range/10 and <var>MAX</var> = max(<var>data</var>)+Range/10,
+where Range=max(<var>data</var>)-min(<var>data</var>);
+</p>
+</dd>
+</dl>
+
+<span id="Outputs-3"></span><h3 class="heading">Outputs</h3>
+
+<dl compact="compact">
+<dt><var>bandwidth</var></dt>
+<dd><p>the optimal <var>bandwidth</var> (Gaussian kernel assumed);
+</p>
+</dd>
+<dt><var>density</var></dt>
+<dd><p>column vector of length <var>n</var> with the values of the density
+estimate at the grid points;
+</p>
+</dd>
+<dt><var>xmesh</var></dt>
+<dd><p>the grid over which the <var>density</var> estimate is computed;
+if no output is requested, then the code automatically plots a graph of
+the <var>density</var> estimate.
+</p>
+</dd>
+</dl>
+
+<span id="Reference"></span><h3 class="heading">Reference</h3>
+<p>Please cite in your work:
+</p><blockquote class="indentedblock">
+<p>Z. I. Botev, J. F. Grotowski and D. P. Kroese
+&quot;Kernel Density Estimation Via Diffusion&quot;, Annals of Statistics, 2010, to appear
+[Download from: http://www.maths.uq.edu.au/~kroese/ps/AOS799.pdf]
+</p></blockquote>
+
+<span id="Example-4"></span><h3 class="heading">Example</h3>
+<div class="example">
+<pre class="example">data=[randn(100,1);randn(100,1)*2+35 ;randn(100,1)+55];
+kde(data,2^14,min(data)-5,max(data)+5);
+</pre></div>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-function">Function File: <em></em> <strong>function</strong> <em>p ( <var>x</var> ) = maxChi2FromNdraws_pdf ( <var>x</var>, <var>Ndraws</var>, <var>dof = 4</var> )</em></dt>
+<dd>
+<p>Probability density (pdf) for the maximum out of <var>Ndraws</var> independent draws from a
+(central) chi2 distribution with <var>dof</var> degrees of freedom.
+</p>
+<p>Return p(<var>x</var>): pdf over (vector of) maxChi2 statistics values <var>x</var>&rsquo;
+</p>
+<span id="Examples-201"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">max2F = linspace ( 30, 60, 100 );
+p = maxChi2FromNdraws_pdf ( max2F, 2e7, dof=4 );
+dFmax = mean(diff(max2F));
+Emax2F = sum ( max2F .* p ) * dFmax;
+assert ( Emax2F, 40.901, -1e-3 );    ## 1e-3 relative tolerance
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-maxStatFromNdraws_005fpdf">Function File: <em><var>p</var> =</em> <strong>maxStatFromNdraws_pdf</strong> <em>( <var>x</var>, <var>Ndraws</var>, <var>statHgrm</var> )</em></dt>
+<dd>
+<p>Probability density (pdf) for the maximum out of <var>Ndraws</var> independent draws from an
+arbitrary statistic, defined via its empirical probability density <var>statHgrm</var> as a histogram object.
+</p>
+<p>Return p(<var>x</var>): pdf over (vector of) max(Statistic) statistics values <var>x</var>&rsquo;
+</p>
+<span id="Examples-202"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Ndraws = 1e3;
+twoF = linspace ( 10, 40, 100 );
+pdf0 = maxChi2FromNdraws_pdf ( twoF, Ndraws, dof=4 );
+hgrm = Hist ( 1, {&quot;lin&quot;, &quot;dbin&quot;, 0.05, &quot;bin0&quot;, 0 } );
+F = @(x) octforge_chi2pdf(x, 4);
+hgrm = initHistFromFunc(hgrm, F, [0, 50] );
+pdf1 = maxStatFromNdraws_pdf ( twoF, Ndraws, hgrm );
+relerr = max ( abs ( pdf0 - pdf1 ) ./ pdf0 );
+assert ( relerr &lt; 2e-3 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-meanNaN">Function File: <em><var>y</var> =</em> <strong>meanNaN</strong> <em>( <var>x</var>, <var>dim</var> )</em></dt>
+<dd>
+<p>Compute the mean of <var>x</var> over the dimension <var>dim</var>, ignoring NaNs.
+</p><span id="Examples-203"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(meanNaN([1:5, NaN, 6:10]), mean(1:10))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-normHist">Function File: <em>[ <var>NN</var>, <var>XX</var> ] =</em> <strong>normHist</strong> <em>( <var>data</var>, <var>bins</var> )</em></dt>
+<dd>
+<p>compute a pdf-normalized histogram (i.e. the *integral* is 1)
+</p>
+<p>With one vector input argument, plot a histogram of the values with
+10 <var>bins</var>.  The range of the histogram <var>bins</var> is determined by the
+range of the <var>data</var>.  With one matrix input argument, plot a
+histogram where each bin contains a bar per input column.
+</p>
+<p>Given a second scalar argument, use that as the number of <var>bins</var>.
+</p>
+<p>Given a second vector argument, use that as the centers of the
+bins, with the width of the <var>bins</var> determined from the adjacent
+values in the vector.
+</p>
+<span id="Examples-204"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(normHist(0:0.001:100), 0.011 * ones(1, 10), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fchi2cdf">: <em></em> <strong>octforge_chi2cdf</strong> <em>(<var>x</var>, <var>n</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the cumulative distribution function
+(CDF) at <var>x</var> of the chi-square distribution with <var>n</var> degrees of
+freedom.
+</p><span id="Examples-205"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 2];
+y = [0, 1 - exp(-x(2:end)/2)];
+ssert (octforge_chi2cdf (x, 2*ones (1,5)), y, eps)
+ssert (octforge_chi2cdf (x, 2), y, eps)
+ssert (octforge_chi2cdf (x, 2*[1 0 NaN 1 1]), [y(1) NaN NaN y(4:5)], eps)
+ssert (octforge_chi2cdf ([x(1:2) NaN x(4:5)], 2), [y(1:2) NaN y(4:5)], eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2cdf ([x, NaN], 2), [y, NaN], eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2cdf (single ([x, NaN]), 2), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2cdf ([x, NaN], single (2)), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fchi2inv">: <em></em> <strong>octforge_chi2inv</strong> <em>(<var>x</var>, <var>n</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the quantile (the inverse of the CDF)
+at <var>x</var> of the chi-square distribution with <var>n</var> degrees of freedom.
+</p><span id="Examples-206"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.3934693402873666 1 2];
+ssert (octforge_chi2inv (x, 2*ones (1,5)), [NaN 0 1 Inf NaN], 5*eps)
+ssert (octforge_chi2inv (x, 2), [NaN 0 1 Inf NaN], 5*eps)
+ssert (octforge_chi2inv (x, 2*[0 1 NaN 1 1]), [NaN 0 NaN Inf NaN], 5*eps)
+ssert (octforge_chi2inv ([x(1:2) NaN x(4:5)], 2), [NaN 0 NaN Inf NaN], 5*eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2inv ([x, NaN], 2), [NaN 0 1 Inf NaN NaN], 5*eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2inv (single ([x, NaN]), 2), single ([NaN 0 1 Inf NaN NaN]), 5*eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2inv ([x, NaN], single (2)), single ([NaN 0 1 Inf NaN NaN]), 5*eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fchi2pdf">: <em></em> <strong>octforge_chi2pdf</strong> <em>(<var>x</var>, <var>n</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the probability density function (PDF)
+at <var>x</var> of the chi-square distribution with <var>n</var> degrees of freedom.
+</p><span id="Examples-207"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 Inf];
+y = [0, 1/2 * exp(-x(2:5)/2)];
+ssert (octforge_chi2pdf (x, 2*ones (1,5)), y)
+ssert (octforge_chi2pdf (x, 2), y)
+ssert (octforge_chi2pdf (x, 2*[1 0 NaN 1 1]), [y(1) NaN NaN y(4:5)])
+ssert (octforge_chi2pdf ([x, NaN], 2), [y, NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2pdf (single ([x, NaN]), 2), single ([y, NaN]))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_chi2pdf ([x, NaN], single (2)), single ([y, NaN]))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fchi2rnd">: <em></em> <strong>octforge_chi2rnd</strong> <em>(<var>n</var>)</em></dt>
+<dt id="index-octforge_005fchi2rnd-1">: <em></em> <strong>octforge_chi2rnd</strong> <em>(<var>n</var>, <var>r</var>)</em></dt>
+<dt id="index-octforge_005fchi2rnd-2">: <em></em> <strong>octforge_chi2rnd</strong> <em>(<var>n</var>, <var>r</var>, <var>c</var>, &hellip;)</em></dt>
+<dt id="index-octforge_005fchi2rnd-3">: <em></em> <strong>octforge_chi2rnd</strong> <em>(<var>n</var>, [<var>sz</var>])</em></dt>
+<dd><p>Return a matrix of random samples from the chi-square distribution with
+<var>n</var> degrees of freedom.
+</p>
+<p>When called with a single size argument, return a square matrix with
+the dimension specified.  When called with more than one scalar argument the
+first two arguments are taken as the number of rows and columns and any
+further arguments specify additional matrix dimensions.  The size may also
+be specified with a vector of dimensions <var>sz</var>.
+</p>
+<p>If no size arguments are given then the result matrix is the size of
+<var>n</var>.
+</p><span id="Examples-208"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (2)), [1, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (ones (2,1))), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (ones (2,2))), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (1, 3)), [3, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (1, [4 1])), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_chi2rnd (1, 4, 1)), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_chi2rnd (2)), &quot;double&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_chi2rnd (single (2))), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_chi2rnd (single ([2 2]))), &quot;single&quot;)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fgamcdf">: <em></em> <strong>octforge_gamcdf</strong> <em>(<var>x</var>, <var>a</var>, <var>b</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the cumulative distribution function
+(CDF) at <var>x</var> of the Gamma distribution with shape parameter <var>a</var> and
+scale <var>b</var>.
+</p><span id="Examples-209"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 2 Inf];
+y = [0, gammainc(x(2:end), 1)];
+ssert (octforge_gamcdf (x, ones (1,6), ones (1,6)), y)
+ssert (octforge_gamcdf (x, 1, ones (1,6)), y)
+ssert (octforge_gamcdf (x, ones (1,6), 1), y)
+ssert (octforge_gamcdf (x, [0 -Inf NaN Inf 1 1], 1), [NaN NaN NaN NaN y(5:6)])
+ssert (octforge_gamcdf (x, 1, [0 -Inf NaN Inf 1 1]), [NaN NaN NaN NaN y(5:6)])
+ssert (octforge_gamcdf ([x(1:2) NaN x(4:6)], 1, 1), [y(1:2) NaN y(4:6)])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gamcdf ([x, NaN], 1, 1), [y, NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gamcdf (single ([x, NaN]), 1, 1), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fgaminv">: <em></em> <strong>octforge_gaminv</strong> <em>(<var>x</var>, <var>a</var>, <var>b</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the quantile (the inverse of the CDF)
+at <var>x</var> of the Gamma distribution with shape parameter <var>a</var> and
+scale <var>b</var>.
+</p><span id="Examples-210"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.63212055882855778 1 2];
+ssert (octforge_gaminv (x, ones (1,5), ones (1,5)), [NaN 0 1 Inf NaN], eps)
+ssert (octforge_gaminv (x, 1, ones (1,5)), [NaN 0 1 Inf NaN], eps)
+ssert (octforge_gaminv (x, ones (1,5), 1), [NaN 0 1 Inf NaN], eps)
+ssert (octforge_gaminv (x, [1 -Inf NaN Inf 1], 1), [NaN NaN NaN NaN NaN])
+ssert (octforge_gaminv (x, 1, [1 -Inf NaN Inf 1]), [NaN NaN NaN NaN NaN])
+ssert (octforge_gaminv ([x(1:2) NaN x(4:5)], 1, 1), [NaN 0 NaN Inf NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gaminv ([x, NaN], 1, 1), [NaN 0 1 Inf NaN NaN], eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gaminv (single ([x, NaN]), 1, 1), single ([NaN 0 1 Inf NaN NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gaminv ([x, NaN], single (1), 1), single ([NaN 0 1 Inf NaN NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gaminv ([x, NaN], 1, single (1)), single ([NaN 0 1 Inf NaN NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fgampdf">: <em></em> <strong>octforge_gampdf</strong> <em>(<var>x</var>, <var>a</var>, <var>b</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, return the probability density function
+(PDF) at <var>x</var> of the Gamma distribution with shape parameter <var>a</var> and
+scale <var>b</var>.
+</p><span id="Examples-211"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 Inf];
+y = [0 exp(-x(2:end))];
+ssert (octforge_gampdf (x, ones (1,5), ones (1,5)), y)
+ssert (octforge_gampdf (x, 1, ones (1,5)), y)
+ssert (octforge_gampdf (x, ones (1,5), 1), y)
+ssert (octforge_gampdf (x, [0 -Inf NaN Inf 1], 1), [NaN NaN NaN NaN y(5)])
+ssert (octforge_gampdf (x, 1, [0 -Inf NaN Inf 1]), [NaN NaN NaN 0 y(5)])
+ssert (octforge_gampdf ([x, NaN], 1, 1), [y, NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gampdf (single ([x, NaN]), 1, 1), single ([y, NaN]))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gampdf ([x, NaN], single (1), 1), single ([y, NaN]))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_gampdf ([x, NaN], 1, single (1)), single ([y, NaN]))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fgamrnd">: <em></em> <strong>octforge_gamrnd</strong> <em>(<var>a</var>, <var>b</var>)</em></dt>
+<dt id="index-octforge_005fgamrnd-1">: <em></em> <strong>octforge_gamrnd</strong> <em>(<var>a</var>, <var>b</var>, <var>r</var>)</em></dt>
+<dt id="index-octforge_005fgamrnd-2">: <em></em> <strong>octforge_gamrnd</strong> <em>(<var>a</var>, <var>b</var>, <var>r</var>, <var>c</var>, &hellip;)</em></dt>
+<dt id="index-octforge_005fgamrnd-3">: <em></em> <strong>octforge_gamrnd</strong> <em>(<var>a</var>, <var>b</var>, [<var>sz</var>])</em></dt>
+<dd><p>Return a matrix of random samples from the Gamma distribution with
+shape parameter <var>a</var> and scale <var>b</var>.
+</p>
+<p>When called with a single size argument, return a square matrix with
+the dimension specified.  When called with more than one scalar argument the
+first two arguments are taken as the number of rows and columns and any
+further arguments specify additional matrix dimensions.  The size may also
+be specified with a vector of dimensions <var>sz</var>.
+</p>
+<p>If no size arguments are given then the result matrix is the common size of
+<var>a</var> and <var>b</var>.
+</p><span id="Examples-212"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1,2)), [1, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (ones (2,1), 2)), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (ones (2,2), 2)), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1, 2*ones (2,1))), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1, 2*ones (2,2))), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1, 2, 3)), [3, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1, 2, [4 1])), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_gamrnd (1, 2, 4, 1)), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_gamrnd (1, 2)), &quot;double&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_gamrnd (single (1), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_gamrnd (single ([1 1]), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_gamrnd (1, single (2))), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_gamrnd (1, single ([2 2]))), &quot;single&quot;)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fnormcdf">: <em></em> <strong>octforge_normcdf</strong> <em>(<var>x</var>)</em></dt>
+<dt id="index-octforge_005fnormcdf-1">: <em></em> <strong>octforge_normcdf</strong> <em>(<var>x</var>, <var>mu</var>, <var>sigma</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the cumulative distribution function
+(CDF) at <var>x</var> of the normal distribution with mean <var>mu</var> and
+standard deviation <var>sigma</var>.
+</p>
+<p>Default values are <var>mu</var> = 0, <var>sigma</var> = 1.
+</p><span id="Examples-213"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-Inf 1 2 Inf];
+y = [0, 0.5, 1/2*(1+erf(1/sqrt(2))), 1];
+ssert (octforge_normcdf (x, ones (1,4), ones (1,4)), y)
+ssert (octforge_normcdf (x, 1, ones (1,4)), y)
+ssert (octforge_normcdf (x, ones (1,4), 1), y)
+ssert (octforge_normcdf (x, [0 -Inf NaN Inf], 1), [y(1) NaN NaN NaN])
+ssert (octforge_normcdf (x, 1, [Inf NaN -1 0]), [NaN NaN NaN NaN])
+ssert (octforge_normcdf ([x(1:2) NaN x(4)], 1, 1), [y(1:2) NaN y(4)])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normcdf ([x, NaN], 1, 1), [y, NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normcdf (single ([x, NaN]), 1, 1), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normcdf ([x, NaN], single (1), 1), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normcdf ([x, NaN], 1, single (1)), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fnorminv">: <em></em> <strong>octforge_norminv</strong> <em>(<var>x</var>)</em></dt>
+<dt id="index-octforge_005fnorminv-1">: <em></em> <strong>octforge_norminv</strong> <em>(<var>x</var>, <var>mu</var>, <var>sigma</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the quantile (the inverse of the CDF)
+at <var>x</var> of the normal distribution with mean <var>mu</var> and
+standard deviation <var>sigma</var>.
+</p>
+<p>Default values are <var>mu</var> = 0, <var>sigma</var> = 1.
+</p><span id="Examples-214"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 2];
+ssert (octforge_norminv (x, ones (1,5), ones (1,5)), [NaN -Inf 1 Inf NaN])
+ssert (octforge_norminv (x, 1, ones (1,5)), [NaN -Inf 1 Inf NaN])
+ssert (octforge_norminv (x, ones (1,5), 1), [NaN -Inf 1 Inf NaN])
+ssert (octforge_norminv (x, [1 -Inf NaN Inf 1], 1), [NaN NaN NaN NaN NaN])
+ssert (octforge_norminv (x, 1, [1 0 NaN Inf 1]), [NaN NaN NaN NaN NaN])
+ssert (octforge_norminv ([x(1:2) NaN x(4:5)], 1, 1), [NaN -Inf NaN Inf NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_norminv ([x, NaN], 1, 1), [NaN -Inf 1 Inf NaN NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_norminv (single ([x, NaN]), 1, 1), single ([NaN -Inf 1 Inf NaN NaN]))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_norminv ([x, NaN], single (1), 1), single ([NaN -Inf 1 Inf NaN NaN]))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_norminv ([x, NaN], 1, single (1)), single ([NaN -Inf 1 Inf NaN NaN]))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fnormpdf">: <em></em> <strong>octforge_normpdf</strong> <em>(<var>x</var>)</em></dt>
+<dt id="index-octforge_005fnormpdf-1">: <em></em> <strong>octforge_normpdf</strong> <em>(<var>x</var>, <var>mu</var>, <var>sigma</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the probability density function (PDF)
+at <var>x</var> of the normal distribution with mean <var>mu</var> and
+standard deviation <var>sigma</var>.
+</p>
+<p>Default values are <var>mu</var> = 0, <var>sigma</var> = 1.
+</p><span id="Examples-215"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-Inf 1 2 Inf];
+y = 1/sqrt(2*pi)*exp (-(x-1).^2/2);
+ssert (octforge_normpdf (x, ones (1,4), ones (1,4)), y, eps)
+ssert (octforge_normpdf (x, 1, ones (1,4)), y, eps)
+ssert (octforge_normpdf (x, ones (1,4), 1), y, eps)
+ssert (octforge_normpdf (x, [0 -Inf NaN Inf], 1), [y(1) NaN NaN NaN], eps)
+ssert (octforge_normpdf (x, 1, [Inf NaN -1 0]), [NaN NaN NaN NaN], eps)
+ssert (octforge_normpdf ([x, NaN], 1, 1), [y, NaN], eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normpdf (single ([x, NaN]), 1, 1), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normpdf ([x, NaN], single (1), 1), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_normpdf ([x, NaN], 1, single (1)), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fnormrnd">: <em></em> <strong>octforge_normrnd</strong> <em>(<var>mu</var>, <var>sigma</var>)</em></dt>
+<dt id="index-octforge_005fnormrnd-1">: <em></em> <strong>octforge_normrnd</strong> <em>(<var>mu</var>, <var>sigma</var>, <var>r</var>)</em></dt>
+<dt id="index-octforge_005fnormrnd-2">: <em></em> <strong>octforge_normrnd</strong> <em>(<var>mu</var>, <var>sigma</var>, <var>r</var>, <var>c</var>, &hellip;)</em></dt>
+<dt id="index-octforge_005fnormrnd-3">: <em></em> <strong>octforge_normrnd</strong> <em>(<var>mu</var>, <var>sigma</var>, [<var>sz</var>])</em></dt>
+<dd><p>Return a matrix of random samples from the normal distribution with
+parameters mean <var>mu</var> and standard deviation <var>sigma</var>.
+</p>
+<p>When called with a single size argument, return a square matrix with
+the dimension specified.  When called with more than one scalar argument the
+first two arguments are taken as the number of rows and columns and any
+further arguments specify additional matrix dimensions.  The size may also
+be specified with a vector of dimensions <var>sz</var>.
+</p>
+<p>If no size arguments are given then the result matrix is the common size of
+<var>mu</var> and <var>sigma</var>.
+</p><span id="Examples-216"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1,2)), [1, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (ones (2,1), 2)), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (ones (2,2), 2)), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1, 2*ones (2,1))), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1, 2*ones (2,2))), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1, 2, 3)), [3, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1, 2, [4 1])), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_normrnd (1, 2, 4, 1)), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_normrnd (1, 2)), &quot;double&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_normrnd (single (1), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_normrnd (single ([1 1]), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_normrnd (1, single (2))), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_normrnd (1, single ([2 2]))), &quot;single&quot;)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fstdnormal_005fcdf">: <em></em> <strong>octforge_stdnormal_cdf</strong> <em>(<var>x</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the cumulative distribution function
+(CDF) at <var>x</var> of the standard normal distribution
+(mean = 0, standard deviation = 1).
+</p><span id="Examples-217"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-Inf 0 1 Inf];
+y = [0, 0.5, 1/2*(1+erf(1/sqrt(2))), 1];
+ssert (octforge_stdnormal_cdf ([x, NaN]), [y, NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_stdnormal_cdf (single ([x, NaN])), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fstdnormal_005finv">: <em></em> <strong>octforge_stdnormal_inv</strong> <em>(<var>x</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the quantile (the
+inverse of the CDF) at <var>x</var> of the standard normal distribution
+(mean = 0, standard deviation = 1).
+</p><span id="Examples-218"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-1 0 0.5 1 2];
+ssert (octforge_stdnormal_inv (x), [NaN -Inf 0 Inf NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_stdnormal_inv ([x, NaN]), [NaN -Inf 0 Inf NaN NaN])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_stdnormal_inv (single ([x, NaN])), single ([NaN -Inf 0 Inf NaN NaN]))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fstdnormal_005fpdf">: <em></em> <strong>octforge_stdnormal_pdf</strong> <em>(<var>x</var>)</em></dt>
+<dd><p>For each element of <var>x</var>, compute the probability density function (PDF)
+at <var>x</var> of the standard normal distribution
+(mean = 0, standard deviation = 1).
+</p><span id="Examples-219"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = [-Inf 0 1 Inf];
+y = 1/sqrt(2*pi)*exp (-x.^2/2);
+ssert (octforge_stdnormal_pdf ([x, NaN]), [y, NaN], eps)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_stdnormal_pdf (single ([x, NaN])), single ([y, NaN]), eps (&quot;single&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005fstdnormal_005frnd">: <em></em> <strong>octforge_stdnormal_rnd</strong> <em>(<var>r</var>)</em></dt>
+<dt id="index-octforge_005fstdnormal_005frnd-1">: <em></em> <strong>octforge_stdnormal_rnd</strong> <em>(<var>r</var>, <var>c</var>, &hellip;)</em></dt>
+<dt id="index-octforge_005fstdnormal_005frnd-2">: <em></em> <strong>octforge_stdnormal_rnd</strong> <em>([<var>sz</var>])</em></dt>
+<dd><p>Return a matrix of random samples from the standard normal distribution
+(mean = 0, standard deviation = 1).
+</p>
+<p>When called with a single size argument, return a square matrix with
+the dimension specified.  When called with more than one scalar argument the
+first two arguments are taken as the number of rows and columns and any
+further arguments specify additional matrix dimensions.  The size may also
+be specified with a vector of dimensions <var>sz</var>.
+</p><span id="Examples-220"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert (size (octforge_stdnormal_rnd (3)), [3, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_stdnormal_rnd ([4 1])), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_stdnormal_rnd (4,1)), [4, 1])
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octforge_005funifrnd">: <em></em> <strong>octforge_unifrnd</strong> <em>(<var>a</var>, <var>b</var>)</em></dt>
+<dt id="index-octforge_005funifrnd-1">: <em></em> <strong>octforge_unifrnd</strong> <em>(<var>a</var>, <var>b</var>, <var>r</var>)</em></dt>
+<dt id="index-octforge_005funifrnd-2">: <em></em> <strong>octforge_unifrnd</strong> <em>(<var>a</var>, <var>b</var>, <var>r</var>, <var>c</var>, &hellip;)</em></dt>
+<dt id="index-octforge_005funifrnd-3">: <em></em> <strong>octforge_unifrnd</strong> <em>(<var>a</var>, <var>b</var>, [<var>sz</var>])</em></dt>
+<dd><p>Return a matrix of random samples from the uniform distribution on
+[<var>a</var>, <var>b</var>].
+</p>
+<p>When called with a single size argument, return a square matrix with
+the dimension specified.  When called with more than one scalar argument the
+first two arguments are taken as the number of rows and columns and any
+further arguments specify additional matrix dimensions.  The size may also
+be specified with a vector of dimensions <var>sz</var>.
+</p>
+<p>If no size arguments are given then the result matrix is the common size of
+<var>a</var> and <var>b</var>.
+</p><span id="Examples-221"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1,2)), [1, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (ones (2,1), 2)), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (ones (2,2), 2)), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1, 2*ones (2,1))), [2, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1, 2*ones (2,2))), [2, 2])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1, 2, 3)), [3, 3])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1, 2, [4 1])), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (size (octforge_unifrnd (1, 2, 4, 1)), [4, 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_unifrnd (1, 2)), &quot;double&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_unifrnd (single (1), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_unifrnd (single ([1 1]), 2)), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_unifrnd (1, single (2))), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (class (octforge_unifrnd (1, single ([2 2]))), &quot;single&quot;)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_unifrnd (0,0), 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_unifrnd (1,1), 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert (octforge_unifrnd (1,0), NaN)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-pickFromRange">Function File: <em><var>ret</var> =</em> <strong>pickFromRange</strong> <em>( <var>range</var>, [ <var>num</var> ] )</em></dt>
+<dd>
+<p>function to return a number of random-values (specified by the optional
+argument <var>num</var>, default is 1. Return is a column-vector) from within &rsquo;range&rsquo;,
+which can be a single number, or a vector with [min, max] entries
+</p>
+<span id="Examples-222"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">pickFromRange([10,20],5);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-randPointInNSphere">Function File: <em><var>p</var> =</em> <strong>randPointInNSphere</strong> <em>( <var>n</var>, <var>u</var> )</em></dt>
+<dd>
+<p>Generate random points (with)in a <var>n</var>-dimensional sphere
+</p>
+<span id="Arguments-85"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>n</var></dt>
+<dd><p>dimensionality of sphere
+</p>
+</dd>
+<dt><var>u</var></dt>
+<dd><p>vector of numbers used to chose the radius; set
+</p>
+<dl compact="compact">
+<dt>u = rand(1, m)</dt>
+<dd><p>to generate m points uniformly within the sphere, or
+</p>
+</dd>
+<dt>u = ones(1, m)</dt>
+<dd><p>to generate m points uniformly over the sphere&rsquo;s surface
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Examples-223"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(1, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(2, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(3, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(4, 1)), 1.0, 1e-4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(norm(randPointInNSphere(5, 1)), 1.0, 1e-4)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-rngmed">Function File: <em><var>ret</var> =</em> <strong>rngmed</strong> <em>( <var>data</var>, <var>window</var> )</em></dt>
+<dd>
+<p>return a &rsquo;smoothed&rsquo; vector using a
+running-median of the given <var>window</var>-size.
+output-vector has same number of entries, with <var>window</var>/2 bins
+at the borders filled with identical values
+</p>
+<span id="Note-54"></span><h3 class="heading">Note</h3>
+
+<p>this is the most &rsquo;naive&rsquo; implementation, not optimized at all!
+</p><span id="Examples-224"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(rngmed(1:10, 3), [1.5 2.0 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.0])
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="text_002dhandling.html" accesskey="n" rel="next"><samp>text-handling</samp></a>, Previous: <a href="plotting.html" accesskey="p" rel="prev"><samp>plotting</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

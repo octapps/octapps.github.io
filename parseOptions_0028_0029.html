@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>parseOptions() (OctApps Reference Manual)</title>
+
+<meta name="description" content="parseOptions() (OctApps Reference Manual)">
+<meta name="keywords" content="parseOptions() (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="General_002dPurpose-Functions.html" rel="up" title="General-Purpose Functions">
+<link href="Hist.html" rel="next" title="Hist">
+<link href="General_002dPurpose-Functions.html" rel="prev" title="General-Purpose Functions">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="parseOptions_0028_0029"></span><div class="header">
+<p>
+Next: <a href="Hist.html" accesskey="n" rel="next"><code>Hist</code></a>, Up: <a href="General_002dPurpose-Functions.html" accesskey="u" rel="up">General-Purpose Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="parseOptions_0028_0029-1"></span><h4 class="subsection">1.1.1 <code>parseOptions()</code></h4>
+
+<p><code>parseOptions()</code> is a general-purpose argument parser for Octave functions.
+It provides parsing of keyword-value arguments as well as powerful type-checking of argument values.
+Together with <code>octapps_run</code>, a Unix shell script, Octave functions written using <code>parseOptions</code> may be called directly from the Unix command line with no additional changes.
+</p>
+<p>Consider the following simple function:
+</p><div class="example">
+<pre class="example">function function1(varargin)
+
+  parseOptions(varargin,
+               {&quot;message&quot;, &quot;char&quot;},
+               []);
+
+  printf(&quot;%s\n&quot;, message);
+
+endfunction
+</pre></div>
+<p>This defines a function called <code>function1()</code>, whose arguments are parsed by <code>parseOptions()</code>.
+The first argument to <code>parseOptions()</code> are the arguments passed to <code>function1()</code>, which are contained in the cell array <var>varargin</var>.
+The second and subsequent<a id="DOCF1" href="#FOOT1"><sup>1</sup></a> arguments to <code>parseOptions()</code> define specifications which define which arguments are accepted by <code>parseOptions()</code>.
+Each specification is given by a cell array <code>{ &hellip; }</code> with at least two arguments: the first argument is the keyword given to the argument, and the second argument defines the allowed type of the argument.
+</p>
+<p>In this example, <code>function1()</code> takes a single keyword argument, <var>message</var>, whose value must satisfy the type specification &lsquo;<samp>char</samp>&rsquo;.
+The type specifications generally map naturally to Octave functions which test for various types: a type specification &lsquo;<samp>&lt;type&gt;</samp>&rsquo; calls the Octave function <code>is&lt;type&gt;()</code> on the argument value, which must return &lsquo;<samp>true</samp>&rsquo; for the argument value to be accepted.
+In this case, the type specification &lsquo;<samp>char</samp>&rsquo; calls the Octave function <code>ischar()</code>, which returns &lsquo;<samp>true</samp>&rsquo; only if the argument value is a <em>string</em>.
+</p>
+<p>The function <code>function1()</code> is called from within Octave like this:
+</p><div class="example">
+<pre class="example">octave&gt; function1(&quot;message&quot;, &quot;Hello world!&quot;)
+Hello world!
+</pre></div>
+
+<p>Incorrect calls to <code>function1()</code> are handled with error messages:
+</p><div class="example">
+<pre class="example">octave&gt; function1
+error: parseOptions: missing required option 'message'
+error: called from
+    parseOptions at line 409 column 9
+    function1 at line 3 column 3
+
+octave&gt; function1(&quot;message&quot;)
+error: parseOptions: expected 'key',value pairs following regular options in args
+error: called from
+    parseOptions at line 329 column 5
+    function1 at line 3 column 3
+
+octave&gt; function1(&quot;message&quot;, 1.23)
+error: parseOptions: value of 'message' must satisfy ( ischar(x) )
+error: called from
+    parseOptions at line 379 column 11
+    function1 at line 3 column 3
+</pre></div>
+
+<p>The function <code>function1()</code> can also be called directly from the Unix command line, using the script <code>octapps_run</code> installed by <em>OctApps</em>, like this:
+</p><div class="example">
+<pre class="example">$ source octapps-user-env.sh
+
+$ octapps_run function1 --message &quot;Hello world!&quot;
+Hello world!
+</pre></div>
+<p>The <code>&quot;keyword&quot;, value</code> syntax used to call <code>function1()</code> from within Octave translates straightforwardly into the usual <code>--keyword value</code> or <code>--keyword=value</code> syntax used by Unix command-line programs.
+</p>
+<p>Now consider a more complicated example:
+</p><div class="example">
+<pre class="example">function function2(varargin)
+
+  parseOptions(varargin,
+               {&quot;message&quot;, &quot;char&quot;},
+               {&quot;count&quot;, &quot;integer,strictpos,scalar&quot;},
+               {&quot;offset&quot;, &quot;integer,scalar&quot;, 0},
+               {&quot;scale&quot;, &quot;real,positive,scalar&quot;, 2.34},
+               {&quot;direction&quot;, &quot;column,rows:2&quot;, [1.3; 5.7]},
+               {&quot;transform&quot;, &quot;matrix,cols:2&quot;, eye(2)},
+               []);
+
+  printf(&quot;%s\n&quot;, message);
+  printf(&quot;count = %i, count + offset = %i, count * scale = %g\n&quot;, count, count + offset, count * scale);
+  printf(&quot;direction = [%g; %g], transform * direction = [%g; %g]\n&quot;, direction, transform * direction);
+
+endfunction
+</pre></div>
+<p>This example introduces some new features of <code>parseOptions()</code>:
+</p><ul>
+<li> <code>parseOptions()</code> includes many builtin type specifications:
+<dl compact="compact">
+<dt>&lsquo;<samp>bool</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>logical</samp>&rsquo;</dt>
+<dd><p>Argument value must be a Boolean/logical value, i.e. <code>true</code> or <code>false</code> or <code>1</code> or <code>0</code>.
+</p>
+</dd>
+<dt>&lsquo;<samp>cell</samp>&rsquo;</dt>
+<dd><p>Argument value must a cell array.
+</p>
+</dd>
+<dt>&lsquo;<samp>function</samp>&rsquo;</dt>
+<dd><p>Argument value must be a function handle.
+</p>
+</dd>
+<dt>&lsquo;<samp>complex</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and complex-valued.
+</p>
+</dd>
+<dt>&lsquo;<samp>real</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and real-values.
+</p>
+</dd>
+<dt>&lsquo;<samp>integer</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and integer-valued.
+</p>
+</dd>
+<dt>&lsquo;<samp>evenint</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and an even integer.
+</p>
+</dd>
+<dt>&lsquo;<samp>oddint</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and an odd integer.
+</p>
+</dd>
+<dt>&lsquo;<samp>nonzero</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and non-zero.
+</p>
+</dd>
+<dt>&lsquo;<samp>positive</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and either zero or positively valued.
+</p>
+</dd>
+<dt>&lsquo;<samp>negative</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and either zero or negatively valued.
+</p>
+</dd>
+<dt>&lsquo;<samp>strictpos</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and strictly positive.
+</p>
+</dd>
+<dt>&lsquo;<samp>strictneg</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and strictly negative.
+</p>
+</dd>
+<dt>&lsquo;<samp>unit</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and between 0 and 1 (including 0 and 1).
+</p>
+</dd>
+<dt>&lsquo;<samp>strictunit</samp>&rsquo;</dt>
+<dd><p>Argument value must be numeric and strictly between 0 and 1 (i.e. not including 0 and 1).
+</p>
+</dd>
+<dt>&lsquo;<samp>a:&lt;class&gt;</samp>&rsquo;</dt>
+<dd><p>Argument value must be an instance of the Octave class &lsquo;<samp>&lt;class&gt;</samp>&rsquo;, as determined by the Octave function <code>isa()</code>.
+</p>
+</dd>
+<dt>&lsquo;<samp>acell:&lt;class&gt;</samp>&rsquo;</dt>
+<dd><p>Argument value must be a cell array whose members are instances of the Octave class &lsquo;<samp>&lt;class&gt;</samp>&rsquo;, as determined by the Octave function <code>isa()</code>.
+</p>
+</dd>
+<dt>&lsquo;<samp>size:&lt;size&gt;</samp>&rsquo;</dt>
+<dd><p>The size of the argument value must match &lsquo;<samp>&lt;size&gt;</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>numel:&lt;n&gt;</samp>&rsquo;</dt>
+<dd><p>The number of elements of the argument value must match &lsquo;<samp>&lt;n&gt;</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>rows:&lt;n&gt;</samp>&rsquo;</dt>
+<dd><p>The number of rows of the argument value must match &lsquo;<samp>&lt;n&gt;</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>cols:&lt;n&gt;</samp>&rsquo;</dt>
+<dd><p>The number of columns of the argument value must match &lsquo;<samp>&lt;n&gt;</samp>&rsquo;.
+</p>
+</dd>
+</dl>
+
+</li><li> Type specifications can take several requirements separated by commas.
+
+</li><li> Argument specifications can include a third argument which gives a default value for the function argument.
+
+</li></ul>
+
+<p>Returning to the example <code>function2()</code>, the argument specifications are therefore interpreted as follows:
+</p><dl compact="compact">
+<dt><var>message</var></dt>
+<dd><p>Argument value must be a string.
+</p>
+</dd>
+<dt><var>count</var></dt>
+<dd><p>Argument value must be a strictly-positive integer scalar.
+</p>
+</dd>
+<dt><var>offset</var></dt>
+<dd><p>Argument value must be a integer scalar; default value is &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd>
+<dt><var>scale</var></dt>
+<dd><p>Argument value must be a positive real scalar; default value is &lsquo;<samp>2.34</samp>&rsquo;.
+</p>
+</dd>
+<dt><var>direction</var></dt>
+<dd><p>Argument value must be a column vector with 2 rows; default value is &lsquo;<samp>[1.3; 5.7]</samp>&rsquo;.
+</p>
+</dd>
+<dt><var>transform</var></dt>
+<dd><p>Argument value must be a matrix with 2 columns: default value is <code>eye(2)</code>, i.e. the 2-by-2 identity matrix.
+</p>
+</dd>
+</dl>
+
+<p>The function <code>function2()</code> is called from within Octave like this:
+</p><div class="example">
+<pre class="example">octave&gt; function2(&quot;message&quot;, &quot;Hello world!&quot;, &quot;count&quot;, 3)
+Hello world!
+count = 3, count + offset = 3, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+octave&gt; function2(&quot;message&quot;, &quot;Hello world!&quot;, &quot;count&quot;, 3, &quot;offset&quot;, -7)
+Hello world!
+count = 3, count + offset = -4, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+octave&gt; function2(&quot;message&quot;, &quot;Hello world!&quot;, &quot;count&quot;, 3, &quot;scale&quot;, 0.35)
+Hello world!
+count = 3, count + offset = 3, count * scale = 1.05
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+octave&gt; function2(&quot;message&quot;, &quot;Hello world!&quot;, &quot;count&quot;, 3, &quot;transform&quot;, [1,2;3,4])
+Hello world!
+count = 3, count + offset = 3, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [12.7; 26.7]
+</pre></div>
+
+<p>or from the Unix command line using <code>octapps_run</code> like this:
+</p><div class="example">
+<pre class="example">$ source octapps-user-env.sh
+
+$ octapps_run function2 --message &quot;Hello world!&quot; --count=3
+Hello world!
+count = 3, count + offset = 3, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+$ octapps_run function2 --message &quot;Hello world!&quot; --count=3 --offset=-7
+Hello world!
+count = 3, count + offset = -4, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+$ octapps_run function2 --message &quot;Hello world!&quot; --count=3 --scale 0.35
+Hello world!
+count = 3, count + offset = 3, count * scale = 1.05
+direction = [1.3; 5.7], transform * direction = [1.3; 5.7]
+
+$ octapps_run function2 --message &quot;Hello world!&quot; --count=3 --transform '[1,2;3,4]'
+Hello world!
+count = 3, count + offset = 3, count * scale = 7.02
+direction = [1.3; 5.7], transform * direction = [12.7; 26.7]
+</pre></div>
+
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT1" href="#DOCF1">(1)</a></h3>
+<p>The last argument to <code>parseOptions</code>, <code>[]</code>, is a convenience to allow the closing bracket of <code>parseOptions</code> to be on its own line, and to allow each <code>{ &hellip; }</code> specification to end with a comma to facilitate easy addition/removal/reordering of specifications.
+</p>
+</div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Hist.html" accesskey="n" rel="next"><code>Hist</code></a>, Up: <a href="General_002dPurpose-Functions.html" accesskey="u" rel="up">General-Purpose Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

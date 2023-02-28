@@ -1,0 +1,449 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>histograms (OctApps Reference Manual)</title>
+
+<meta name="description" content="histograms (OctApps Reference Manual)">
+<meta name="keywords" content="histograms (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="histograms_002f_0040Hist.html" rel="next" title="histograms/@Hist">
+<link href="geometry.html" rel="prev" title="geometry">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="histograms"></span><div class="header">
+<p>
+Next: <a href="histograms_002f_0040Hist.html" accesskey="n" rel="next"><samp>histograms/@Hist</samp></a>, Previous: <a href="geometry.html" accesskey="p" rel="prev"><samp>geometry</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="histograms-1"></span><h3 class="section">2.14 <samp>histograms</samp></h3>
+
+<dl>
+<dt id="index-createDeltaHist">Function File: <em><var>hgrm</var> =</em> <strong>createDeltaHist</strong> <em>( <var>x0</var> )</em></dt>
+<dd>
+<p>Creates a histogram representing a delta function at a given value
+</p>
+<span id="Arguments-42"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>delta function histogram
+</p>
+</dd>
+<dt><var>x0</var></dt>
+<dd><p>location of delta function
+</p>
+</dd>
+</dl>
+
+<span id="Examples-107"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">createDeltaHist(1.23);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-createGaussianHist">Function File: <em><var>hgrm</var> =</em> <strong>createGaussianHist</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Creates a histogram representing a Gaussian PDF with given <var>mean</var> and standard deviation
+</p>
+<span id="Arguments-43"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>Gaussian PDF histogram
+</p>
+</dd>
+</dl>
+
+<span id="Options-25"></span><h3 class="heading">Options</h3>
+<dl compact="compact">
+<dt><code>mean</code></dt>
+<dd><p><var>mean</var> of the Gaussian distribution
+</p>
+</dd>
+<dt><code>std</code></dt>
+<dd><p>standard deviation
+</p>
+</dd>
+<dt><code>binsize</code></dt>
+<dd><p>histogram bin-size (default = &quot;<var>std</var>&quot; / 10)
+</p>
+</dd>
+<dt><code>domain</code></dt>
+<dd><p>constrain all samples to lie within this interval [min(<var>domain</var>), max(<var>domain</var>)]
+</p>
+</dd>
+</dl>
+
+<span id="Examples-108"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+sert(abs(meanOfHist(hgrm) - 1.2) &lt; 0.1)
+sert(abs(sqrt(varianceOfHist(hgrm)) - 3.4) &lt; 0.1)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-cumulativeDistOfHist">Function File: <em><var>cdf</var> =</em> <strong>cumulativeDistOfHist</strong> <em>( <var>hgrm</var>, <var>x</var>, [ <var>k</var> = 1 ] )</em></dt>
+<dd>
+<p>Evaluate the cumulative distribution function (c.d.f) of a histogram.
+</p>
+<span id="Arguments-44"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>x</var></dt>
+<dd><p>argument to the c.d.f.
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension over which to evaluate the c.d.f.
+</p>
+</dd>
+</dl>
+
+<span id="Examples-109"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, sqrt(2.3), 1e7, 1), rand(1e7, 1)]);
+sert(abs(cumulativeDistOfHist(hgrm, 1.7 - sqrt(2.3), 1) - octforge_normcdf(-1)) &lt; 0.005)
+sert(abs(cumulativeDistOfHist(hgrm, 1.7, 1) - octforge_normcdf(0)) &lt; 0.005)
+sert(abs(cumulativeDistOfHist(hgrm, 1.7 + sqrt(2.3), 1) - octforge_normcdf(+1)) &lt; 0.005)
+sert(max(abs(cumulativeDistOfHist(hgrm, 0.33, 2)(50:end-50) - 0.33)) &lt; 0.05)
+sert(max(abs(cumulativeDistOfHist(hgrm, 0.77, 2)(50:end-50) - 0.77)) &lt; 0.05)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-meanOfHist">Function File: <em><var>mean</var> =</em> <strong>meanOfHist</strong> <em>( <var>hgrm</var>, [ <var>k</var> = 1 ] )</em></dt>
+<dd>
+<p>Returns the mean(s) of a histogram.
+</p>
+<span id="Arguments-45"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension to calculate mean(s) over
+</p>
+</dd>
+</dl>
+
+<span id="Examples-110"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, 4.3, 1e6, 1), rand(1e6, 1)]);
+sert(abs(meanOfHist(hgrm) - 1.7) &lt; 5e-2)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-momentOfHist">Function File: <em><var>mu</var> =</em> <strong>momentOfHist</strong> <em>( <var>hgrm</var>, <var>sumdims</var>, <var>n</var>, [ <var>x0</var> = 0 ] )</em></dt>
+<dd>
+<p>Computes the moments of a histogram:
+Only moments for finite bins are returned.
+</p>
+<span id="Arguments-46"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>mu</var></dt>
+<dd><p>integral over x{sumdims=sd} of
+p(x{sd(1)},...,x{sd(end)})
+* (x{sd(1)}-<var>x0</var>{sd(1)})^<var>n</var>{sd(1)}
+* &hellip;
+* (x{sd(end)}-<var>x0</var>{sd(end)})^<var>n</var>{sd(end)} dx{sd(1)} ... dx{sd(end)}
+</p>
+</dd>
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>sumdims</var></dt>
+<dd><p>dimensions to be summed over
+</p>
+</dd>
+<dt><var>n</var></dt>
+<dd><p>moment orders in each summed dimension
+</p>
+</dd>
+<dt><var>x0</var></dt>
+<dd><p>bin offsets, must either be a scalar or match the sizes
+of the histogram dimensions *not* being summed over
+</p>
+</dd>
+</dl>
+
+<span id="Examples-111"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+sert(momentOfHist(hgrm, 1, 0), 1.0, 1e-3)
+sert(momentOfHist(hgrm, 1, 1), 1.2, 1e-3)
+sert(momentOfHist(hgrm, 1, 2, 1.2), 3.4.^2, 1e-3)
+sert(momentOfHist(hgrm, 1, 3, 1.2), 0.0, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-plotHist">Function File: <em></em> <strong>plotHist</strong> <em>( <var>hgrm</var>, <var>options</var>, &hellip;, <var>hgrm</var>, <var>options</var>, &hellip; )</em></dt>
+<dt id="index-plotHist-1">Function File: <em><var>hh</var> =</em> <strong>plotHist</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Plot a histogram as a stair graph
+</p>
+<span id="Arguments-47"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>options</var></dt>
+<dd><p><var>options</var> to pass to graphics function
+</p>
+</dd>
+<dt><var>hh</var></dt>
+<dd><p>return graphics handles
+</p>
+</dd>
+</dl>
+
+<span id="plotHist_0028_0029_002dspecific-options"></span><h3 class="heading"><code>plotHist()</code>-specific options</h3>
+
+<dl compact="compact">
+<dt><code>stairs</code></dt>
+<dd><p>if true [default], plot histogram as a stair-stepped
+graph; otherwise, plot a smooth line through bin centres
+</p>
+</dd>
+<dt><code>infbins</code></dt>
+<dd><p>if true [default], plot stalks for counts in infinite bins
+</p></dd>
+</dl>
+
+<span id="Examples-112"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">fig = figure(&quot;visible&quot;, &quot;off&quot;);
+hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+plotHist(hgrm, &quot;k-&quot;);
+plotHist(hgrm, &quot;k-&quot;, &quot;stairs&quot;, true);
+plotHist(hgrm, &quot;k-&quot;, &quot;stairs&quot;, false);
+close(fig);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-printHistTable">Function File: <em></em> <strong>printHistTable</strong> <em>( <var>hgrm</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Print the contents of a histogram object as an ASCII table.
+</p>
+<span id="Arguments-48"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+</dl>
+
+<span id="Options-26"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><var>dbins</var></dt>
+<dd><p>width of bins to use in each dimension
+</p>
+</dd>
+<dt><var>pth</var></dt>
+<dd><p>threshold to apply before printing
+</p>
+</dd>
+</dl>
+
+<span id="Examples-113"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, 4.3, 1e6, 1), rand(1e6, 1)]);
+showHist(hgrm);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-quantileFuncOfHist">Function File: <em>q.f. =</em> <strong>quantileFuncOfHist</strong> <em>( <var>hgrm</var>, <var>p</var>, [ <var>k</var> = 1 ] )</em></dt>
+<dd>
+<p>Evaluate the quantile function (q.f.) of a histogram.
+</p>
+<span id="Arguments-49"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>p</var></dt>
+<dd><p>quantile probability, in the range [0, 1]
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension over which to evaluate the q.f.
+</p>
+</dd>
+</dl>
+
+<span id="Examples-114"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, sqrt(2.3), 1e7, 1), rand(1e7, 1)]);
+sert(abs(quantileFuncOfHist(hgrm, octforge_normcdf(-1), 1) - (1.7 - sqrt(2.3))) &lt; 0.01)
+sert(abs(quantileFuncOfHist(hgrm, octforge_normcdf( 0), 1) - (1.7)) &lt; 0.01)
+sert(abs(quantileFuncOfHist(hgrm, octforge_normcdf(+1), 1) - (1.7 + sqrt(2.3))) &lt; 0.01)
+sert(max(abs(quantileFuncOfHist(hgrm, 0.33, 2)(50:end-50) - 0.33)) &lt; 0.05)
+sert(max(abs(quantileFuncOfHist(hgrm, 0.77, 2)(50:end-50) - 0.77)) &lt; 0.05)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-showHist">Function File: <em></em> <strong>showHist</strong> <em>( <var>hgrm</var> )</em></dt>
+<dd>
+<p>Show the contents of a histogram object.
+</p>
+<span id="Arguments-50"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+</dl>
+
+<span id="Examples-115"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+showHist(hgrm);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-stdvOfHist">Function File: <em><var>stdv</var> =</em> <strong>stdvOfHist</strong> <em>( <var>hgrm</var>, [ <var>k</var> = 1 ] )</em></dt>
+<dd>
+<p>Returns the standard deviation(s) of a histogram.
+</p>
+<span id="Arguments-51"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension to calculate standard deviation(s) over
+</p>
+</dd>
+</dl>
+
+<span id="Examples-116"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, 4.3, 1e6, 1), rand(1e6, 1)]);
+sert(abs(stdvOfHist(hgrm) - 4.3) &lt; 5e-2)
+sert(abs(stdvOfHist(hgrm) - sqrt(varianceOfHist(hgrm))) &lt; 5e-2)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-varianceOfHist">Function File: <em><var>variance</var> =</em> <strong>varianceOfHist</strong> <em>( <var>hgrm</var>, [ <var>k</var> = 1 ] )</em></dt>
+<dd>
+<p>Returns the variance(s) of a histogram.
+</p>
+<span id="Arguments-52"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension to calculate variance(s) over
+</p>
+</dd>
+</dl>
+
+<span id="Examples-117"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, sqrt(2.3), 1e7, 1), rand(1e7, 1)]);
+sert(abs(meanOfHist(hgrm) - 1.7) &lt; 5e-2)
+sert(abs(varianceOfHist(hgrm) - 2.3) &lt; 5e-2)
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="histograms_002f_0040Hist.html" accesskey="n" rel="next"><samp>histograms/@Hist</samp></a>, Previous: <a href="geometry.html" accesskey="p" rel="prev"><samp>geometry</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

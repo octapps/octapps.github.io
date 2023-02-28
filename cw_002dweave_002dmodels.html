@@ -1,0 +1,685 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-weave-models (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-weave-models (OctApps Reference Manual)">
+<meta name="keywords" content="cw-weave-models (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="file_002dhandling.html" rel="next" title="file-handling">
+<link href="cw_002dsensitivity.html" rel="prev" title="cw-sensitivity">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002dweave_002dmodels"></span><div class="header">
+<p>
+Next: <a href="file_002dhandling.html" accesskey="n" rel="next"><samp>file-handling</samp></a>, Previous: <a href="cw_002dsensitivity.html" accesskey="p" rel="prev"><samp>cw-sensitivity</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002dweave_002dmodels-1"></span><h3 class="section">2.10 <samp>cw-weave-models</samp></h3>
+
+<dl>
+<dt id="index-WeaveFstatMismatch">Function File: <em><var>hgrm</var> =</em> <strong>WeaveFstatMismatch</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the F-statistic mismatch distribution of <code>lalapps_Weave</code>.
+</p>
+<span id="Options-20"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>coh_Tspan</code></dt>
+<dd><p>time span of coherent segments
+</p>
+</dd>
+<dt><code>semi_Tspan</code></dt>
+<dd><p>total time span of semicoherent search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>sky</code></dt>
+<dd><p>Whether to include search over <var>sky</var> parameters (default: true)
+</p>
+</dd>
+<dt><code>spindowns</code></dt>
+<dd><p>Number of spindown parameters being searched
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>Type of <var>lattice</var> used by search (default: Ans)
+</p>
+</dd>
+<dt><code>coh_max_mismatch</code></dt>
+<dt><code>semi_max_mismatch</code></dt>
+<dd><p>Maximum coherent and semicoherent mismatches; for a single-
+segment or non-interpolating search, set <var>coh_max_mismatch</var>=0
+</p>
+</dd>
+</dl>
+
+<span id="Outputs"></span><h3 class="heading">Outputs</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>Histogram of F-statistic mismatch distribution
+</p>
+</dd>
+</dl>
+
+<span id="Examples-79"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+results = fitsread(fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;));
+args = struct;
+args.setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+args.spindowns = results.primary.header.nspins;
+args.coh_max_mismatch = str2double(results.primary.header.progarg_coh_max_mismatch);
+args.semi_max_mismatch = str2double(results.primary.header.progarg_semi_max_mismatch);
+hgrm = fevalstruct(@WeaveFstatMismatch, args);
+assert(meanOfHist(hgrm), 0.0876, 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-WeaveInputSFTBand">Function File: <em>[ <var>SFT_freq_min</var>, <var>SFT_freq_max</var> ] =</em> <strong>WeaveInputSFTBand</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the input SFT band required by <code>lalapps_Weave</code>
+</p>
+<span id="Arguments-38"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>SFT_freq_min/max</var></dt>
+<dd><p>Minimum/maximum SFT frequency range
+</p>
+</dd>
+</dl>
+
+<span id="Options-21"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>segment_list</code></dt>
+<dd><p>Segment list
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>GPS reference time
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>result_file</code></dt>
+<dd><p>Weave result file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>freq_min/max</code></dt>
+<dd><p>Minimum/maximum frequency range
+</p>
+</dd>
+<dt><code>f1dot_min/max</code></dt>
+<dd><p>Minimum/maximum 1st spindown
+</p>
+</dd>
+<dt><code>f2dot_min/max</code></dt>
+<dd><p>Minimum/maximum 2nd spindown (optional)
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>TSFT</code></dt>
+<dd><p>Length of an SFT (default: 1800s)
+</p>
+</dd>
+<dt><code>Dterms</code></dt>
+<dd><p>Number of Dirichlet terms used by the F-statistic (default: 8)
+</p>
+</dd>
+<dt><code>run_med_win</code></dt>
+<dd><p>Size of running median window used by the F-statistic (default: 101)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-80"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+results = fitsread(fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;));
+args = struct;
+args.setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+args.result_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;);
+[SFT_freq_min, SFT_freq_max] = fevalstruct(@WeaveInputSFTBand, args);
+assert(SFT_freq_min &lt;= min([results.segment_info.data.sft_min_freq]));
+assert(SFT_freq_max &gt;= max([results.segment_info.data.sft_max_freq]));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-WeaveReadSetup">Function File: <em><var>setup</var> =</em> <strong>WeaveReadSetup</strong> <em>( <var>setup_file</var> )</em></dt>
+<dd>
+<p>Returns pre-parsed setup file as a struct with additional fields:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>segment_list</samp>&rsquo;</dt>
+<dd><p>Nx2 array of segment GPS [ start-times ; end-times ]
+</p></dd>
+<dt>&lsquo;<samp>segment_props</samp>&rsquo;</dt>
+<dd><p>pre-parsed segment properties returned by <code>AnalyseSegmentList()</code>
+</p></dd>
+<dt>&lsquo;<samp>Nsegments</samp>&rsquo;</dt>
+<dd><p>number of segments
+</p></dd>
+<dt>&lsquo;<samp>Ndetectors</samp>&rsquo;</dt>
+<dd><p>number of detectors
+</p></dd>
+<dt>&lsquo;<samp>detectors</samp>&rsquo;</dt>
+<dd><p>cell-array of detector-names
+</p></dd>
+<dt>&lsquo;<samp>ref_time</samp>&rsquo;</dt>
+<dd><p>reference GPS time
+</p></dd>
+<dt>&lsquo;<samp>start_time</samp>&rsquo;</dt>
+<dd><p>first segment start time
+</p></dd>
+<dt>&lsquo;<samp>coh_Tspan</samp>&rsquo;</dt>
+<dd><p>average segment length (=coherent length)
+</p></dd>
+<dt>&lsquo;<samp>semi_Tspan</samp>&rsquo;</dt>
+<dd><p>total time-span of segment list
+</p>
+</dd>
+</dl>
+
+<span id="Examples-81"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+setup = WeaveReadSetup(setup_file);
+assert(isstruct(setup));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-WeaveRunTime">Function File: <em>[ <var>times</var>, <var>maxmem</var>, <var>tau</var> ] =</em> <strong>WeaveRunTime</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the run time and maximum memory usage of <code>lalapps_Weave</code>.
+</p>
+<span id="Options-22"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>Nsegments</code></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><code>Ndetectors</code></dt>
+<dd><p>number of detectors
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>GPS reference time
+</p>
+</dd>
+<dt><code>start_time</code></dt>
+<dd><p>GPS start time
+</p>
+</dd>
+<dt><code>coh_Tspan</code></dt>
+<dd><p>time span of coherent segments
+</p>
+</dd>
+<dt><code>semi_Tspan</code></dt>
+<dd><p>total time span of semicoherent search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>result_file</code></dt>
+<dd><p>Weave result file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>freq_min/max</code></dt>
+<dd><p>minimum/maximum frequency range
+</p>
+</dd>
+<dt><code>dfreq</code></dt>
+<dd><p>frequency spacing
+</p>
+</dd>
+<dt><code>f1dot_min/max</code></dt>
+<dd><p>minimum/maximum 1st spindown
+</p>
+</dd>
+<dt><code>f2dot_min/max</code></dt>
+<dd><p>minimum/maximum 2nd spindown (optional)
+</p>
+</dd>
+<dt><code>Fmethod</code></dt>
+<dd><p>F-statistic method used by search
+</p>
+</dd>
+<dt><code>Ncohres</code></dt>
+<dd><p>total number of computed coherent results
+</p>
+</dd>
+<dt><code>Nsemitpl</code></dt>
+<dd><p>number of computed semicoherent results
+</p>
+</dd>
+<dt><code>cache_max</code></dt>
+<dd><p>maximum size of coherent results cache
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>stats</code></dt>
+<dd><p>Comma-separated list of statistics being computed
+</p>
+</dd>
+<dt><code>timings</code></dt>
+<dd><p>the name of a Weave result file to read fundamental timing constants
+from, or else the string &quot;default&quot; to use default timings
+</p>
+</dd>
+<dt><code>TSFT</code></dt>
+<dd><p>Length of an SFT (default: 1800s)
+</p>
+</dd>
+</dl>
+
+<span id="Outputs-1"></span><h3 class="heading">Outputs</h3>
+<ul>
+<li> <var>times</var>.total:
+estimate of total CPU run time (seconds)
+
+</li><li> <var>times</var>.&lsquo;<samp>field</samp>&rsquo;:
+estimate of CPU time (seconds) to perform action &lsquo;<samp>field</samp>&rsquo;;
+see the script itself for further documentation
+
+</li><li> <var>maxmem</var>.total:
+estimate of maximum total memory usage (MB)
+
+</li><li> <var>maxmem</var>.&lsquo;<samp>field</samp>&rsquo;:
+estimate of maximum memory usage (MB) of component &lsquo;<samp>field</samp>&rsquo;;
+see the script itself for further documentation
+
+</li><li> <var>tau</var>.&lsquo;<samp>field</samp>&rsquo;:
+fundamental timing constants
+
+</li></ul>
+
+<span id="Examples-82"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+results = fitsread(fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;));
+args = struct;
+args.setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+args.result_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;);
+args.stats = &quot;sum2F,mean2F,log10BSGL,log10BSGLtL,log10BtSGLtL&quot;;
+[times, maxmem, tau] = fevalstruct(@WeaveRunTime, args);
+assert(times.total &gt; 0);
+assert(maxmem.total &gt; 0);
+assert(all(structfun(@(t) t &gt; 0, tau)));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-WeaveSensDepth">Function File: <em><var>depth</var> =</em> <strong>WeaveSensDepth</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the sensitivity depth of <code>lalapps_Weave</code>.
+</p>
+<span id="Options-23"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>Nsegments</code></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>comma-separated list of detectors
+</p>
+</dd>
+<dt><code>coh_Tspan</code></dt>
+<dd><p>time span of coherent segments
+</p>
+</dd>
+<dt><code>semi_Tspan</code></dt>
+<dd><p>total time span of semicoherent search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>alpha</code></dt>
+<dt><code>delta</code></dt>
+<dd><p>If not searching over sky parameters, give sky point of
+search (default: all-sky)
+</p>
+</dd>
+<dt><code>spindowns</code></dt>
+<dd><p>Number of spindown parameters being searched
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>Type of <var>lattice</var> used by search (default: Ans)
+</p>
+</dd>
+<dt><code>coh_max_mismatch</code></dt>
+<dt><code>semi_max_mismatch</code></dt>
+<dd><p>Maximum coherent and semicoherent mismatches; for a single-
+segment or non-interpolating search, set <var>coh_max_mismatch</var>=0
+</p>
+</dd>
+<dt><code>NSFTs</code></dt>
+<dd><p>total number of SFTs used by search
+</p>
+</dd>
+<dt><code>pFD</code></dt>
+<dd><p>false dismissal probability of search
+</p>
+</dd>
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>pFA</code></dt>
+<dd><p>false alarm probability of search
+</p>
+</dd>
+<dt><code>semi_ntmpl</code></dt>
+<dd><p>number of semicoherent templates used by search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>mean2F_th</code></dt>
+<dd><p>threshold on mean 2F
+</p>
+</dd>
+<dt><code>TSFT</code></dt>
+<dd><p>Time span of a single SFT (default: 1800 seconds)
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Outputs-2"></span><h3 class="heading">Outputs</h3>
+<dl compact="compact">
+<dt><var>depth</var></dt>
+<dd><p>estimated sensitivity depth
+</p>
+</dd>
+<dt><var>mismatch_hgrm</var></dt>
+<dd><p>mismatch histogram
+</p>
+</dd>
+</dl>
+
+<span id="Examples-83"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+results = fitsread(fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;));
+args = struct;
+args.setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+args.spindowns = results.primary.header.nspins;
+args.coh_max_mismatch = str2double(results.primary.header.progarg_coh_max_mismatch);
+args.semi_max_mismatch = str2double(results.primary.header.progarg_semi_max_mismatch);
+args.NSFTs = results.primary.header.nsfts;
+args.pFA = 0.01;
+args.semi_ntmpl = results.primary.header.nsemitpl;
+depth = fevalstruct(@WeaveSensDepth, args);
+assert(depth, 29.573, 0.1);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-WeaveTemplateCount">Function File: <em>[ <var>coh_Nt</var>, <var>semi_Nt</var>, <var>dfreq</var> ] =</em> <strong>WeaveTemplateCount</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the number of templates computed by <code>lalapps_Weave</code>
+</p>
+<span id="Arguments-39"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>coh_Nt</var></dt>
+<dd><p>number of coherent templates
+</p>
+</dd>
+<dt><var>semi_Nt</var></dt>
+<dd><p>number of semicoherent templates
+</p>
+</dd>
+<dt><var>dfreq</var></dt>
+<dd><p>frequency spacing
+</p>
+</dd>
+</dl>
+
+<span id="Options-24"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>Nsegments</code></dt>
+<dd><p>Number of segments
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>Comma-separated list of detectors
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>GPS reference time
+</p>
+</dd>
+<dt><code>coh_Tspan</code></dt>
+<dd><p>Time span of coherent segments
+</p>
+</dd>
+<dt><code>semi_Tspan</code></dt>
+<dd><p>Total time span of semicoherent search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>result_file</code></dt>
+<dd><p>Weave result file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>sky_area</code></dt>
+<dd><p>Area of sky to cover (4*pi = entire sky)
+</p>
+</dd>
+<dt><code>freq_min/max</code></dt>
+<dd><p>Minimum/maximum frequency range
+</p>
+</dd>
+<dt><code>f1dot_min/max</code></dt>
+<dd><p>Minimum/maximum 1st spindown
+</p>
+</dd>
+<dt><code>f2dot_min/max</code></dt>
+<dd><p>Minimum/maximum 2nd spindown (optional)
+</p>
+</dd>
+<dt><code>coh_max_mismatch</code></dt>
+<dt><code>semi_max_mismatch</code></dt>
+<dd><p>Maximum coherent and semicoherent mismatches; for a single-
+segment or non-interpolating search, set <var>coh_max_mismatch</var>=0
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>Type of <var>lattice</var> to use (default: Ans)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-84"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+results = fitsread(fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;));
+args = struct;
+args.setup_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_setup_file.fits&quot;);
+args.result_file = fullfile(fileparts(file_in_loadpath(&quot;WeaveReadSetup.m&quot;)), &quot;test_result_file.fits&quot;);
+[coh_Nt, semi_Nt] = fevalstruct(@WeaveTemplateCount, args);
+assert(coh_Nt, results.primary.header.ncohtpl, -0.2);
+assert(semi_Nt, results.primary.header.nsemitpl, -0.2);
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="file_002dhandling.html" accesskey="n" rel="next"><samp>file-handling</samp></a>, Previous: <a href="cw_002dsensitivity.html" accesskey="p" rel="prev"><samp>cw-sensitivity</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

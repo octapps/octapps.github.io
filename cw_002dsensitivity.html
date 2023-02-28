@@ -1,0 +1,944 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-sensitivity (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-sensitivity (OctApps Reference Manual)">
+<meta name="keywords" content="cw-sensitivity (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002dweave_002dmodels.html" rel="next" title="cw-weave-models">
+<link href="cw_002doptimal_002dsearch_002dsetup.html" rel="prev" title="cw-optimal-search-setup">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002dsensitivity"></span><div class="header">
+<p>
+Next: <a href="cw_002dweave_002dmodels.html" accesskey="n" rel="next"><samp>cw-weave-models</samp></a>, Previous: <a href="cw_002doptimal_002dsearch_002dsetup.html" accesskey="p" rel="prev"><samp>cw-optimal-search-setup</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002dsensitivity-1"></span><h3 class="section">2.9 <samp>cw-sensitivity</samp></h3>
+
+<dl>
+<dt id="index-AnalyticSensitivityConstSNRChiSqr">Function File: <em>[ <var>rhob</var>, <var>tms</var> ] =</em> <strong>AnalyticSensitivityConstSNRChiSqr</strong> <em>( <var>paNt</var>, <var>pd</var>, <var>Ns</var>, <var>nu</var> )</em></dt>
+<dd>
+<p>Calculate sensitivty in terms of the root-mean-square SNR for
+a population of constant-SNR signals, and for a chi^2 detection
+statistic
+</p>
+<span id="Arguments-25"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rhob</var></dt>
+<dd><p>detectable r.m.s. SNR (per segment)
+</p>
+</dd>
+<dt><var>tms</var></dt>
+<dd><p>terms of the second factor of the expression
+</p>
+</dd>
+<dt><var>paNt</var></dt>
+<dd><p>false alarm probability (per template)
+</p>
+</dd>
+<dt><var>pd</var></dt>
+<dd><p>false dismissal probability
+</p>
+</dd>
+<dt><var>Ns</var></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><var>nu</var></dt>
+<dd><p>degrees of freedom per segment
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-AnalyticSensitivitySNRChiSqr">Function File: <em>[ <var>rhoh</var>, <var>iter</var> ] =</em> <strong>AnalyticSensitivitySNRChiSqr</strong> <em>( <var>paNt</var>, <var>pd</var>, <var>Ns</var>, <var>nu</var> )</em></dt>
+<dd>
+<p>Calculate sensitivty in terms of the root-mean-square SNR for
+a population of isotropically distributed and oriented signals,
+and for a chi^2 detection statistic
+</p>
+<span id="Arguments-26"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rhoh</var></dt>
+<dd><p>detectable r.m.s. SNR (per segment)
+</p>
+</dd>
+<dt><var>iter</var></dt>
+<dd><p>number of iterations needed to solve for rhoh
+</p>
+</dd>
+<dt><var>paNt</var></dt>
+<dd><p>false alarm probability (per template)
+</p>
+</dd>
+<dt><var>pd</var></dt>
+<dd><p>false dismissal probability
+</p>
+</dd>
+<dt><var>Ns</var></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><var>nu</var></dt>
+<dd><p>degrees of freedom per segment
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-AnalyticSensitivitySNRExpr">Function File: <em>[ <var>rho</var>, <var>tms</var> ] =</em> <strong>AnalyticSensitivitySNRExpr</strong> <em>( <var>za</var>, <var>pd</var>, <var>Ns</var>, <var>nu</var> )</em></dt>
+<dd>
+<p>Implements an expression used in analytic sensitivity estimation
+for a chi^2 detection statistic
+</p>
+<span id="Arguments-27"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rho</var></dt>
+<dd><p>detectable r.m.s. SNR (per segment)
+</p>
+</dd>
+<dt><var>tms</var></dt>
+<dd><p>terms of the second factor of the expression
+</p>
+</dd>
+<dt><var>za</var></dt>
+<dd><p>normalised false alarm threshold
+</p>
+</dd>
+<dt><var>pd</var></dt>
+<dd><p>false dismissal probability
+</p>
+</dd>
+<dt><var>Ns</var></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><var>nu</var></dt>
+<dd><p>degrees of freedom per segment
+</p>
+</dd>
+</dl>
+
+<span id="Examples-65"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AnalyticSensitivitySNRExpr(0.01, 0.1, 100, 4), 0.6312, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-AntennaPattern">Function File: <em><var>F</var> =</em> <strong>AntennaPattern</strong> <em>( <var>a</var>, <var>b</var>, <var>x</var>, <var>y</var>, <var>zeta</var> )</em></dt>
+<dd>
+<p>Calculate the antenna pattern of an interferometer
+</p>
+<span id="Arguments-28"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>F</var></dt>
+<dd><p>antenna pattern
+</p>
+</dd>
+<dt><var>a</var></dt>
+<dt><var>b</var></dt>
+<dd><p>detector null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>x</var></dt>
+<dt><var>y</var></dt>
+<dd><p>polarisation null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>zeta</var></dt>
+<dd><p>angle between interferometer arms in radians
+</p>
+</dd>
+</dl>
+
+<span id="Examples-66"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(AntennaPattern([1,0,0], [0,1,0], [0.5,0.5,0], [0.5,-0.5,0], pi/2), [0,0,0], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CreateRandParam">Function File: <em><var>rng</var> =</em> <strong>CreateRandParam</strong> <em>( <var>p</var>, <var>p</var>, &hellip; )</em></dt>
+<dd>
+<p>Parses random parameters specs, which may be either
+</p><ul>
+<li> &lsquo;<samp>constant</samp>&rsquo;:
+denoting a single value, or
+</li><li> [&lsquo;<samp>min</samp>&rsquo;, &lsquo;<samp>max</samp>&rsquo;]:
+denoting a range of values
+</li></ul>
+
+<span id="Arguments-29"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rng</var></dt>
+<dd><p>random parameter generator
+</p>
+</dd>
+<dt><var>p</var></dt>
+<dd><p>random parameter spec
+</p>
+</dd>
+</dl>
+
+<span id="Examples-67"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isstruct(CreateRandParam([0, 5.5], [2.2, 7])))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DetectionProbabilityStackSlide">Function File: <em><var>pDET</var> =</em> <strong>DetectionProbabilityStackSlide</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate detection probability for given fixed sensitivity-depth signal <var>Depth</var> = sqrt(S)/h0
+</p>
+<span id="Options-15"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>Nseg</code></dt>
+<dd><p>number of StackSlide segments
+</p>
+</dd>
+<dt><code>Tdata</code></dt>
+<dd><p>total amount of data used, in seconds
+(Note: <var>Tdata</var> = Nsft * Tsft, where &rsquo;Nsft&rsquo; is the total number of
+SFTs of length &rsquo;Tsft&rsquo; used in the search, from all <var>detectors</var>)
+</p>
+</dd>
+<dt><code>misHist</code></dt>
+<dd><p>mismatch histogram, produced using <code>Hist()</code>
+</p>
+</dd>
+<dt><code>pFA</code></dt>
+<dd><p>false-alarm probability (-ies) *per template* (can be a vector)
+</p>
+</dd>
+<dt><code>avg2Fth</code></dt>
+<dd><p>ALTERNATIVE to <var>pFA</var>: specify average-2F threshold directly (can be a vector)
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, <var>...</var>)
+</p>
+</dd>
+<dt><code>alpha</code></dt>
+<dd><p>source right ascension in radians (default: all-sky = [0, 2pi])
+</p>
+</dd>
+<dt><code>delta</code></dt>
+<dd><p>source declination (default: all-sky = [-pi/2, pi/2])
+</p>
+</dd>
+<dt><code>Depth</code></dt>
+<dd><p>fixed sensitivity-depth of signal population (can be a vector)
+</p>
+</dd>
+<dt><code>detweights</code></dt>
+<dd><p>detector weights on S_h to use (default: uniform weights)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-68"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="SensitivityDepthStackSlide_0028_0029.html">tutorial on <code>SensitivityDepthStackSlide()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DetectorLocations">Function File: <em>[ <var>L</var>, <var>slambda</var>, <var>gamma</var>, <var>zeta</var> ] =</em> <strong>DetectorLocations</strong> <em>( <var>detID</var> )</em></dt>
+<dd>
+<p>Return parameters of various gravitational-wave interferometers
+</p>
+<span id="Arguments-30"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>L</var></dt>
+<dd><p>detector&rsquo;s longitude in radians
+</p>
+</dd>
+<dt><var>slambda</var></dt>
+<dd><p>sine of the detector&rsquo;s latitude
+</p>
+</dd>
+<dt><var>gamma</var></dt>
+<dd><p>detector orientation in radians
+</p>
+</dd>
+<dt><var>zeta</var></dt>
+<dd><p>angle between interferometer arms in radians
+</p>
+</dd>
+<dt><var>detID</var></dt>
+<dd><p>identifier of a gravitational-wave interferometer:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>H</samp>&rsquo;</dt>
+<dd><p>LIGO Hanford
+</p>
+</dd>
+<dt>&lsquo;<samp>L</samp>&rsquo;</dt>
+<dd><p>LIGO Livingston
+</p>
+</dd>
+<dt>&lsquo;<samp>V</samp>&rsquo;</dt>
+<dd><p>VIRGO
+</p>
+</dd>
+<dt>&lsquo;<samp>G</samp>&rsquo;</dt>
+<dd><p>GEO
+</p>
+</dd>
+<dt>&lsquo;<samp>K</samp>&rsquo;</dt>
+<dd><p>KAGRA
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Examples-69"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(DetectorLocations(&quot;H&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(DetectorLocations(&quot;L&quot;))
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(DetectorLocations(&quot;V&quot;))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DetectorNullVectors">Function File: <em>[ <var>a</var>, <var>b</var> ] =</em> <strong>DetectorNullVectors</strong> <em>( <var>Phis</var>, <var>slambda</var>, <var>gamma</var> )</em></dt>
+<dd>
+<p>Calculate the vectors along which an interferometric detector
+is insensitive to gravitational waves
+</p>
+<span id="Arguments-31"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>a</var></dt>
+<dt><var>b</var></dt>
+<dd><p>detector null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>Phis</var></dt>
+<dd><p>local sidereal time at the detector
+</p>
+</dd>
+<dt><var>slambda</var></dt>
+<dd><p>sine of the detector&rsquo;s latitude
+</p>
+</dd>
+<dt><var>gamma</var></dt>
+<dd><p>detector orientation in radians
+</p>
+</dd>
+</dl>
+
+<span id="Examples-70"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[a,b] = DetectorNullVectors(0.0, 0.0, pi/2);
+assert(a, [0;1;0], 1e-3)
+assert(b, [0;0;1], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-NextRandParam">Function File: <em>[ <var>v</var>, <var>v</var>, &hellip; ] =</em> <strong>NextRandParam</strong> <em>( <var>rng</var>, <var>N</var> )</em></dt>
+<dd>
+<p>Generates values for random parameters, given a generator
+</p>
+<span id="Arguments-32"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rng</var></dt>
+<dd><p>random parameter generator
+</p>
+</dd>
+<dt><var>N</var></dt>
+<dd><p>number of values to generate
+</p>
+</dd>
+<dt><var>v</var></dt>
+<dd><p>values of random parameter
+</p>
+</dd>
+</dl>
+
+<span id="Examples-71"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">gsl;
+[a, b] = NextRandParam(CreateRandParam([0, 5.5], [2.2, 7]), 100);
+assert(0 &lt;= min(a) &amp;&amp; max(a) &lt;= 5.5);
+assert(2.2 &lt;= min(b) &amp;&amp; max(b) &lt;= 7);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-PolarisationNullVectors">Function File: <em>[ <var>xp</var>, <var>yp</var>, <var>xx</var>, <var>yx</var> ] =</em> <strong>PolarisationNullVectors</strong> <em>( <var>alpha</var>, <var>sdelta</var>, <var>psi</var> )</em></dt>
+<dd>
+<p>Calculate the vectors along which a pure plus/cross gravitational
+wave create no space-time peturbation
+</p>
+<span id="Arguments-33"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>xp</var></dt>
+<dt><var>yp</var></dt>
+<dd><p>plus polarisation null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>xx</var></dt>
+<dt><var>yx</var></dt>
+<dd><p>cross polarisation null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>alpha</var></dt>
+<dd><p>source right ascension in radians
+</p>
+</dd>
+<dt><var>sdelta</var></dt>
+<dd><p>sine of source declination
+</p>
+</dd>
+<dt><var>psi</var></dt>
+<dd><p>source polarisation angle in radians
+</p>
+</dd>
+</dl>
+
+<span id="Examples-72"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[xp, yp, xx, yx] = PolarisationNullVectors(0, 0, pi/2);
+assert(xp, [0; -1/sqrt(2); 1/sqrt(2)], 1e-3);
+assert(yp, [0; 1/sqrt(2); 1/sqrt(2)], 1e-3);
+assert(xx, [0; 0; 1], 1e-3);
+assert(yx, [0; 1; 0], 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SensitivityDepth">Function File: <em>[ <var>Depth</var>, <var>pd_Depth</var> ] =</em> <strong>SensitivityDepth</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Calculate sensitivity in terms of the sensitivity depth.
+</p>
+<span id="Arguments-34"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>Depth</var></dt>
+<dd><p>SensitivityDepth
+</p>
+</dd>
+<dt><var>pd_Depth</var></dt>
+<dd><p>calculated false dismissal probability
+</p>
+</dd>
+</dl>
+
+<span id="Options-16"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>pd</code></dt>
+<dd><p>false dismissal probability
+</p>
+</dd>
+<dt><code>Ns</code></dt>
+<dd><p>number of segments
+</p>
+</dd>
+<dt><code>Tdata</code></dt>
+<dd><p>total amount of data used in seconds
+</p>
+</dd>
+<dt><code>Rsqr</code></dt>
+<dd><p>histogram of SNR &quot;geometric factor&quot; R^2,
+computed using <code>SqrSNRGeometricFactorHist()</code>,
+or scalar giving mean value of R^2
+</p>
+</dd>
+<dt><code>stat</code></dt>
+<dd><p>detection statistic, one of:
+</p><dl compact="compact">
+<dt>{<code>ChiSqr</code>, <var>opt</var>, <var>val</var>, &hellip;}</dt>
+<dd><p>chi^2 statistic, e.g. the F-statistic, with options:
+</p><dl compact="compact">
+<dt><var>paNt</var></dt>
+<dd><p>false alarm probability per template
+</p>
+</dd>
+<dt><var>sa</var></dt>
+<dd><p>false alarm threshold
+</p>
+</dd>
+<dt><var>dof</var></dt>
+<dd><p>degrees of freedom per segment (default: 4)
+</p>
+</dd>
+<dt><var>norm</var></dt>
+<dd><p>use normal approximation to chi^2 (default: false)
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt>{<code>HoughFstat</code>, <var>opt</var>, <var>val</var>, &hellip;}</dt>
+<dd><p>Hough on the F-statistic, with options:
+</p><dl compact="compact">
+<dt><var>paNt</var></dt>
+<dd><p>false alarm probability per template
+</p>
+</dd>
+<dt><var>nth</var></dt>
+<dd><p>number count false alarm threshold
+</p>
+</dd>
+<dt><var>Fth</var></dt>
+<dd><p>F-statistic threshold per segment
+</p>
+</dd>
+<dt><var>zero</var></dt>
+<dd><p>use zeroth-order approximation (default: false)
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+</dd>
+<dt><code>prog</code></dt>
+<dd><p>show progress updates
+</p>
+</dd>
+<dt><code>misHist</code></dt>
+<dd><p>mismatch histograms (default: no mismatch)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-73"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Rsqr = SqrSNRGeometricFactorHist;
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SensitivityDepthHoughF">Function File: <em><var>sensDepth</var> =</em> <strong>SensitivityDepthHoughF</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate Hough-on-Fstat sensitivity depth, defined as
+</p>
+<p><var>sensDepth</var> = sqrt(<var>Sdata</var>)/<var>h0</var>,
+</p>
+<p>where
+</p>
+<dl compact="compact">
+<dt><var>Sdata</var></dt>
+<dd><p>an estimate of the noise PSD over all the data used (which should be computed
+as the harmonic mean over all the SFTs from all <var>detectors</var>)
+</p></dd>
+<dt><var>h0</var></dt>
+<dd><p>the smallest detectable GW amplitude at the given false-alarm (<var>pFA</var>) and
+false-dismissal probability (<var>pFD</var>)
+</p></dd>
+</dl>
+
+<span id="Options-17"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>Nseg</code></dt>
+<dd><p>number of Hough segments
+</p>
+</dd>
+<dt><code>Tdata</code></dt>
+<dd><p>total amount of data used, in seconds
+(Note: <var>Tdata</var> = <var>Nsft</var> * <var>Tsft</var>, where <var>Nsft</var> is the total number of
+SFTs of length <var>Tsft</var> used in the search, from all <var>detectors</var>)
+</p>
+</dd>
+<dt><code>misHist</code></dt>
+<dd><p>mismatch histogram, produced using <code>Hist()</code>
+</p>
+</dd>
+<dt><code>pFD</code></dt>
+<dd><p>false-dismissal probability = 1 - pDet
+</p>
+</dd>
+<dt><code>pFA</code></dt>
+<dd><p>false-alarm probability (-ies) *per template* (can be a vector)
+</p>
+</dd>
+<dt><code>Fth</code></dt>
+<dd><p>F-stat threshold (on F, not 2F!) in each segment for &quot;pixel&quot; selection
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, <var>...</var>)
+</p>
+</dd>
+<dt><code>detweights</code></dt>
+<dd><p>detector weights on S_h to use (default: uniform weights)
+</p>
+</dd>
+<dt><code>alpha</code></dt>
+<dd><p>source right ascension in radians (default: all-sky)
+</p>
+</dd>
+<dt><code>delta</code></dt>
+<dd><p>source declination (default: all-sky)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-74"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Nseg = 20;
+Tdata = 60*3600*Nseg;
+misHist = createDeltaHist(0.1);
+pFD = 0.1;
+pFA = [1e-10; 1e-8; 1e-6];
+Fth = 2.5;
+dets = &quot;H1,L1&quot;;
+sigma = SensitivityDepthHoughF(&quot;Nseg&quot;, Nseg, &quot;Tdata&quot;, Tdata, &quot;misHist&quot;, misHist, &quot;pFD&quot;, pFD, &quot;pFA&quot;, pFA, &quot;Fth&quot;, Fth, &quot;detectors&quot;, dets);
+assert(max(abs(sigma - [27.442; 35.784; 42.490])) &lt; 0.05);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SensitivityDepthStackSlide">Function File: <em><var>sensDepth</var> =</em> <strong>SensitivityDepthStackSlide</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate StackSlide sensitivity depth, defined as
+</p>
+<p><var>sensDepth</var> = sqrt(<var>Sdata</var>)/<var>h0</var>,
+</p>
+<p>where
+</p>
+<dl compact="compact">
+<dt><var>Sdata</var></dt>
+<dd><p>an estimate of the noise PSD over all the data used (which should be computed
+as the harmonic mean over all the SFTs from all <var>detectors</var>)
+</p></dd>
+<dt><var>h0</var></dt>
+<dd><p>the smallest detectable GW amplitude at the given false-alarm (<var>pFA</var>) and
+false-dismissal probability (<var>pFD</var>)
+</p></dd>
+</dl>
+
+<span id="Options-18"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>Nseg</code></dt>
+<dd><p>number of StackSlide segments (every row is one trial, every column is for one stage )
+</p>
+</dd>
+<dt><code>Tdata</code></dt>
+<dd><p>total amount of data used, in seconds
+can be a row vector for different amounts of data in each stage
+or a column vector for different trial setups or matrix for both combined
+(Note: <var>Tdata</var> = <var>Nsft</var> * <var>Tsft</var>, where <var>Nsft</var> is the total number of
+SFTs of length <var>Tsft</var> used in the search, from all <var>detectors</var>)
+</p>
+<div class="example">
+<pre class="example">## two different setups with 5 stages (5 columns, 2 rows)
+Nseg = [90,90,44,44,22;100,100,50,50,25]
+## different for every stage but the same for every trial
+Tdata = [ NSFT*1800, NSFT*900, NSFT*3600, NSFT*1800, NSFT*1800]
+## as we have 5 stages there must be five thrqesholds
+avg2Fth = [6.109,6.109,7.38,8.82,15]
+## we also need one mismatch histogram per stage
+misHist = {mismatch1, mismatch2, mismatch3, mismatch4, mismatch5}
+## a column with two false dimissal probabilitites, one for each trial
+pFD = [0.1,0.05]'
+</pre></div>
+
+</dd>
+<dt><code>misHist</code></dt>
+<dd><p>cell array of mismatch histograms, one for every stage, produced using <code>Hist()</code>
+</p>
+</dd>
+<dt><code>pFD</code></dt>
+<dd><p>false-dismissal probability = 1 - pDet = 1 - &rsquo;confidence&rsquo;
+</p>
+</dd>
+<dt><code>pFA</code></dt>
+<dd><p>false-alarm probability (-ies) *per template* (every row is one trial, every column is for one stage )
+</p>
+</dd>
+<dt><code>avg2Fth</code></dt>
+<dd><p>ALTERNATIVE to <var>pFA</var>: average-2F threshold (every row is one trial, every column is for one stage )
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, <var>...</var>)
+</p>
+</dd>
+<dt><code>detweights</code></dt>
+<dd><p>detector weights on S_h to use (default: uniform weights)
+</p>
+</dd>
+<dt><code>alpha</code></dt>
+<dd><p>source right ascension in radians (default: all-sky)
+</p>
+</dd>
+<dt><code>delta</code></dt>
+<dd><p>source declination (default: all-sky)
+</p>
+</dd>
+<dt><code>cosi</code></dt>
+<dd><p>orientation angle (default: isotropic average)
+</p>
+</dd>
+<dt><code>psi</code></dt>
+<dd><p>polarization angle (default: isotropic average)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-75"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="SensitivityDepthStackSlide_0028_0029.html">tutorial on <code>SensitivityDepthStackSlide()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SignalAmplitudes">Function File: <em>[ <var>ap</var>, <var>ax</var> ] =</em> <strong>SignalAmplitudes</strong> <em>( <code>nonax</code>, <var>cosi</var> )</em></dt>
+<dt id="index-SignalAmplitudes-1">Function File: <em><var>apxnorm</var> =</em> <strong>SignalAmplitudes</strong> <em>( <code>nonax</code> )</em></dt>
+<dd>
+<p>Calculate the amplitudes of each polarisation from a signal
+emitted by a particular emission mechanism:
+&quot;<var>nonax</var>&quot;: nonaxisymmetric distortion at 2f
+</p>
+<span id="Arguments-35"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>ap</var></dt>
+<dt><var>ax</var></dt>
+<dd><p>signal polarisation amplitudes
+</p>
+</dd>
+<dt><var>apxnorm</var></dt>
+<dd><p>normalisation constant for R^2
+</p>
+</dd>
+<dt><var>cosi</var></dt>
+<dd><p>cosine of the inclination angle
+</p>
+</dd>
+</dl>
+
+<span id="Examples-76"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(SignalAmplitudes(&quot;nonax&quot;), 4/25)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SqrSNRGeometricFactorHist">Function File: <em><var>Rsqr</var> =</em> <strong>SqrSNRGeometricFactorHist</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Calculate a histogram of the squared SNR &quot;geometric factor&quot;, R^2
+</p>
+<span id="Arguments-36"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>Rsqr</var></dt>
+<dd><p>histogram of R^2
+</p>
+</dd>
+</dl>
+
+<span id="Options-19"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>T</code></dt>
+<dd><p>observation time in sidereal days (default: inf)
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p><var>detectors</var> to use; either e.g. &quot;H1,L1&quot; or &quot;HL&quot; (default: L1)
+</p>
+</dd>
+<dt><code>detweights</code></dt>
+<dd><p>detector weights on S_h to use (default: uniform weights)
+</p>
+</dd>
+<dt><code>alpha</code></dt>
+<dd><p>source right ascension in radians (default: all-sky)
+</p>
+</dd>
+<dt><code>sdelta</code></dt>
+<dd><p>sine of source declination (default: all-sky)
+</p>
+</dd>
+<dt><code>psi</code></dt>
+<dd><p>source orientation in radians (default: all)
+</p>
+</dd>
+<dt><code>cosi</code></dt>
+<dd><p>cosine of inclination angle (default: all)
+</p>
+</dd>
+<dt><code>emission</code></dt>
+<dd><p><var>emission</var> mechanism (default: nonax)
+</p>
+</dd>
+<dt><code>zmstime</code></dt>
+<dd><p>sidereal time of the zero meridian at observation mid-point
+</p>
+</dd>
+<dt><code>hist_dx</code></dt>
+<dd><p>histogram bin size
+</p>
+</dd>
+<dt><code>hist_N</code></dt>
+<dd><p>number of histogram points to calculate at a time
+</p>
+</dd>
+<dt><code>hist_err</code></dt>
+<dd><p>histogram error target
+</p>
+</dd>
+<dt><code>use_cache</code></dt>
+<dd><p>if true [default], use a cached version of the histogram if available for the given input parameters
+</p>
+</dd>
+</dl>
+
+<span id="Examples-77"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">Rsqr0  = SqrSNRGeometricFactorHist(&quot;use_cache&quot;, false);	## stores results in cache
+Rsqr0c = SqrSNRGeometricFactorHist(&quot;use_cache&quot;, true );
+assert ( isequal ( Rsqr0, Rsqr0c ) );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-TimeAvgSqrAntennaPattern">Function File: <em><var>Fsqr_t</var> =</em> <strong>TimeAvgSqrAntennaPattern</strong> <em>( <var>a0</var>, <var>b0</var>, <var>x</var>, <var>y</var>, <var>zeta</var>, <var>OmegaT</var>, <var>nmax</var> )</em></dt>
+<dd>
+<p>Calculate the time-averaged squared antenna pattern of an interferometer
+</p>
+<span id="Arguments-37"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>Fsqr_t</var></dt>
+<dd><p>time-averaged squared antenna pattern
+</p>
+</dd>
+<dt><var>a0</var></dt>
+<dt><var>b0</var></dt>
+<dd><p>detector null vectors at observation mid-point,
+in equatorial coordinates
+</p>
+</dd>
+<dt><var>x</var></dt>
+<dt><var>y</var></dt>
+<dd><p>polarisation null vectors in equatorial coordinates
+</p>
+</dd>
+<dt><var>zeta</var></dt>
+<dd><p>angle between interferometer arms in radians
+</p>
+</dd>
+<dt><var>OmegaT</var></dt>
+<dd><p>product of angular sidereal frequency and observation time
+</p>
+</dd>
+<dt><var>nmax</var></dt>
+<dd><p>maximum sinc term to add up (0 to 4; default is 4)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-78"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(TimeAvgSqrAntennaPattern([1;0;0], [0;1;0], [0;0.5;0.5], [0;0.5;-0.5], pi/2, inf), 0.03125)
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002dweave_002dmodels.html" accesskey="n" rel="next"><samp>cw-weave-models</samp></a>, Previous: <a href="cw_002doptimal_002dsearch_002dsetup.html" accesskey="p" rel="prev"><samp>cw-optimal-search-setup</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

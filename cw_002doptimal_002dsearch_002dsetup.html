@@ -1,0 +1,823 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-optimal-search-setup (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-optimal-search-setup (OctApps Reference Manual)">
+<meta name="keywords" content="cw-optimal-search-setup (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002dsensitivity.html" rel="next" title="cw-sensitivity">
+<link href="cw_002dmetric_002dtemplate_002dbanks.html" rel="prev" title="cw-metric-template-banks">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002doptimal_002dsearch_002dsetup"></span><div class="header">
+<p>
+Next: <a href="cw_002dsensitivity.html" accesskey="n" rel="next"><samp>cw-sensitivity</samp></a>, Previous: <a href="cw_002dmetric_002dtemplate_002dbanks.html" accesskey="p" rel="prev"><samp>cw-metric-template-banks</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002doptimal_002dsearch_002dsetup-1"></span><h3 class="section">2.8 <samp>cw-optimal-search-setup</samp></h3>
+
+<dl>
+<dt id="index-CostFunctionsBinary">Function File: <em><var>cost_funs</var> =</em> <strong>CostFunctionsBinary</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Return computing-cost functions for use in <code>OptimalSolution4StackSlide_v2()</code> to compute
+optimal StackSlide setup for a binary-CW searches (freq, Period, asini, tAsc, ecc, argp)
+assuming the &quot;long segment regime&quot; where Tseg &gt;&gt; P
+</p>
+<span id="Arguments-21"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cost_funs</var></dt>
+<dd><p>struct of computing-cost functions to pass to <code>OptimalSolution4StackSlide_v2()</code>
+</p>
+</dd>
+</dl>
+
+<span id="Search-setup-options_003a-_0028using-ScoX1-defaults_0029"></span><h3 class="heading">Search setup options: (using ScoX1 defaults)</h3>
+
+<dl compact="compact">
+<dt><code>freqRange</code></dt>
+<dd><p>[min, max] of search frequency range [100, 300]
+</p>
+</dd>
+<dt><code>asiniRange</code></dt>
+<dd><p>[min, max] of a*sini/c search range (default: [0.90000, 1.98000])
+</p>
+</dd>
+<dt><code>tAscRange</code></dt>
+<dd><p>[min, max] of time of ascensino search range (default: [897753694.073760   897754294.073760])
+</p>
+</dd>
+<dt><code>PeriodRange</code></dt>
+<dd><p>[min, max] of Period search range (default: [68023.5753600000, 68023.8345600000]
+</p>
+</dd>
+<dt><code>eccRange</code></dt>
+<dd><p>[min, max] of eccentricity search range (default: [0, 0]
+</p>
+</dd>
+<dt><code>argpRange</code></dt>
+<dd><p>[min, max] of argument(periapse) search range (default: [0, 0])
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, &hellip;)
+</p>
+</dd>
+<dt><code>coh_duty</code></dt>
+<dd><p>duty cycle of data within each coherent segment
+</p>
+</dd>
+<dt><code>resampling</code></dt>
+<dd><p>use F-statistic <var>resampling</var> instead of &rsquo;demod&rsquo; timings for coherent cost [default: false]
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>template-bank <var>lattice</var> (&quot;Zn&quot;, &quot;Ans&quot;,..) [default: &quot;Ans&quot;]
+</p>
+</dd>
+<dt><code>coh_c0_demod</code></dt>
+<dd><p>computational cost of F-statistic &rsquo;demod&rsquo; per template per second [optional]
+</p>
+</dd>
+<dt><code>coh_c0_resamp</code></dt>
+<dd><p>computational cost of F-statistic <var>resampling</var> per template [optional]
+</p>
+</dd>
+<dt><code>inc_c0</code></dt>
+<dd><p>computational cost of incoherent step per template per segment [optional]
+</p>
+</dd>
+<dt><code>grid_interpolation</code></dt>
+<dd><p>use interpolating StackSlide or non-interpolating (ie coherent-grids == incoherent-grid)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-59"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+refParams.Nseg = 40;
+refParams.Tseg = 8.0 * DAYS;
+refParams.mCoh   = 0.5;
+refParams.mInc   = 0.5;
+Tsft = 240;
+costFuns = CostFunctionsBinary ( ...
+                                &quot;freqRange&quot;, [20, 430],
+                                &quot;detectors&quot;, &quot;H1,L1&quot;,
+                                &quot;resampling&quot;, false, ...
+                                &quot;coh_c0_demod&quot;, 4e-8 / Tsft, ...
+                                &quot;inc_c0&quot;, 5e-9, ...
+                                &quot;lattice&quot;, &quot;Ans&quot; ...
+                              );
+cost0 = 12 * EM2014;
+TobsMax = 360 * DAYS;
+TsegMax = 10 * DAYS;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;TsegMax&quot;, TsegMax, &quot;stackparamsGuess&quot;, refParams, &quot;maxiter&quot;, 3 );
+tol = -1e-2;
+assert ( sol_v2.Nseg, 36, tol );
+assert ( sol_v2.Tseg, 864000, tol );
+assert ( sol_v2.mCoh, 0.800740, tol );
+assert ( sol_v2.mInc, 0.043971, tol );
+</pre></div>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+refParams.Nseg = 40;
+refParams.Tseg = 8.0 * DAYS;
+refParams.mCoh   = 0.5;
+refParams.mInc   = 0.5;
+costFuns = CostFunctionsBinary ( ...
+                                &quot;freqRange&quot;, [20, 630],
+                                &quot;detectors&quot;, &quot;H1,L1&quot;,
+                                &quot;resampling&quot;, true, ...
+                                &quot;coh_c0_resamp&quot;, 3e-7,
+                                &quot;inc_c0&quot;, 5e-9, ...
+                                &quot;lattice&quot;, &quot;Ans&quot; ...
+                              );
+cost0 = 12 * EM2014;
+TobsMax = 360 * DAYS;
+TsegMax = 10 * DAYS;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;TsegMax&quot;, TsegMax, &quot;stackparamsGuess&quot;, refParams, &quot;maxiter&quot;, 3 );
+tol = -1e-2;
+assert ( sol_v2.mCoh, 0.038235, tol );
+assert ( sol_v2.mInc, 0.030999, tol );
+assert ( sol_v2.Nseg, 36, tol );
+assert ( sol_v2.Tseg, 864000, tol );
+</pre></div>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+refParams.Nseg = 40;
+refParams.Tseg = 8.0 * DAYS;
+refParams.mCoh   = 0.5;
+refParams.mInc   = 0.5;
+costFuns = CostFunctionsBinary ( ...
+                                &quot;freqRange&quot;, [20, 200],
+                                &quot;eccRange&quot;, [0, 0.087],
+                                &quot;detectors&quot;, &quot;H1,L1&quot;,
+                                &quot;resampling&quot;, true, ...
+                                &quot;coh_c0_resamp&quot;, 3e-7,
+                                &quot;inc_c0&quot;, 5e-9, ...
+                                &quot;lattice&quot;, &quot;Ans&quot; ...
+                              );
+cost0 = 12 * EM2014;
+TobsMax = 360 * DAYS;
+TsegMax = 10 * DAYS;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;TsegMax&quot;, TsegMax, &quot;stackparamsGuess&quot;, refParams );
+tol = -1e-2;
+assert ( sol_v2.mCoh, 0.81274, tol );
+assert ( sol_v2.mInc, 0.30675, tol );
+assert ( sol_v2.Nseg, 14.804, tol );
+assert ( sol_v2.Tseg, 864000, tol );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CostFunctionsDirected">Function File: <em><var>cost_funs</var> =</em> <strong>CostFunctionsDirected</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Return computing-cost functions for use in <code>OptimalSolution4StackSlide_v2()</code> to compute
+optimal StackSlide setup for a directed search (known sky-position, unknown f, fdot, f2dot, <var>...</var>)
+</p>
+<span id="Note-10"></span><h3 class="heading">Note</h3>
+
+<p>Adapted from <code>metricComputingCost()</code> function initially used in S6CasA E\s''earch setup
+</p>
+<span id="Arguments-22"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cost_funs</var></dt>
+<dd><p>struct of computing-cost functions to pass to <code>OptimalSolution4StackSlide_v2()</code>
+</p>
+</dd>
+</dl>
+
+<span id="Search-setup-options"></span><h3 class="heading">Search setup options</h3>
+
+<dl compact="compact">
+<dt><code>tau_min</code></dt>
+<dd><p>spindown-age &rsquo;tau&rsquo; in seconds [default: 300 yrs]
+</p>
+</dd>
+<dt><code>brk_min</code></dt>
+<dd><p>(minimal) braking index &rsquo;n0&rsquo; for spindown-bounds [default: 2]
+</p>
+</dd>
+<dt><code>fmin</code></dt>
+<dd><p>lower search frequency bound [default: 50.00]
+</p>
+</dd>
+<dt><code>fmax</code></dt>
+<dd><p>upper search frequency bound [default: 50.05]
+</p>
+</dd>
+<dt><code>boundaryType</code></dt>
+<dd><p>what type of parameter-space boundary to assume [default: <code>EaHCasA</code>]:
+</p>
+</dd>
+<dt><code>EaHCasA</code></dt>
+<dd><p>for a freq-dependent &rsquo;box&rsquo; in {f1dot,f2dot}, defined by (<var>tau_min</var>, <var>brk_min</var>)
+</p>
+</dd>
+<dt><code>S5CasA</code></dt>
+<dd><p>for Karl&rsquo;s CasA search construction, with brk-index in [2,7]
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, <var>...</var>)
+</p>
+</dd>
+<dt><code>coh_duty</code></dt>
+<dd><p>duty cycle of data within each coherent segment
+</p>
+</dd>
+<dt><code>resampling</code></dt>
+<dd><p>use F-statistic <var>resampling</var> instead of &rsquo;demod&rsquo; timings for coherent cost [default: false]
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>template-bank <var>lattice</var> (&quot;Zn&quot;, &quot;Ans&quot;,..) [default: &quot;Ans&quot;]
+</p>
+</dd>
+<dt><code>coh_c0_demod</code></dt>
+<dd><p>computational cost of F-statistic &rsquo;demod&rsquo; per template per second [optional]
+</p>
+</dd>
+<dt><code>coh_c0_resamp</code></dt>
+<dd><p>computational cost of F-statistic <var>resampling</var> per template [optional]
+</p>
+</dd>
+<dt><code>inc_c0</code></dt>
+<dd><p>computational cost of incoherent step per template per segment [optional]
+</p>
+</dd>
+<dt><code>grid_interpolation</code></dt>
+<dd><p>use interpolating StackSlide or non-interpolating (ie coherent-grids == incoherent-grid)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-60"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+refParams.Nseg = 32;
+refParams.Tseg = 8.0 * 86400;
+refParams.mCoh   = 0.12;
+refParams.mInc   = 0.41;
+costFuns = CostFunctionsDirected( ...
+                                &quot;fmin&quot;, 120, ...
+                                &quot;fmax&quot;, 1000, ...
+                                &quot;tau_min&quot;, 300 * YRSID_SI, ...
+                                &quot;detectors&quot;, &quot;H1,L1&quot;,
+                                &quot;coh_duty&quot;, 0.53375, ...
+                                &quot;resampling&quot;, false, ...
+                                &quot;coh_c0_demod&quot;, 7.4e-8 / 1800, ...
+                                &quot;inc_c0&quot;, 4.7e-9, ...
+                                &quot;lattice&quot;, &quot;Zn&quot;, ...
+                                &quot;boundaryType&quot;, &quot;EaHCasA&quot; ...
+                              );
+cost0 = 3.1451 * EM2014;
+TobsMax = 256.49 * DAYS;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;stackparamsGuess&quot;, refParams );
+tol = -1e-2;
+assert ( sol_v2.mCoh, 0.11892, tol );
+assert ( sol_v2.mInc, 0.40691, tol );
+assert ( sol_v2.Nseg, 32.075, tol );
+assert ( sol_v2.Tseg, 6.9091e+05, tol );
+</pre></div>
+
+<div class="example">
+<pre class="example">UnitsConstants;
+refParams.Nseg = 100;
+refParams.Tseg = 86400;
+refParams.mCoh   = 0.5;
+refParams.mInc   = 0.5;
+costFuns = CostFunctionsDirected( ...
+                                &quot;fmin&quot;, 100, ...
+                                &quot;fmax&quot;, 300, ...
+                                &quot;tau_min&quot;, 300 * YRSID_SI, ...
+                                &quot;detectors&quot;, &quot;H1,L1&quot;,
+                                &quot;coh_duty&quot;, 0.7, ...
+                                &quot;resampling&quot;, false, ...
+                                &quot;coh_c0_demod&quot;, 7e-8 / 1800, ...
+                                &quot;inc_c0&quot;, 6e-9, ...
+                                &quot;lattice&quot;, &quot;Ans&quot;, ...
+                                &quot;boundaryType&quot;, &quot;S5CasA&quot; ...
+                              );
+cost0 = 472 * DAYS;
+TobsMax = 365 * DAYS;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;stackparamsGuess&quot;, refParams, &quot;sensApprox&quot;, &quot;WSG&quot; );
+tol = -1e-2;
+assert ( sol_v2.mCoh, 0.19219, tol );
+assert ( sol_v2.mInc, 0.25250, tol );
+assert ( sol_v2.Nseg, 57.035, tol );
+assert ( sol_v2.Tseg, 2.1643e+05, tol );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CostFunctionsEaHGCT">Function File: <em><var>cost_funs</var> =</em> <strong>CostFunctionsEaHGCT</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Return computing-cost functions used by <code>OptimalSolution4StackSlide_v2()</code>
+to compute optimal Einstein@Home search setups for the GCT code.
+Used to compute the E@H S5GC1 solution given in Prix&amp;Shaltev,PRD85,
+084010(2012) Table~II.
+</p>
+<span id="Arguments-23"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cost_funs</var></dt>
+<dd><p>struct of computing-cost functions to pass to <code>OptimalSolution4StackSlide_v2()</code>
+</p>
+</dd>
+</dl>
+
+<span id="Options-12"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>fracSky</code></dt>
+<dd><p>fraction of sky covered by search
+</p>
+</dd>
+<dt><code>fmin</code></dt>
+<dd><p>minimum frequency covered by search (in Hz)
+</p>
+</dd>
+<dt><code>fmax</code></dt>
+<dd><p>maximum frequency covered by search (in Hz)
+</p>
+</dd>
+<dt><code>tau_min</code></dt>
+<dd><p>minimum spindown age, determines spindown ranges
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>CSV list of <var>detectors</var> to use (&quot;H1&quot;=Hanford, &quot;L1&quot;=Livingston, &quot;V1&quot;=Virgo, <var>...</var>)
+</p>
+</dd>
+<dt><code>coh_duty</code></dt>
+<dd><p>duty cycle of data within each coherent segment
+</p>
+</dd>
+<dt><code>resampling</code></dt>
+<dd><p>use F-statistic <var>resampling</var> instead of &rsquo;demod&rsquo; for coherent cost [default: false]
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>template-bank <var>lattice</var> (&quot;Zn&quot;, &quot;Ans&quot;,..) [default: &quot;Zn&quot;]
+</p>
+</dd>
+<dt><code>coh_c0_demod</code></dt>
+<dd><p>computational cost of F-statistic &rsquo;demod&rsquo; per template per second [optional]
+</p>
+</dd>
+<dt><code>coh_c0_resamp</code></dt>
+<dd><p>computational cost of F-statistic <var>resampling</var> per template [optional]
+</p>
+</dd>
+<dt><code>inc_c0</code></dt>
+<dd><p>computational cost of incoherent step per template per segment [optional]
+</p>
+</dd>
+<dt><code>grid_interpolation</code></dt>
+<dd><p>whether to use interpolating or non-interpolating StackSlide (ie coherent-grids == incoherent-grid)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-61"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">refParams.Nseg = 205;
+refParams.Tseg = 25 * 3600; ## 25(!) hours
+refParams.mCoh   = 0.5;
+refParams.mInc   = 0.5;
+costFuns = CostFunctionsEaHGCT( ...
+                                &quot;fracSky&quot;, 1/3, ...
+                                &quot;fmin&quot;, 50, ...
+                                &quot;fmax&quot;, 50.05, ...
+                                &quot;tau_min&quot;, 600 * 365 * 86400, ...
+                                &quot;detectors&quot;, &quot;H1,L1&quot;, ...
+                                &quot;resampling&quot;, false, ...
+                                &quot;coh_c0_demod&quot;, 7e-8 / 1800, ...
+                                &quot;inc_c0&quot;, 6e-9 ...
+                              );
+[ costCoh, costInc ] = costFuns.f(refParams.Nseg, refParams.Tseg, refParams.mCoh, refParams.mInc );
+cost0 = costCoh + costInc;
+TobsMax = 365 * 86400;
+sol_v2 = OptimalSolution4StackSlide_v2 ( &quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;TsegMin&quot;, 3600, &quot;stackparamsGuess&quot;, refParams );
+tol = -1e-3;
+assert ( sol_v2.mCoh, 0.14458, tol );
+assert ( sol_v2.mInc, 0.16639, tol );
+assert ( sol_v2.Nseg, 527.86, tol );
+assert ( sol_v2.Tseg, 5.9743e+04, tol );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CostFunctionsWeave">Function File: <em><var>cost_funs</var> =</em> <strong>CostFunctionsWeave</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Cost function for <code>lalapps_Weave</code> for use with OptimalSolution4StackSlide_v2
+</p>
+<span id="Arguments-24"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cost_funs</var></dt>
+<dd><p>cost functions struct
+</p>
+</dd>
+</dl>
+
+<span id="Options-13"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>setup_file</code></dt>
+<dd><p>Weave setup file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>detectors</code></dt>
+<dd><p>Comma-separated list of detectors
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>GPS reference time
+</p>
+</dd>
+<dt><code>start_time</code></dt>
+<dd><p>GPS start time
+</p>
+</dd>
+<dt><code>semi_Tspan</code></dt>
+<dd><p>Total time span of semicoherent search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>EITHER</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>result_file</code></dt>
+<dd><p>Weave result file
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code><strong>OR</strong></code></dt>
+<dd><dl compact="compact">
+<dt><code>sky_area</code></dt>
+<dd><p>Area of sky to cover (4*pi = entire sky)
+</p>
+</dd>
+<dt><code>freq_min/max</code></dt>
+<dd><p>Minimum/maximum frequency range
+</p>
+</dd>
+<dt><code>f1dot_min/max</code></dt>
+<dd><p>Minimum/maximum 1st spindown
+</p>
+</dd>
+<dt><code>f2dot_min/max</code></dt>
+<dd><p>Minimum/maximum 2nd spindown (optional)
+</p>
+</dd>
+<dt><code>Fmethod</code></dt>
+<dd><p>F-statistic method used by search
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>stats</code></dt>
+<dd><p>Comma-separated list of statistics being computed
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>Type of <var>lattice</var> to use (default: Ans)
+</p>
+</dd>
+<dt><code>timings</code></dt>
+<dd><p>the name of a Weave result file to read fundamental timing constants
+from, or else the string &quot;default&quot; to use default timings
+</p>
+</dd>
+<dt><code>grid_interpolation</code></dt>
+<dd><p>If true, compute cost of interpolating search (i.e. semicoherent
+grid interpolates results on coherent grids)
+If false, compute cost of noninterpolating search (i.e. identical
+coherent and semicoherent grids)
+</p>
+</dd>
+<dt><code>TSFT</code></dt>
+<dd><p>Length of an SFT (default: 1800s)
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-CriticalNoncentralityStackSlide">Function File: <em><var>noncent</var> =</em> <strong>CriticalNoncentralityStackSlide</strong> <em>( <var>pFA</var>, <var>pFD</var>, <var>Nseg</var>, <var>approx</var>=&quot;none&quot; )</em></dt>
+<dd>
+<p>function to compute the &rsquo;critical&rsquo; non-centrality parameter required to obtain
+exactly <var>pFD</var> false-dismissal probability at given <var>pFA</var> false-alarm
+probability for a chi^2 distribution with &rsquo;4*<var>Nseg</var> degrees of freedrom,
+i.e. the solution <var>noncent</var> to the equations
+</p>
+<p><var>pFA</var> = prob ( S &gt; Sth | <var>noncent</var>=0 ) &ndash;&gt; Sth(<var>pFA</var>)
+<var>pFD</var> = prob ( S &lt; Sth(<var>pFA</var>) | <var>noncent</var> )
+</p>
+<p>at given {<var>pFA</var>, <var>pFD</var>}, and S ~ chi^2_(4Nseg) ( <var>noncent</var> ) is a chi^2-distributed statistic
+with &rsquo;4Nseg&rsquo; degrees of freedrom and non-centrality <var>noncent</var>.
+</p>
+<p>the optional argument <var>approx</var> allows to control the level of approximation:
+</p><ul>
+<li> <code>approx</code> == &quot;none&quot;:
+use full chi^2_(4*<var>Nseg</var>) distribution
+</li><li> <code>approx</code> == &quot;Gauss&quot;:
+use the Gaussian (N&gt;&gt;1) approximation
+</li><li> <code>approx</code> == &quot;WSG&quot;:
+return w=1 for the &quot;weak-signal Gaussian&quot; case
+</li></ul>
+
+<span id="Examples-62"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">## compare with example cases in Prix&amp;Shaltev,PRD85,084010(2012)
+pFA = 1e-10; pFD = 0.1;
+rhoF2 = CriticalNoncentralityStackSlide ( pFA, pFD, 1 );
+assert ( sqrt(rhoF2), 8.35, -1e-2 );
+Nseg = 139; rhoS2 = CriticalNoncentralityStackSlide ( pFA, pFD, Nseg );
+assert ( sqrt(rhoS2), 17.3, -1e-2 );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-LocalCostCoefficients_005fv2">Function File: <em>[ <var>coefCoh</var>, <var>coefInc</var> ] =</em> <strong>LocalCostCoefficients_v2</strong> <em>( <var>cost_fun</var>, <var>Nseg</var>, <var>Tseg</var>, <var>mCoh</var>, <var>mInc</var> )</em></dt>
+<dd>
+<p>Compute local power-law coefficients fit to given computing-cost function
+<var>cost_fun</var> at StackSlide parameters <var>Nseg</var> and <var>Tseg</var> = Tobs/<var>Nseg</var>, and
+mismatch parameters <var>mCoh</var> and <var>mInc</var>.
+</p>
+<p>The computing-cost struct <var>cost_fun</var> must be of the form
+</p><dl compact="compact">
+<dt><code>lattice</code></dt>
+<dd><p>string defining template-bank lattice
+</p></dd>
+<dt><code>grid_interpolation</code></dt>
+<dd><p>boolean switch whether coherent grids are interpolated
+</p></dd>
+<dt><code>f</code></dt>
+<dd><p>cost function of the form &rsquo;[costCoh, costInc] = f(<var>Nseg</var>, <var>Tseg</var>, <var>mCoh</var>, <var>mInc</var>)&rsquo;
+</p></dd>
+</dl>
+<p>and allow for vector inputs in all four input arguments.
+</p>
+<p>Return structures <var>coefCoh</var> and <var>coefInc</var> have fields {delta, eta, kappa, nDim, cost }
+corresponding to the local power-law fit of computing cost
+cost = kappa *  mis^{-nDim/2} * <var>Nseg</var>^eta * <var>Tseg</var>^delta
+according to Eq.(61, 62,63, 64)
+</p>
+<span id="Note-11"></span><h3 class="heading">Note</h3>
+<p>Equation numbers refer to Prix&amp;Shaltev, PRD85, 084010 (2012)
+</p>
+<span id="Examples-63"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">## trivial test example first
+ol = 1e-8;
+estCostFunction = struct ( &quot;lattice&quot;, &quot;Ans&quot;, &quot;f&quot;, @test_f );
+[coefCoh, coefInc] = LocalCostCoefficients_v2 ( testCostFunction, 100, 86400, 0.5, 0.3 );
+assert ( coefCoh.eta, 2.2, tol);
+assert ( coefCoh.delta, 4.4, tol );
+assert ( coefCoh.nDim, 3.3, tol );
+assert ( coefCoh.kappa, pi, tol );
+assert ( coefCoh.lattice, &quot;Ans&quot;);
+assert ( coefInc.eta, 4.2, tol);
+assert ( coefInc.delta, 1.4, tol );
+assert ( coefInc.nDim, 1.3, tol );
+assert ( coefInc.kappa, pi, tol );
+assert ( coefInc.lattice, &quot;Ans&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-OptimalSolution4StackSlide_005fv2">Function File: <em><var>stackparams</var> =</em> <strong>OptimalSolution4StackSlide_v2</strong> <em>( <code>option</code>, <var>val</var>, <code>option</code>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Computes a *self-consistent* solution for (locally-)optimal StackSlide
+parameters, given computing cost-functions (coherent and incoherent) and
+constraints (<code>cost0</code>, <code>TobsMax</code>, <code>TsegMax</code> &hellip;)
+</p>
+<span id="Options-14"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>costFuns</code></dt>
+<dd><p>structure containing parameters and cost-function handle
+</p>
+<dl compact="compact">
+<dt><code>grid_interpolation</code></dt>
+<dd><p>boolean flag about whether to use coherent-grid interpolation or not
+</p>
+</dd>
+<dt><code>nDim</code></dt>
+<dd><p>(optional) fix number of dimensions [default: compute from cost scaling]
+</p>
+</dd>
+<dt><code>lattice</code></dt>
+<dd><p>string specifying the template-bank <var>lattice</var> to use
+</p>
+</dd>
+<dt><code>fun</code></dt>
+<dd><p>cost-function handle, of the form [ costCoh, costInc ] = <var>fun</var>(Nseg, Tseg, mCoh, mInc)
+where the cost function must accept vector-arguments (of equal length or scalar)
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>cost0</code></dt>
+<dd><p>total computing cost (in CPU seconds),
+</p>
+</dd>
+</dl>
+
+<p>You can optionally provide the following additional constraints
+</p>
+<dl compact="compact">
+<dt><code>TobsMax</code></dt>
+<dd><p>maximal total observation time
+</p>
+</dd>
+<dt><code>TsegMin</code></dt>
+<dd><p>minimal segment length
+</p>
+</dd>
+<dt><code>TsegMax</code></dt>
+<dd><p>maximal segment length
+</p>
+</dd>
+<dt><code>stackparamsGuess</code></dt>
+<dd><p>initial &quot;guess&quot; for solution, must contain fields {Nseg, Tseg, mCoh, mInc }
+</p>
+</dd>
+<dt><code>pFA</code></dt>
+<dd><p>false-alarm probability at which to optimize sensitivity [1e-10]
+</p>
+</dd>
+<dt><code>pFD</code></dt>
+<dd><p>false-dismissal probability (=1-detection-probability) [0.1]
+</p>
+</dd>
+<dt><code>tol</code></dt>
+<dd><p>tolerance on the obtained relative difference of the solution, required for convergence [1e-2]
+</p>
+</dd>
+<dt><code>maxiter</code></dt>
+<dd><p>maximal allowed number of iterations [10]
+</p>
+</dd>
+<dt><code>hitmaxtimes</code></dt>
+<dd><p>how many times solutions are allowed to rail againt constraints before giving up [1]
+</p>
+</dd>
+<dt><code>minMismatch</code></dt>
+<dd><p>minimum allowed mismatch for solution [0]
+</p>
+</dd>
+<dt><code>sensApprox</code></dt>
+<dd><p>sensitivity approximation to use in <code>SensitivityScalingDeviationN()</code>, one of:
+</p><ul>
+<li> <code>none</code> [default]
+</li><li> <code>Gauss</code>
+</li><li> <code>WSG</code>
+</li></ul>
+
+</dd>
+<dt><code>nonlinearMismatch</code></dt>
+<dd><p>use empirical nonlinear mismatch relation instead of linear &lsquo;<samp>mis</samp>&rsquo; = xi * m
+</p>
+</dd>
+</dl>
+
+<span id="Output"></span><h3 class="heading">Output</h3>
+
+<p>The return structure &rsquo;sol&rsquo; has fields {<code>Nseg</code>, <code>Tseg</code>, <code>m</code>} where
+</p>
+<dl compact="compact">
+<dt><code>Nseg</code></dt>
+<dd><p>the optimal (fractional!) number of segments
+</p>
+</dd>
+<dt><code>Tseg</code></dt>
+<dd><p>the optimal segment length (in seconds)
+</p>
+</dd>
+<dt><code>m</code></dt>
+<dd><p>the optimal grid mismatch
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-SensitivityScalingDeviationN">Function File: <em><var>w</var> =</em> <strong>SensitivityScalingDeviationN</strong> <em>( <var>pFA</var>, <var>pFD</var>, <var>Nseg</var>, <var>approx</var> = &quot;&quot; )</em></dt>
+<dd>
+<p>Compute the deviation parameter <var>w</var> of the local StackSlide-sensitivity power-law scaling
+coefficient from the weak-signal limit (where w=1).
+In the Gaussian weak-signal limit (&quot;WSG&quot;), the critical non-centrality RHO^2 scales exactly as
+RHO^2 ~ N^(1/2), and threshold signal-strength hth therefore scales as ~ N^(-1/4).
+</p>
+<p>In general the N-scaling deviates from this, and we can locally describe it as a power-law
+of the form RHO^2 ~ N^(1/(2w), and hth ~ N^(-1/(4w)), respectively, where <var>w</var> quantifies
+the devation from the WSG-scaling.
+</p>
+<ul>
+<li> <code>approx</code> == &quot;none&quot;:
+use full chi^2_(4*<var>Nseg</var>) distribution
+</li><li> <code>approx</code> == &quot;Gauss&quot;:
+use the Gaussian (N&gt;&gt;1) approximation
+</li><li> <code>approx</code> == &quot;WSG&quot;:
+return w=1 for the &quot;weak-signal Gaussian&quot; case
+</li></ul>
+
+<p><var>Nseg</var> is allowed to be a vector, in which case the return w is also a vector.
+</p>
+<span id="Examples-64"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">tol = -1e-6; pFD = 0.1;
+## compare numbers to those from Prix&amp;Shaltev,PRD85,084010(2012)
+wGauss1_10 = SensitivityScalingDeviationN ( 1e-10, pFD, 1, approx = &quot;Gauss&quot; );
+assert ( wGauss1_10, 1.38029957237533, tol );
+wGauss13_10 = SensitivityScalingDeviationN ( 1e-10, pFD, 13, approx = &quot;Gauss&quot; );
+assert ( wGauss13_10, 1.15371666877782, tol );
+w1_2 = SensitivityScalingDeviationN ( 1e-2, pFD, 1, approx = &quot;none&quot; );
+assert ( w1_2, 1.88370817833829, tol );
+w13_2 = SensitivityScalingDeviationN ( 1e-2, pFD, 13, approx = &quot;none&quot; );
+assert ( w13_2, 1.29212548567877, tol );
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002dsensitivity.html" accesskey="n" rel="next"><samp>cw-sensitivity</samp></a>, Previous: <a href="cw_002dmetric_002dtemplate_002dbanks.html" accesskey="p" rel="prev"><samp>cw-metric-template-banks</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

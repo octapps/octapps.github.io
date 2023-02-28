@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>plotting (OctApps Reference Manual)</title>
+
+<meta name="description" content="plotting (OctApps Reference Manual)">
+<meta name="keywords" content="plotting (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="statistics.html" rel="next" title="statistics">
+<link href="mathematical.html" rel="prev" title="mathematical">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="plotting"></span><div class="header">
+<p>
+Next: <a href="statistics.html" accesskey="n" rel="next"><samp>statistics</samp></a>, Previous: <a href="mathematical.html" accesskey="p" rel="prev"><samp>mathematical</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="plotting-1"></span><h3 class="section">2.18 <samp>plotting</samp></h3>
+
+<dl>
+<dt id="index-contourc2struct">Function File: <em><var>S</var> =</em> <strong>contourc2struct</strong> <em>( <var>C</var> )</em></dt>
+<dd>
+<p>Converts contour matrix <var>C</var> returned by contour
+functions into a easier-to-use array struct S
+</p>
+<span id="Examples-181"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[X, Y] = ndgrid(-10:10, -10:10);
+Z = X.^2 + Y.^2;
+C = contourc(Z);
+contourc2struct(C);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ezmovie">Function File: <em></em> <strong>ezmovie</strong> <em>( <code>start</code>, <var>opt</var>, <var>val</var>, &hellip; ) ;</em></dt>
+<dt id="index-ezmovie-1">Function File: <em></em> <strong>ezmovie</strong> <em>( <code>add</code> ) ;</em></dt>
+<dt id="index-ezmovie-2">Function File: <em></em> <strong>ezmovie</strong> <em>( <code>stop</code> ) ;</em></dt>
+<dd>
+<p>Generate a H.264/MPEG-4 AVC movie from a sequence of figures.
+Requires the command <code>ffmpeg</code> or <code>avconv</code> to be available.
+</p>
+<span id="Options-to-ezmovie_0028start_0029"></span><h3 class="heading">Options to ezmovie(<code>start</code>)</h3>
+
+<dl compact="compact">
+<dt><var>filebasename</var></dt>
+<dd><p>basename of movie file; extension will be &quot;.mp4&quot;
+</p>
+</dd>
+<dt><var>delay</var></dt>
+<dd><p><var>delay</var> between each figure, in seconds
+</p>
+</dd>
+<dt><var>width</var></dt>
+<dd><p><var>width</var> of movie, in pixels
+</p>
+</dd>
+<dt><var>height</var></dt>
+<dd><p><var>height</var> of movie, in pixels
+</p>
+</dd>
+<dt><var>fontsize</var></dt>
+<dd><p>font size of printed figure, in points (default: 10)
+</p>
+</dd>
+<dt><var>linescale</var></dt>
+<dd><p>factor to scale line <var>width</var> of figure objects (default: 1)
+</p>
+</dd>
+<dt><var>verbose</var></dt>
+<dd><p>if true, print <var>verbose</var> output from <code>ffmpeg</code> or <code>avconv</code>
+</p>
+</dd>
+</dl>
+
+<span id="Example-3"></span><h3 class="heading">Example</h3>
+<div class="example">
+<pre class="example">ezmovie(&quot;start&quot;, &quot;opt&quot;, val, ...);
+plot(...);
+ezmovie add;
+plot(...);
+ezmovie add;
+</pre></div>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-ezprint">Function File: <em></em> <strong>ezprint</strong> <em>( <var>filepath</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Print a figure to a file, with some common options.
+</p>
+<span id="Options-28"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>width</code></dt>
+<dd><p>width of printed figure, in points
+</p>
+</dd>
+<dt><code>aspect</code></dt>
+<dd><p>aspect ratio of <var>height</var> to <var>width</var> (default: 0.75)
+</p>
+</dd>
+<dt><code>height</code></dt>
+<dd><p><var>height</var> of printed figure, in points (overrides &quot;<var>aspect</var>&quot;)
+</p>
+</dd>
+<dt><code>dpi</code></dt>
+<dd><p>resolution of printed figure, in dots per inch (default: 300)
+</p>
+</dd>
+<dt><code>fontsize</code></dt>
+<dd><p>font size of printed figure, in points (default: 10)
+</p>
+</dd>
+<dt><code>linescale</code></dt>
+<dd><p>factor to scale line <var>width</var> of figure objects (default: 1)
+</p>
+</dd>
+<dt><code>texregex</code></dt>
+<dd><p>regular expression to apply to TeX output files
+</p>
+</dd>
+</dl>
+
+<span id="Examples-182"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">graphics_toolkit gnuplot;
+figname = strcat(tempname(tempdir), &quot;.tex&quot;);
+fig = figure(&quot;visible&quot;, &quot;off&quot;);
+plot(0:100, mod(0:100, 10));
+ezprint(figname, &quot;width&quot;, 100);
+close(fig);
+assert(exist(figname, &quot;file&quot;));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-greyScaleReady">Function File: <em><var>map</var> =</em> <strong>greyScaleReady</strong> <em>( <var>name</var>, [ <var>n</var> = 64 ] )</em></dt>
+<dd>
+<p>Generate colour maps where the &quot;luma&quot; (brightness) decreases
+linearly as a function of colour <var>map</var> index; these maps should
+therefore be printable in grey-scale. Light-to-dark colour maps
+range from white to the first colour of &quot;<var>name</var>&quot;, via the second
+colour of &quot;<var>name</var>&quot;; dark-to-light colour maps reverse this order.
+</p>
+<span id="Arguments-76"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>map</var></dt>
+<dd><p>colour map
+</p>
+</dd>
+<dt><var>name</var></dt>
+<dd><p>one of:
+</p><dl compact="compact">
+<dt>light-to-dark colour maps</dt>
+<dd><p><code>blue-cyan</code>, <code>blue-magenta</code>, <code>green-cyan</code>,
+<code>green-yellow</code>, <code>red-magenta</code>, <code>red-yellow</code>
+</p>
+</dd>
+<dt>dark-to-light colour maps</dt>
+<dd><p><code>cyan-blue</code>, <code>cyan-green</code>, <code>magenta-blue</code>,
+<code>magenta-red</code>, <code>yellow-green</code>, <code>yellow-red</code>
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><var>n</var></dt>
+<dd><p>number of colour map entries
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-makeColourMap">Function File: <em><var>map</var> =</em> <strong>makeColourMap</strong> <em>( <var>r</var>, <var>g</var>, <var>b</var>, [ <var>n</var> = 64 ] )</em></dt>
+<dd>
+<p>Generate a colour <var>map</var> by interpolating colour intensities.
+</p>
+<span id="Arguments-77"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>map</var></dt>
+<dd><p>colour map
+</p>
+</dd>
+<dt><var>r</var></dt>
+<dt><var>g</var></dt>
+<dt><var>b</var></dt>
+<dd><p>m-by-2 arrays of interpolation coefficients
+</p><div class="example">
+<pre class="example">[x1, c1; x2, c2; ...]
+</pre></div>
+<p>where x indexes the colour <var>map</var>, 0&lt;=x&lt;=1
+c is the red/gree/blue colour at x
+</p>
+</dd>
+<dt><var>n</var></dt>
+<dd><p>number of colour <var>map</var> entries
+</p>
+</dd>
+</dl>
+
+<span id="Examples-183"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">makeColourMap([0 1;0.114 1;0.701 1;1 0.35], [0 1;0.114 1;0.701 0.35;1 0.35], [0 1;0.114 0.35;0.701 0.35;1 0.35]);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-PlotAndLabelContour">Function File: <em></em> <strong>PlotAndLabelContour</strong> <em>( <var>C</var>, <var>ctropt</var>, <var>ctropt</var>, &hellip; )</em></dt>
+<dt id="index-PlotAndLabelContour-1">Function File: <em></em> <strong>PlotAndLabelContour</strong> <em>( <var>S</var>, <var>ctropt</var>, <var>ctropt</var>, &hellip; )</em></dt>
+<dt id="index-PlotAndLabelContour-2">Function File: <em><var>S</var> =</em> <strong>PlotAndLabelContour</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Plot contours, possibly with labels
+</p>
+<span id="Arguments-78"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>C</var></dt>
+<dd><p>contour array returned by contourc, etc.
+</p>
+</dd>
+<dt><var>S</var></dt>
+<dd><p><var>S</var> = contourc2struct(<var>C</var>)
+</p>
+</dd>
+<dt><var>ctropt</var></dt>
+<dd><p>{<var>lev</var>, <var>prop</var>, <var>options</var>&hellip;}, where:
+</p><dl compact="compact">
+<dt><var>lev</var></dt>
+<dd><p>contour level(s)
+</p></dd>
+<dt><var>prop</var></dt>
+<dd><p>contour line properties
+</p></dd>
+<dt><var>options</var></dt>
+<dd><dl compact="compact">
+<dt><code>lbl</code></dt>
+<dd><p>label this contour (true/false)
+</p></dd>
+<dt><code>lblpos</code></dt>
+<dd><p>relative position of label along contour
+</p></dd>
+<dt><code>lbldim</code></dt>
+<dd><p>size of area to clear for contour label
+</p></dd>
+<dt><code>lblminlen</code></dt>
+<dd><p>don&rsquo;t label contours shorter than this
+</p></dd>
+</dl>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Examples-184"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">fig = figure(&quot;visible&quot;, &quot;off&quot;);
+[X, Y] = ndgrid(-10:10, -10:10);
+Z = X.^2 - Y.^2;
+lbllev = 10:10:90;
+C = contourc(Z, lbllev);
+PlotAndLabelContours(C, {&quot;lev&quot;, lbllev, &quot;levprop&quot;, {&quot;color&quot;, &quot;black&quot;}, &quot;lbl&quot;, true, &quot;lbldim&quot;, [0.1, 0.1], &quot;lblfmt&quot;, &quot;%0.0f&quot;});
+close(fig);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-plotColourMap">Function File: <em><var>lum</var> =</em> <strong>plotColourMap</strong> <em>( <var>map</var>, [ <var>name</var> ] )</em></dt>
+<dd>
+<p>Visualise a colour <var>map</var>.
+</p>
+<span id="Arguments-79"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>map</var></dt>
+<dd><p>colour map
+</p>
+</dd>
+<dt><var>name</var></dt>
+<dd><p>optional colour <var>map</var> name
+</p>
+</dd>
+<dt><var>lum</var></dt>
+<dd><p>luma of colour map
+</p>
+</dd>
+</dl>
+
+<span id="Examples-185"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">plotColourMap(colormap());
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-PlotGrid">Function File: <em></em> <strong>PlotGrid</strong> <em>( <var>rowrange</var>, <var>colrange</var>, <var>rowspace</var>, <var>colspace</var>, <var>rowfigs</var>, <var>colfigs</var> )</em></dt>
+<dt id="index-PlotGrid-1">Function File: <em><var>hax</var> =</em> <strong>PlotGrid</strong> <em>( <var>rowidx</var>, <var>colidx</var> )</em></dt>
+<dt id="index-PlotGrid-2">Function File: <em></em> <strong>PlotGrid</strong> <em>( <var>range</var>, <var>space</var>, <var>figs</var> )</em></dt>
+<dt id="index-PlotGrid-3">Function File: <em><var>hax</var> =</em> <strong>PlotGrid</strong> <em>( <var>idx</var> )</em></dt>
+<dd>
+<p>A more flexible replacement for <code>subplot()</code>.
+</p>
+<span id="Arguments-80"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>[row|col]range</var></dt>
+<dd><p>range of figure coordinates in [0,1] to be covered by grid [in this dimension]
+</p>
+</dd>
+<dt><var>[row|col]space</var></dt>
+<dd><p>spacing between figures [in this dimension]
+</p>
+</dd>
+<dt><var>[row|col]figs</var></dt>
+<dd><p>number of figures [in this dimension]
+</p>
+</dd>
+<dt><var>[row|col]idx</var></dt>
+<dd><p>figure index [in this dimension]
+</p>
+</dd>
+</dl>
+
+<span id="Examples-186"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">fig = figure(&quot;visible&quot;, &quot;off&quot;);
+N = 5;
+M = 3;
+PlotGrid([0.1,0.9], [0.1,0.8], 0.05, 0.03, N, M);
+for i = 1:N
+  for j = 1:M
+    PlotGrid(i, j);
+    text(0.5,0.5,sprintf(&quot;%g,%g&quot;,i,j));
+  endfor
+endfor
+close(fig);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SetTickMarks">Function File: <em></em> <strong>SetTickMarks</strong> <em>( <var>dim</var>, <var>nticks</var> )</em></dt>
+<dd>
+<p>Try to generate a given number of ticks on a given axis.
+</p>
+<span id="Arguments-81"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>dim</var></dt>
+<dd><p>one of <code>x</code>, <code>y</code>, <code>z</code>
+</p>
+</dd>
+<dt><var>nticks</var></dt>
+<dd><p>number of ticks to try to generate
+</p>
+</dd>
+</dl>
+
+<span id="Examples-187"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">fig = figure(&quot;visible&quot;, &quot;off&quot;);
+plot(0:100, mod(0:100, 10));
+SetTickMarks(&quot;x&quot;, 4);
+SetTickMarks(&quot;y&quot;, 4);
+close(fig);
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="statistics.html" accesskey="n" rel="next"><samp>statistics</samp></a>, Previous: <a href="mathematical.html" accesskey="p" rel="prev"><samp>mathematical</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

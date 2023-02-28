@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>condor-jobs (OctApps Reference Manual)</title>
+
+<meta name="description" content="condor-jobs (OctApps Reference Manual)">
+<meta name="keywords" content="condor-jobs (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="convert_002dunits.html" rel="next" title="convert-units">
+<link href="command_002dline.html" rel="prev" title="command-line">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="condor_002djobs"></span><div class="header">
+<p>
+Next: <a href="convert_002dunits.html" accesskey="n" rel="next"><samp>convert-units</samp></a>, Previous: <a href="command_002dline.html" accesskey="p" rel="prev"><samp>command-line</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="condor_002djobs-1"></span><h3 class="section">2.3 <samp>condor-jobs</samp></h3>
+
+<dl>
+<dt id="index-depends">Loadable Function: <em>[<var>deps</var>,<var>extras</var>] =</em> <strong>depends</strong> <em>( <var>function</var>, &hellip; )</em></dt>
+<dt id="index-depends-1">Loadable Function: <em>[<var>deps</var>,<var>extras</var>] =</em> <strong>depends</strong> <em>( <var>exclude</var>, <var>function</var>, &hellip; )</em></dt>
+<dd>
+
+<p>Returns a struct containing the names (keys) and filenames (values) of functions required by the supplied <var>function</var>s. If <var>exclude</var> (a cell array of strings) is given, exclude all functions whose filepaths start with one of the filepath prefixes in <var>exclude</var>. 
+</p>
+<p>The cell array <var>extras</var> returns any additional data files required by the functions. It is determined by calling any dependent function named &rsquo;__depends_extra_files__()&rsquo;, which should return file names as multiple string arguments. 
+</p>
+<span id="Examples-6"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">octprefixes = cellfun(@octapps_config_info, {&quot;fcnfiledir&quot;, &quot;octfiledir&quot;}, &quot;UniformOutput&quot;, false);
+[deps,extras] = depends(octprefixes, &quot;parseOptions&quot;);
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-makeCondorDAG">Function File: <em><var>dag_file</var> =</em> <strong>makeCondorDAG</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Set up a Condor DAG for running Condor jobs.
+</p>
+<span id="Arguments-1"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>dag_file</var></dt>
+<dd><p>name of Condor DAG submit file
+</p>
+</dd>
+</dl>
+
+<span id="Options"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>dag_name</code></dt>
+<dd><p>name of Condor DAG, used to name DAG submit file
+</p>
+</dd>
+<dt><code>job_nodes</code></dt>
+<dd><p>struct array of job nodes, which has the following fields:
+</p>
+<dl compact="compact">
+<dt><code>file</code></dt>
+<dd><p>name of Condor submit file for this job
+</p>
+</dd>
+<dt><code>vars</code></dt>
+<dd><p>struct of variable substitutions to make
+</p>
+</dd>
+<dt><code>child</code></dt>
+<dd><p>array indexing child job nodes for this node
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>retries</code></dt>
+<dd><p>how man times to retry Condor jobs (default: 0)
+</p>
+</dd>
+<dt><code>sub_dags</code></dt>
+<dd><p>split DAG into this many subfiles (default: 1)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-7"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">oldpwd = pwd;
+jobdir = mkpath(tempname(tempdir));
+unwind_protect
+  cd(jobdir);
+  jobname = &quot;test_makeCondorDAG&quot;;
+  job = makeCondorJob(&quot;job_name&quot;, jobname, ...
+                      &quot;log_dir&quot;, pwd,
+                      &quot;func_name&quot;, &quot;__test_parseOptions__&quot;, ...
+                      &quot;func_nargout&quot;, 1, ...
+                      &quot;arguments&quot;, { ...
+                                     &quot;--real-strictpos-scalar&quot;, &quot;$(x)&quot;, ...
+                                     &quot;--integer-vector&quot;, [3,9,5], ...
+                                     &quot;--string&quot;, &quot;Hi there&quot;, ...
+                                     &quot;--cell&quot;, {1,{2,3}}, ...
+                                   }, ...
+                      &quot;data_files&quot;, { ...
+                                      fullfile(fileparts(file_in_loadpath(&quot;readSFT.m&quot;)), &quot;SFT-good&quot;) ...
+                                    }, ...
+                      &quot;extra_condor&quot;, { ...
+                                        &quot;requirements&quot;, &quot;TARGET.has_avx == true&quot;, ...
+                                      } ...
+                     );
+  assert(exist(&quot;./test_makeCondorDAG.job&quot;) == 2);
+  assert(exist(&quot;./test_makeCondorDAG.sh&quot;) == 2);
+  assert(exist(&quot;./test_makeCondorDAG.in&quot;) == 7);
+  assert(exist(&quot;./test_makeCondorDAG.in/.exec&quot;) == 7);
+  assert(exist(&quot;./test_makeCondorDAG.in/.func&quot;) == 7);
+  assert(exist(&quot;./test_makeCondorDAG.in/SFT-good&quot;) == 2);
+  nodes = struct;
+  node = struct;
+  node.file = job;
+  node.vars.x = 1.23;
+  nodes(1) = node;
+  node.vars.x = 4.56;
+  nodes(2) = node;
+  makeCondorDAG(&quot;dag_name&quot;, jobname, &quot;job_nodes&quot;, nodes);
+  assert(exist(&quot;./test_makeCondorDAG.dag&quot;) == 2);
+  assert(exist(&quot;./test_makeCondorDAG_nodes.bin.gz&quot;) == 2);
+  assert(exist(&quot;./test_makeCondorDAG.out&quot;) == 7);
+  assert(exist(&quot;./test_makeCondorDAG.out/00&quot;) == 7);
+  assert(exist(&quot;./test_makeCondorDAG.out/01&quot;) == 7);
+unwind_protect_cleanup
+  cd(oldpwd);
+end_unwind_protect
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-makeCondorJob">Function File: <em><var>job_file</var> =</em> <strong>makeCondorJob</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Set up a Condor job for running Octave scripts or executables.
+</p>
+<span id="Arguments-2"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>job_file</var></dt>
+<dd><p>name of Condor job submit file
+</p>
+</dd>
+</dl>
+
+<span id="General-options"></span><h3 class="heading">General options</h3>
+
+<dl compact="compact">
+<dt><code>job_name</code></dt>
+<dd><p>name of Condor job, used to name submit file
+and input/output directories
+</p>
+</dd>
+<dt><code>log_dir</code></dt>
+<dd><p>where to write Condor log files (default: $TMP)
+</p>
+</dd>
+<dt><code>data_files</code></dt>
+<dd><p>cell array of required data files; elements of cell
+array may be either:
+</p><ul>
+<li> <samp>file_path</samp>, or
+</li><li> {<code>ENVPATH</code>, <samp>file_name_in_ENVPATH</samp>, &hellip;}
+</li></ul>
+<p>where <code>ENVPATH</code> is the name of an environment path
+</p>
+</dd>
+<dt><code>extra_condor</code></dt>
+<dd><p>extra commands to write to Condor submit file, in form:
+{&lsquo;<samp>command</samp>&rsquo;, &lsquo;<samp>value</samp>&rsquo;, &hellip;}
+</p>
+</dd>
+</dl>
+
+<span id="Options-for-running-Octave-scripts"></span><h3 class="heading">Options for running Octave scripts</h3>
+
+<dl compact="compact">
+<dt><code>func_name</code></dt>
+<dd><p>name of Octave function to run
+</p>
+</dd>
+<dt><code>arguments</code></dt>
+<dd><p>cell array of arguments to pass to function.
+use $(variable) to insert reference to a Condor variable.
+</p>
+</dd>
+<dt><code>func_nargout</code></dt>
+<dd><p>how many outputs returned by the function to save
+</p>
+</dd>
+<dt><code>exec_files</code></dt>
+<dd><p>cell array of executable files required by the function
+</p>
+</dd>
+<dt><code>output_format</code></dt>
+<dd><p>output format of file containg saved outputs from function:
+</p><dl compact="compact">
+<dt><code>Oct(Text|Bin)(Z)</code></dt>
+<dd><p>Octave (text|binary) (zipped) format; file extension will be .(txt|bin)(.gz)
+</p></dd>
+<dt><code>HDF5</code></dt>
+<dd><p>Hierarchical Data Format version 5 format; file extension will be .hdf5
+</p></dd>
+<dt><code>Mat</code></dt>
+<dd><p>Matlab (version 6) binary format; file extension will be .mat
+</p></dd>
+</dl>
+<p>Default is &quot;OctBinZ&quot;
+</p>
+</dd>
+</dl>
+
+<span id="Options-for-running-executables"></span><h3 class="heading">Options for running executables</h3>
+
+<dl compact="compact">
+<dt><code>executable</code></dt>
+<dd><p>name of executable to run
+</p>
+</dd>
+<dt><code>arguments</code></dt>
+<dd><p>cell array of arguments to pass to executable.
+use <code>$(variable)</code> to insert reference to a Condor variable.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-makeCondorRescueDAG">Function File: <em></em> <strong>makeCondorRescueDAG</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Build a rescue Condor DAG to rerun jobs with missing or corrupt result files.
+</p>
+<span id="Options-1"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>dag_name</code></dt>
+<dd><p>Name of Condor DAG, used to name DAG submit file.
+</p>
+</dd>
+<dt><code>check_load</code></dt>
+<dd><p>If true, check that result file can be loaded and
+its contents are not corrupted; otherwise, just
+check that result file exists [default: true].
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-mergeCondorResults">Function File: <em></em> <strong>mergeCondorResults</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Merge results from a Condor DAG.
+</p>
+<span id="Options-2"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>dag_name</code></dt>
+<dd><p>Name of Condor DAG, used to name DAG submit file.
+</p>
+</dd>
+<dt><code>merged_suffix</code></dt>
+<dd><p>Suffix to append to merged results file name
+<code>'dag_name'_'merged_suffix'.bin.gz</code>.
+Default is &quot;merged&quot;.
+</p>
+</dd>
+<dt><code>args_filter</code></dt>
+<dd><p>Job results which share the same job arguments are merged
+together. If specified, this is a function which may modify
+the job arguments before they are compared, i.e. to change
+which arguments are merged together.
+</p>
+</dd>
+<dt><code>merge_function</code></dt>
+<dd><p>jobs with the same arguments, as determined by
+the DAG job name &rsquo;vars&rsquo; field. Syntax is:
+</p><div class="example">
+<pre class="example">  merged_res = merge_function(merged_res, res, args)
+</pre></div>
+<p>where &rsquo;res&rsquo; are to be merged into &rsquo;merged_res&rsquo;, and
+&rsquo;args&rsquo; are the arguments passed to the job.
+One function per element of job &rsquo;results&rsquo; must be given.
+</p>
+</dd>
+<dt><code>norm_function</code></dt>
+<dd><p>If given, function(s) used to normalise merged results
+after all Condor jobs have been processed. Syntax is:
+</p><div class="example">
+<pre class="example">  merged_res = norm_function(merged_res, n)
+</pre></div>
+<p>where &rsquo;n&rsquo; is the number of merged Condor jobs.
+One function per element of job &rsquo;results&rsquo; must be given.
+</p>
+</dd>
+<dt><code>save_period</code></dt>
+<dd><p>How often merged results should be saved (default: 90 sec).
+</p>
+</dd>
+<dt><code>extra_data</code></dt>
+<dd><p>Extra data to save to merged results file.
+</p>
+</dd>
+<dt><code>load_retries</code></dt>
+<dd><p>How many times to try loading result files (default: 3).
+</p>
+</dd>
+<dt><code>retry_period</code></dt>
+<dd><p>How long to wait between trying to load results (default 30 sec).
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-sharedlibdeps">Function File: <em><var>deps</var> =</em> <strong>sharedlibdeps</strong> <em>( <var>file</var>, &hellip; )</em></dt>
+<dt id="index-sharedlibdeps-1">Function File: <em><var>deps</var> =</em> <strong>sharedlibdeps</strong> <em>( <var>exclude</var>, <var>file</var>, &hellip; )</em></dt>
+<dd>
+<p>Returns in <var>deps</var> a list of all the shared libraries on which
+the executables/shared libraries <var>file</var>, &hellip; depend.
+If <var>exclude</var> (a cell array of strings) is given, exclude all libraries
+whose filepaths start with one of the filepath prefixes in <var>exclude</var>.
+</p><span id="Examples-8"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">libdir = octapps_config_info(&quot;libdir&quot;);
+version = octapps_config_info(&quot;version&quot;);
+dirs0 = glob(fullfile(libdir, &quot;liboct*.so&quot;));
+dirs1 = glob(fullfile(libdir,&quot;octave&quot;, version, &quot;liboct*.so&quot;));
+deps = sharedlibdeps(dirs0{:}, dirs1{:});
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="convert_002dunits.html" accesskey="n" rel="next"><samp>convert-units</samp></a>, Previous: <a href="command_002dline.html" accesskey="p" rel="prev"><samp>command-line</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

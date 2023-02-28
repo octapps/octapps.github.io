@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>OptimalSolution4StackSlide_v2() (OctApps Reference Manual)</title>
+
+<meta name="description" content="OptimalSolution4StackSlide_v2() (OctApps Reference Manual)">
+<meta name="keywords" content="OptimalSolution4StackSlide_v2() (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuous_002dWave-Functions.html" rel="up" title="Continuous-Wave Functions">
+<link href="Directory-Index.html" rel="next" title="Directory Index">
+<link href="SensitivityDepthStackSlide_0028_0029.html" rel="prev" title="SensitivityDepthStackSlide()">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="OptimalSolution4StackSlide_005fv2_0028_0029"></span><div class="header">
+<p>
+Previous: <a href="SensitivityDepthStackSlide_0028_0029.html" accesskey="p" rel="prev"><code>SensitivityDepthStackSlide()</code></a>, Up: <a href="Continuous_002dWave-Functions.html" accesskey="u" rel="up">Continuous-Wave Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="OptimalSolution4StackSlide_005fv2_0028_0029-1"></span><h4 class="subsection">1.2.5 <code>OptimalSolution4StackSlide_v2()</code></h4>
+
+<p><code>OptimalSolution4StackSlide_v2()</code> finds the optimal setup of a continuous gravitational-wave search, under the constraint of fixed computational cost.
+</p>
+<p>The computational cost of a continuous gravitational-wave search is given by a function; the following example is based on the Einstein@Home search for Cassiopeia A using LIGO S6 data:
+</p><div class="example">
+<pre class="example">octave&gt; UnitsConstants;
+octave&gt; costFuns = CostFunctionsDirected(&quot;fmin&quot;, 120, &quot;fmax&quot;, 1000, &quot;tau_min&quot;, 300 * YRSID_SI, &quot;detectors&quot;, &quot;H1,L1&quot;, &quot;coh_duty&quot;, 0.53375, &quot;resampling&quot;, false, &quot;coh_c0_demod&quot;, 7.4e-8 / 1800, &quot;inc_c0&quot;, 4.7e-9, &quot;lattice&quot;, &quot;Zn&quot;, &quot;boundaryType&quot;, &quot;EaHCasA&quot;);
+octave&gt; cost0 = 3.1451 * EM2014;
+octave&gt; TobsMax = 256.49 * DAYS;
+</pre></div>
+<p>Given a starting guess:
+</p><div class="example">
+<pre class="example">octave&gt; refParams.Nseg = 10;
+octave&gt; refParams.Tseg = 24 * 86400;
+octave&gt; refParams.mCoh = 0.5;
+octave&gt; refParams.mInc = 0.5;
+</pre></div>
+<p><code>OptimalSolution4StackSlide_v2()</code> iteratively converges to the optimal solution under the given constraints:
+</p><div class="example">
+<pre class="example">octave&gt; sol = OptimalSolution4StackSlide_v2(&quot;costFuns&quot;, costFuns, &quot;cost0&quot;, cost0, &quot;TobsMax&quot;, TobsMax, &quot;stackparamsGuess&quot;, refParams, &quot;debugLevel&quot;, 1);
+Completing stackparams of starting point ... done: {Nseg =   10.0, Tseg =   24.00 d, Tobs =  240.00 d, mCoh = 0.5    , mInc = 0.5    } : dCC0=+1e+01 : L0LIN=+7.01e+06
+Running solver [Unconstrained]:   iteration = 07/10 [converged]: {Nseg =   50.6, Tseg =    5.07 d, Tobs =  256.49 d, mCoh = 0.075  , mInc = 0.52   } : dCC0=-7e-01 : L0LIN=+3.91e+06 ==&gt; FEASIBLE!
+Running solver [TobsMax]:         iteration = 05/10 [converged]: {Nseg =   32.1, Tseg =    8.00 d, Tobs =  256.49 d, mCoh = 0.12   , mInc = 0.41   } : dCC0=-4e-03 : L0LIN=+5.19e+06 ==&gt; FEASIBLE!
+==============================
+--&gt; Best solution found: [TobsMax]: {Nseg =   32.1, Tseg =    8.00 d, Tobs =  256.49 d, mCoh = 0.12   , mInc = 0.41   } : dCC0=-4e-03 : L0LIN=+5.19e+06
+==============================
+</pre></div>
+
+
+
+
+</body>
+</html>

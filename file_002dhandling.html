@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>file-handling (OctApps Reference Manual)</title>
+
+<meta name="description" content="file-handling (OctApps Reference Manual)">
+<meta name="keywords" content="file-handling (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="general.html" rel="next" title="general">
+<link href="cw_002dweave_002dmodels.html" rel="prev" title="cw-weave-models">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="file_002dhandling"></span><div class="header">
+<p>
+Next: <a href="general.html" accesskey="n" rel="next"><samp>general</samp></a>, Previous: <a href="cw_002dweave_002dmodels.html" accesskey="p" rel="prev"><samp>cw-weave-models</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="file_002dhandling-1"></span><h3 class="section">2.11 <samp>file-handling</samp></h3>
+
+<dl>
+<dt id="index-fitsread">Loadable Function: <em><var>data</var> =</em> <strong>fitsread</strong> <em>( <var>filename</var> )</em></dt>
+<dd>
+<p>Load data from a FITS (Flexible Image Transport System) file.
+</p>
+<span id="Examples-85"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">data = fitsread(&quot;results.fits&quot;);             # Load all data in &quot;results.fits&quot;
+data = fitsread(&quot;results.fits[table1]&quot;);     # Load only the table &quot;table1&quot; in &quot;results.fits&quot;
+</pre></div>
+
+</dd></dl>
+
+<dl>
+<dt id="index-mkpath">Function File: <em><var>path</var> =</em> <strong>mkpath</strong> <em>( <var>dirs</var>, &hellip; )</em></dt>
+<dd>
+<p>Makes the directory path <var>dirs</var>, including all parent directories.
+Returns the final directory in <var>path</var>.
+</p>
+<span id="Examples-86"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">dir0 = tempname(tempdir);
+mkpath(dir0, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+assert(isdir(fullfile(dir0, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;)));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-readConfigFile">Function File: <em><var>cfg</var> =</em> <strong>readConfigFile</strong> <em>( <var>file</var> )</em></dt>
+<dd>
+<p>Read a .ini style configuration <var>file</var> into a struct.
+</p>
+<span id="Arguments-40"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cfg</var></dt>
+<dd><p>configuration <var>file</var> contents
+</p>
+</dd>
+<dt><var>file</var></dt>
+<dd><p>configuration file
+</p>
+</dd>
+</dl>
+
+<span id="Examples-87"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">inifile = strcat(tempname(tempdir), &quot;.ini&quot;);
+inicfg = struct(&quot;sec1&quot;, struct(&quot;key1&quot;, 1.23, &quot;key2&quot;, &quot;hi&quot;), &quot;sec2&quot;, struct(&quot;key3&quot;, &quot;there&quot;));
+writeConfigFile(inifile, inicfg);
+inicfg2 = readConfigFile(inifile);
+assert(inicfg.sec1.key1, inicfg2.sec1.key1);
+assert(inicfg.sec1.key2, inicfg2.sec1.key2);
+assert(inicfg.sec2.key3, inicfg2.sec2.key3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-writeConfigFile">Function File: <em></em> <strong>writeConfigFile</strong> <em>( <var>file</var>, <var>cfg</var> )</em></dt>
+<dd>
+<p>Write a .ini style configuration <var>file</var> from a struct.
+</p>
+<span id="Arguments-41"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>file</var></dt>
+<dd><p>configuration file
+</p>
+</dd>
+<dt><var>cfg</var></dt>
+<dd><p>configuration <var>file</var> contents
+</p>
+</dd>
+</dl>
+
+<span id="Examples-88"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">inifile = strcat(tempname(tempdir), &quot;.ini&quot;);
+inicfg = struct(&quot;sec1&quot;, struct(&quot;key1&quot;, 1.23, &quot;key2&quot;, &quot;hi&quot;), &quot;sec2&quot;, struct(&quot;key3&quot;, &quot;there&quot;))
+writeConfigFile(inifile, inicfg);
+</pre></div>
+</dd></dl>
+
+
+
+
+</body>
+</html>

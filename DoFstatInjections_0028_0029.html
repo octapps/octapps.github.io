@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>DoFstatInjections() (OctApps Reference Manual)</title>
+
+<meta name="description" content="DoFstatInjections() (OctApps Reference Manual)">
+<meta name="keywords" content="DoFstatInjections() (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuous_002dWave-Functions.html" rel="up" title="Continuous-Wave Functions">
+<link href="ComputeDopplerMetric_0028_0029.html" rel="next" title="ComputeDopplerMetric()">
+<link href="Continuous_002dWave-Functions.html" rel="prev" title="Continuous-Wave Functions">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="DoFstatInjections_0028_0029"></span><div class="header">
+<p>
+Next: <a href="ComputeDopplerMetric_0028_0029.html" accesskey="n" rel="next"><code>ComputeDopplerMetric()</code></a>, Up: <a href="Continuous_002dWave-Functions.html" accesskey="u" rel="up">Continuous-Wave Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="DoFstatInjections_0028_0029-1"></span><h4 class="subsection">1.2.1 <code>DoFstatInjections()</code></h4>
+
+<p><code>DoFstatInjections()</code> creates gravitational-wave data containing a simulated continuous gravitational-wave signal, then searches for them using the F-statistic.
+</p>
+<p>First we define the parameters of the simulated continuous gravitational-wave signal:
+</p><div class="example">
+<pre class="example">octave&gt; Alpha = 3.92;
+octave&gt; Delta = 0.83;
+octave&gt; Freq = 200;
+octave&gt; f1dot = 1e-9;
+</pre></div>
+<p>We then define some common arguments to <code>DoFstatInjections()</code> (see the documentation for details):
+</p><div class="example">
+<pre class="example">octave&gt; Tobs = 86400;
+octave&gt; DFIargs = {&quot;ref_time&quot;, 731163327, &quot;start_time&quot;, 850468953, &quot;time_span&quot;, Tobs, &quot;detectors&quot;, &quot;H1,L1&quot;, &quot;sft_time_span&quot;, 1800, &quot;sft_overlap&quot;, 0, &quot;sft_noise_window&quot;, 50, &quot;inj_h0&quot;, 0.55, &quot;inj_cosi&quot;, 0.31, &quot;inj_psi&quot;, 0.22, &quot;inj_phi0&quot;, 1.82, &quot;inj_alpha&quot;, Alpha, &quot;inj_delta&quot;, Delta, &quot;inj_fndot&quot;, [Freq; f1dot], &quot;Dterms&quot;, 8, &quot;randSeed&quot;, 1234};
+</pre></div>
+
+<p>We perform a simple search over just frequency, all other parameters being perfectly matched:
+</p><div class="example">
+<pre class="example">octave&gt; dFreq = 0.2 / Tobs;
+octave&gt; sch_Freq = linspace(Freq - 50*dFreq, Freq + 50*dFreq, 90);
+octave&gt; sch_f1dot = f1dot * ones(size(sch_Freq));
+octave&gt; sch_fndot = [sch_Freq; sch_f1dot];
+octave&gt; sch_Alpha = Alpha * ones(size(sch_Freq));
+octave&gt; sch_Delta = Delta * ones(size(sch_Freq));
+octave&gt; res = DoFstatInjections(DFIargs{:}, &quot;det_sqrt_PSD&quot;, 1.0, &quot;OrbitParams&quot;, false, &quot;sch_fndot&quot;, sch_fndot, &quot;sch_alpha&quot;, sch_Alpha, &quot;sch_delta&quot;, sch_Delta);
+</pre></div>
+<p>If none of the <var>sch_...</var> variables are passed to <code>DoFstatInjections()</code>, it searches at the exact parameters of the injected signal:
+</p><div class="example">
+<pre class="example">octave&gt; res0 = DoFstatInjections(DFIargs{:}, &quot;det_sqrt_PSD&quot;, 1.0, &quot;OrbitParams&quot;, false);
+</pre></div>
+
+<p>Finally, we plot the results:
+</p><div class="example">
+<pre class="example">octave&gt; graphics_toolkit gnuplot
+octave&gt; plot(res.sch_fndot(1,:) - Freq, res.sch_twoF, &quot;kx-&quot;, res0.sch_fndot(1,:) - Freq, res0.sch_twoF, &quot;ro&quot;);
+octave&gt; xlabel(&quot;Search - Injection Frequency [Hz]&quot;);
+octave&gt; ylabel(&quot;2F&quot;);
+octave&gt; ezprint(&quot;DoFstatInjections-plot-1.png&quot;, &quot;width&quot;, 180, &quot;fontsize&quot;, 6);
+</pre></div>
+<img src="DoFstatInjections-plot-1.png" alt="DoFstatInjections-plot-1">
+
+
+
+
+</body>
+</html>

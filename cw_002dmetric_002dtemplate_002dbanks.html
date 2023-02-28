@@ -1,0 +1,1326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-metric-template-banks (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-metric-template-banks (OctApps Reference Manual)">
+<meta name="keywords" content="cw-metric-template-banks (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002doptimal_002dsearch_002dsetup.html" rel="next" title="cw-optimal-search-setup">
+<link href="cw_002dline_002dveto.html" rel="prev" title="cw-line-veto">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002dmetric_002dtemplate_002dbanks"></span><div class="header">
+<p>
+Next: <a href="cw_002doptimal_002dsearch_002dsetup.html" accesskey="n" rel="next"><samp>cw-optimal-search-setup</samp></a>, Previous: <a href="cw_002dline_002dveto.html" accesskey="p" rel="prev"><samp>cw-line-veto</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002dmetric_002dtemplate_002dbanks-1"></span><h3 class="section">2.7 <samp>cw-metric-template-banks</samp></h3>
+
+<dl>
+<dt id="index-AnalyseSegmentList">Function File: <em></em> <strong>AnalyseSegmentList</strong> <em>( <var>segment_list_2col</var> )</em></dt>
+<dt id="index-AnalyseSegmentList-1">Function File: <em></em> <strong>AnalyseSegmentList</strong> <em>( <var>segment_list_4col</var>, <var>Ndet</var>, <var>Tsft</var>=1800 )</em></dt>
+<dt id="index-AnalyseSegmentList-2">Function File: <em><var>props</var> =</em> <strong>AnalyseSegmentList</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Analyse a segment list and print/return various properties.
+</p>
+<span id="Arguments-9"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>segment_list_2col</var></dt>
+<dd><p>2-column segment list: [<code>start_times</code>, <code>end_times</code>]
+</p>
+</dd>
+<dt><var>segment_list_4col</var></dt>
+<dd><p>4-column segment list: [<code>start_times</code>, <code>end_times</code>, <strong>unused</strong>, <code>num_SFTs</code>]
+</p>
+</dd>
+<dt><var>Ndet</var></dt>
+<dd><p>number of detectors
+</p>
+</dd>
+<dt><var>Tspan</var></dt>
+<dd><p>SFT time-span in seconds
+</p>
+</dd>
+</dl>
+
+<span id="Examples-37"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">props = AnalyseSegmentList([0:2:10; 1:2:11]' * 86400);
+sert(props.num_segments, 6)
+sert(props.coh_mean_Tspan, 86400)
+sert(props.inc_Tobs, 6 * 86400)
+sert(props.inc_Tspan, 11 * 86400)
+sert(props.inc_duty, 6 / 11, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CompareSegmentLists">Function File: <em><var>iseq</var> =</em> <strong>CompareSegmentLists</strong> <em>( <var>seglist</var>, <var>seglist_1</var>, <var>seglist_2</var>, &hellip; )</em></dt>
+<dt id="index-CompareSegmentLists-1">Function File: <em><var>iseq</var> =</em> <strong>CompareSegmentLists</strong> <em>( <var>seglist</var>, <var>{seglist_1</var>, <var>seglist_2</var>, <var>...}</var> )</em></dt>
+<dd>
+<p>Return true if the segment list &rsquo;seglist&rsquo; equals any of the segment
+lists <var>seglist_1</var>, <var>seglist_2</var>, etc., and false otherwise.
+</p>
+<span id="Examples-38"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">seglists = CreateSegmentList(123, [2, 3, 5, 9, 17], [1.2, 4.5, 9.7], [], [0.7, 0.9]);
+for n = 1:numel(seglists)
+  assert(find(CompareSegmentLists(seglists{n}, seglists)) == n);
+endfor
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ComputeDopplerMetric">Function File: <em>[ <var>metric</var>, <var>coordIDs</var> ] =</em> <strong>ComputeDopplerMetric</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Create various Doppler phase- and Fstat metrics.
+</p>
+<span id="Arguments-10"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>metric</var></dt>
+<dd><p>Doppler metric, with struct-elements (depending on metric_type):
+</p>
+<dl compact="compact">
+<dt><var>metric.g_ij</var></dt>
+<dd><p>phase metric
+</p>
+</dd>
+<dt><var>metric.gF_ij</var></dt>
+<dd><p>full F-stat metric
+</p>
+</dd>
+<dt><var>metric.gFav_ij</var></dt>
+<dd><p>averaged F-stat metric
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><var>coordIDs</var></dt>
+<dd><p>coordinate IDs of the chosen coordinates
+</p>
+</dd>
+</dl>
+
+<span id="Options-6"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>coords</code></dt>
+<dd><p>comma-separated list of coordinates:
+</p>
+<dl compact="compact">
+<dt><code>alpha_delta</code></dt>
+<dd><p>physical sky coordinates
+</p>
+</dd>
+<dt><code>ssky_equ</code></dt>
+<dd><p>super-sky in equatorial coordinates
+</p>
+</dd>
+<dt><code>ssky_ecl</code></dt>
+<dd><p>super-sky in ecliptic coordinates
+</p>
+</dd>
+<dt><code>spin_equ</code></dt>
+<dd><p>spin sky in x-y equatorial coordinates
+</p>
+</dd>
+<dt><code>orbit_ecl</code></dt>
+<dd><p>orbit sky in x-y-z ecliptic coordinates
+</p>
+</dd>
+<dt><code>freq</code></dt>
+<dd><p>frequency in SI units
+</p>
+</dd>
+<dt><code>fdots</code></dt>
+<dd><p>frequency spindowns in SI units
+</p>
+</dd>
+<dt><code>gct_nu</code></dt>
+<dd><p>GCT frequency/spindowns in SI units
+</p>
+</dd>
+<dt><code>gct_nx_ny_equ</code></dt>
+<dd><p>GCT constrained equatorial sky coordinates
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><code>spindowns</code></dt>
+<dd><p>number of spindown coordinates: 0=none, 1=1st spindown, 2=1st+2nd spindown, etc.
+</p>
+</dd>
+<dt><code>segment_list</code></dt>
+<dd><p>list of segments [start_time, end_time; start_time, end_time; &hellip;] in GPS seconds
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>reference time in GPS seconds [default: mean of segment list start/end times]
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>comma-separated list of detector names
+</p>
+</dd>
+<dt><code>ephemerides</code></dt>
+<dd><p>Earth/Sun ephemerides from <code>loadEphemerides()</code>
+</p>
+</dd>
+<dt><code>fiducial_freq</code></dt>
+<dd><p>fiducial frequency for sky-position coordinates
+</p>
+</dd>
+<dt><code>det_motion</code></dt>
+<dd><p>which detector motion to use (default: spin+orbit)
+</p>
+</dd>
+<dt><code>alpha</code></dt>
+<dd><p>for physical sky coordinates, right ascension to compute metric at
+</p>
+</dd>
+<dt><code>delta</code></dt>
+<dd><p>for physical sky coordinates, declination to compute metric at
+</p>
+</dd>
+<dt><code>metric_type</code></dt>
+<dd><p>compute either phase metric (<code>phase</code>), F-stat metric (<var>Fstat</var>), or both (<var>all</var>)
+</p>
+</dd>
+<dt><code>cosi</code></dt>
+<dd><p>cos(iota) signal parameter for full F-stat metric (gF_ij)
+</p>
+</dd>
+<dt><code>psi</code></dt>
+<dd><p>polarization angle signal parameter for full F-stat metric (gF_ij)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-39"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="ComputeDopplerMetric_0028_0029.html">tutorial on <code>ComputeDopplerMetric()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-ComputeSuperskyMetrics">Function File: <em><var>metrics</var> =</em> <strong>ComputeSuperskyMetrics</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Create the supersky parameter-space metrics.
+</p>
+<span id="Arguments-11"></span><h3 class="heading">Arguments</h3>
+<dl compact="compact">
+<dt><var>metrics</var></dt>
+<dd><p>a struct containing the following fields:
+</p>
+<dl compact="compact">
+<dt><code>coh_rssky_metric</code></dt>
+<dd><p>coherent reduced supersky metric for each segment
+</p>
+</dd>
+<dt><code>coh_rssky_transf</code></dt>
+<dd><p>coherent reduced supersky metric coordinate transform data for each segment
+</p>
+</dd>
+<dt><code>semi_rssky_metric</code></dt>
+<dd><p>semicoherent reduced supersky metric
+</p>
+</dd>
+<dt><code>semi_rssky_transf</code></dt>
+<dd><p>semicoherent reduced supersky metric coordinate transform data
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Options-7"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>spindowns</code></dt>
+<dd><p>number of spindown coordinates: 0=none, 1=1st spindown, 2=1st+2nd spindown, etc.
+</p>
+</dd>
+<dt><code>segment_list</code></dt>
+<dd><p>list of segments [start_time, end_time; start_time, end_time; ...] in GPS seconds
+</p>
+</dd>
+<dt><code>ref_time</code></dt>
+<dd><p>reference time in GPS seconds [default: mean of segment list start/end times]
+</p>
+</dd>
+<dt><code>fiducial_freq</code></dt>
+<dd><p>fiducial frequency for sky-position coordinates [required]
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>comma-separated list of detector names [required]
+</p>
+</dd>
+<dt><code>detector_weights</code></dt>
+<dd><p>vector of weights used to combine single-detector metrics [default: unit weights]
+</p>
+</dd>
+<dt><code>detector_motion</code></dt>
+<dd><p>which detector motion to use [default: spin+orbit]
+</p>
+</dd>
+<dt><code>ephemerides</code></dt>
+<dd><p>Earth/Sun ephemerides [default: load from <code>loadEphemerides()</code>]
+</p>
+</dd>
+<dt><code>cache_size</code></dt>
+<dd><p>size of cache of previously-computed metrics to use [default: 100; 0=no cache]
+</p>
+</dd>
+</dl>
+
+<span id="Examples-40"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+metrics = ComputeSuperskyMetrics( ...
+                                 &quot;spindowns&quot;, 1, ...
+                                 &quot;segment_list&quot;, CreateSegmentList(1e9, 5, 86400, [], 0.75), ...
+                                 &quot;fiducial_freq&quot;, 123.4, ...
+                                 &quot;detectors&quot;, &quot;H1,L1&quot;, ...
+                                 &quot;cache_size&quot;, 0 ...
+                               );
+metrics = ComputeSuperskyMetrics( ...
+                                 &quot;spindowns&quot;, 1, ...
+                                 &quot;segment_list&quot;, CreateSegmentList(1e9, 5, 86400, [], 0.75), ...
+                                 &quot;fiducial_freq&quot;, 123.4, ...
+                                 &quot;detectors&quot;, &quot;H1,L1&quot;, ...
+                                 &quot;cache_size&quot;, 100 ...
+                               );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-CreateSegmentList">Function File: <em><var>segment_lists</var> =</em> <strong>CreateSegmentList</strong> <em>( <var>mean_time</var>, <var>Nseg</var>, <var>Tseg</var>, <var>Tspan</var>, <var>duty</var>, [ <var>always_cell</var>=false ] )</em></dt>
+<dd>
+<p>Create segment list(s) with the given mean timestamp <var>mean_time</var>, and exactly 3 of the following
+4 input parameters:
+</p><ul>
+<li> number of segments <var>Nseg</var>
+</li><li> segment time-span <var>Tseg</var>
+</li><li> total time span <var>Tspan</var>
+</li><li> incoherent <var>duty</var> cycle <var>duty</var>
+</li></ul>
+
+<p>Aside from <var>mean_time</var>, each parameter may be vectorised to return
+multiple segment lists with all possible parameter combinations.
+</p>
+<span id="Examples-41"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert( iscell(CreateSegmentList(123, 10, [3, 4], [], 1.0)) )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( numel(CreateSegmentList(123, 10, [3, 4], [], 1.0)) == 2 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( !iscell(CreateSegmentList(123, 10, 3, [], 1.0)) )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( iscell(CreateSegmentList(123, 10, 3, [], 1.0, true)) )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(456, [], 7.3, 140.9, 0.87)).mean_time, 456, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(456, [], 7.3, 140.9, 0.87)).num_segments, 16, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( mean(AnalyseSegmentList(CreateSegmentList(456, [], 7.3, 140.9, 0.87)).coh_Tspan), 7.375, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(456, [], 7.3, 140.9, 0.87)).inc_Tspan, 140, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(456, [], 7.3, 140.9, 0.87)).inc_duty, 0.84286, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(345, 50, [], 256.7, 0.77)).mean_time, 345, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(345, 50, [], 256.7, 0.77)).num_segments, 50, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( mean(AnalyseSegmentList(CreateSegmentList(345, 50, [], 256.7, 0.77)).coh_Tspan), 4, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(345, 50, [], 256.7, 0.77)).inc_Tspan, 256, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(345, 50, [], 256.7, 0.77)).inc_duty, 0.78125, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(234, 200, 3.7, [], 0.77)).mean_time, 234, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(234, 200, 3.7, [], 0.77)).num_segments, 200, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( mean(AnalyseSegmentList(CreateSegmentList(234, 200, 3.7, [], 0.77)).coh_Tspan), 3.7, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(234, 200, 3.7, [], 0.77)).inc_Tspan, 962, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(234, 200, 3.7, [], 0.77)).inc_duty, 0.76923, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(123, 100, 2.3, 365.25, [])).mean_time, 123, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(123, 100, 2.3, 365.25, [])).num_segments, 100, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( mean(AnalyseSegmentList(CreateSegmentList(123, 100, 2.3, 365.25, [])).coh_Tspan), 2.34, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(123, 100, 2.3, 365.25, [])).inc_Tspan, 366, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(123, 100, 2.3, 365.25, [])).inc_duty, 0.63934, 1e-5 )
+</pre></div>
+
+<div class="example">
+<pre class="example">assert( AnalyseSegmentList(CreateSegmentList(123, 1, 2.3, 365.25, [])).inc_duty, 1.0, 1e-5 )
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DiagonalNormaliseMetric">Function File: <em>[ <var>metric</var>, <var>dnorm</var>, <var>invdnorm</var> ] =</em> <strong>DiagonalNormaliseMetric</strong> <em>( <var>metric</var>, [ <code>tolerant</code> ] )</em></dt>
+<dd>
+<p>Diagonally normalise a metric.
+</p>
+<span id="Arguments-12"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>metric</var></dt>
+<dd><p>metric
+</p>
+</dd>
+<dt><var>dnorm</var></dt>
+<dd><p>diagonal normalisation coefficients
+</p>
+</dd>
+<dt><var>invdnorm</var></dt>
+<dd><p>inverse of diagonal normalisation coefficients
+</p>
+</dd>
+</dl>
+
+<p>If <code>tolerant</code> option is given, tolerate zero or negative diagonal elements.
+</p>
+<span id="Examples-42"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">g = [7,3,5; 3,6,2; 5,2,5];
+sert(DiagonalNormaliseMetric(g), g ./ sqrt(diag(g) * diag(g)'), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-EmpiricalFstatMismatch">Function File: <em><var>mtwoF</var> =</em> <strong>EmpiricalFstatMismatch</strong> <em>( <var>Tcoh</var>, <var>Tsemi</var>, <var>mcoh</var>, <var>msemi</var> )</em></dt>
+<dt id="index-EmpiricalFstatMismatch-1">Function File: <em>[ <var>mtwoF</var>, <var>stwoF</var> ] =</em> <strong>EmpiricalFstatMismatch</strong> <em>( <var>Tcoh</var>, <var>Tsemi</var>, <var>mcoh</var>, <var>msemi</var>, <var>scoh</var>, <var>ssemi</var> )</em></dt>
+<dd>
+<p>Compute an empirical fit, derived from numerical simulations,
+to the F-statistic mismatch as a function of the coherent and
+semicoherent time-spans and metric mismatches.
+</p>
+<span id="Arguments-13"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>mtwoF</var></dt>
+<dd><p>mean F-statistic mismatch
+</p>
+</dd>
+<dt><var>stwoF</var></dt>
+<dd><p>standard deviation of F-statistic mismatch
+</p>
+</dd>
+<dt><var>Tcoh</var></dt>
+<dd><p>coherent segment time-span, in seconds
+</p>
+</dd>
+<dt><var>Tsemi</var></dt>
+<dd><p>semicoherent search time-span, in seconds
+</p>
+</dd>
+<dt><var>mcoh</var></dt>
+<dd><p>mean coherent metric mismatch
+</p>
+</dd>
+<dt><var>msemi</var></dt>
+<dd><p>mean semicoherent metric mismatch
+</p>
+</dd>
+<dt><var>scoh</var></dt>
+<dd><p>standard deviation of coherent metric mismatch
+</p>
+</dd>
+<dt><var>ssemi</var></dt>
+<dd><p>standard deviation of semicoherent metric mismatch
+</p>
+</dd>
+</dl>
+
+<p>Input variables may also be vectors.
+Note that a non-interpolating search implies <var>mcoh</var> = 0.
+</p>
+<span id="Examples-43"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(0, 0, 0, 0) == 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0, 0) == 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0, 0.5) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0, 0.5) &lt; 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0.1, 0.5) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0.1, 0.5) &lt; 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0.1, 50) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 0.1, 50) &lt; 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, 50, inf) == 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(EmpiricalFstatMismatch(86400, 10*86400, inf, inf) == 1)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-FindClosestTemplate">Function File: <em><var>closest</var> =</em> <strong>FindClosestTemplate</strong> <em>( <var>points</var>, <var>metric</var>, <var>max_mismatch</var>, <var>lattice</var> )</em></dt>
+<dd>
+<p>Given a set of <var>points</var>, find the <var>closest</var> template to each in a &rsquo;virtual&rsquo;
+lattice template bank, constructed using a given <var>metric</var> and maximum mismatch.
+</p>
+<span id="Arguments-14"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>points</var></dt>
+<dd><p>set of <var>points</var> (in columns) to find <var>closest</var> template
+</p>
+</dd>
+<dt><var>metric</var></dt>
+<dd><p>parameter-space <var>metric</var> associated with <var>points</var>&rsquo;
+</p>
+</dd>
+<dt><var>max_mismatch</var></dt>
+<dd><p>maximum mismatch of <var>lattice</var> template bank
+</p>
+</dd>
+<dt><var>lattice</var></dt>
+<dd><p>type of <var>lattice</var> to use; see <code>LatticeFindClosestPoint()</code>
+</p>
+</dd>
+<dt><var>closest</var></dt>
+<dd><p>closest template to each point
+</p>
+</dd>
+</dl>
+
+<span id="Examples-44"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">x = octforge_unifrnd(-10, 10, [3,100]);
+metric = [7,3,5; 3,6,2; 5,2,5];
+max_mismatch = 0.4;
+dx = x - FindClosestTemplate(x, metric, max_mismatch, &quot;Zn&quot;);
+assert(dot(dx, metric * dx) &lt;= max_mismatch);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-GCTCoherentTaylorMetric">Function File: <em>g =</em> <strong>GCTCoherentTaylorMetric</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Computes the coherent global correlation transform metric, as
+given in Pletsch, PRD 82 042002 (2010), which Taylor-expands the
+Earth&rsquo;s orbital motion.
+</p>
+<span id="Arguments-15"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>g</var></dt>
+<dd><p>coherent GCT metric using Taylor-expanded phase model
+</p>
+</dd>
+</dl>
+
+<span id="Options-8"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>smax</code></dt>
+<dd><p>number of spindowns (up to second spindown)
+</p>
+</dd>
+<dt><code>tj</code></dt>
+<dd><p>value of tj, the mid-point of the coherent time span
+</p>
+</dd>
+<dt><code>t0</code></dt>
+<dd><p>value of t0, an overall reference time
+</p>
+</dd>
+<dt><code>T</code></dt>
+<dd><p>value of T, the coherent time span
+</p>
+</dd>
+<dt><code>Omega</code></dt>
+<dd><p>value of Omega, the Earth&rsquo;s angular rotation frequency
+(default: 2*pi / (sidereal day in seconds)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-45"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,-0.66666666666666,1.2,0,-0.31830988618379; ...
+  -0.66666666666666,1.422222222222222,-2.666666666666666,0.20264236728467,0.63661977236758; ...
+  1.2,-2.666666666666666,5.142857142857143,-0.60792710185402,-1.079730338135965; ...
+  0,0.20264236728467,-0.60792710185402,0.5,0; ...
+  -0.31830988618379,0.63661977236758,-1.079730338135965,0,0.5; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,0,0.2,0,0.31830988618379; ...
+  0,0.088888888888888,0,-0.20264236728467,0; ...
+  0.2,0,0.14285714285714,0,0.12480067958459; ...
+  0,-0.20264236728467,0,0.5,0; ...
+  0.31830988618379,0,0.12480067958459,0,0.5; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,-0.088888888888888,0.21777777777777,-0.014039475036123,-0.0081056946913869; ...
+  -0.088888888888888,0.11259259259259,-0.093629629629629,-0.036633359944481,0.072096915013279; ...
+  0.21777777777777,-0.093629629629629,0.17936084656084,-0.025350712749409,-0.051935118925438; ...
+  -0.014039475036123,-0.036633359944481,-0.025350712749409,0.4959471526543,0.0070197375180618; ...
+  -0.0081056946913869,0.072096915013279,-0.051935118925438,0.0070197375180618,0.48784145796291; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">T = 1:10;
+GCT_det = arrayfun(@(T) det(GCTCoherentTaylorMetric(&quot;smax&quot;, 1, &quot;tj&quot;, 0, &quot;t0&quot;, 0, &quot;T&quot;, T, &quot;Omega&quot;, 2*pi)), T);
+GCT_det_ref = arrayfun(@(T) detg1(2*pi*T/2), T);
+assert(all(abs(GCT_det - GCT_det_ref) &lt; 1e-10));
+</pre></div>
+
+<div class="example">
+<pre class="example">T = 1:10;
+GCT_det = arrayfun(@(T) det(GCTCoherentTaylorMetric(&quot;smax&quot;, 2, &quot;tj&quot;, 0, &quot;t0&quot;, 0, &quot;T&quot;, T, &quot;Omega&quot;, 2*pi)), T);
+GCT_det_ref = arrayfun(@(T) detg2(2*pi*T/2), T);
+assert(all(abs(GCT_det - GCT_det_ref) &lt; 1e-10));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-GCTCoherentMetric">Function File: <em><var>gctco</var> =</em> <strong>GCTCoherentMetric</strong> <em>( <code>togct</code>, <var>phyco</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dt id="index-GCTCoherentMetric-1">Function File: <em><var>phyco</var> =</em> <strong>GCTCoherentMetric</strong> <em>( <code>tophy</code>, <var>gctco</var>, <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Computes the coherent global correlation coordinates, as
+given in Pletsch, PRD 82 042002 (2010)
+</p>
+<span id="Arguments-16"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>phyco</var></dt>
+<dd><p>matrix of physical coordinates: [alpha; delta; freq; f1dot; <var>...</var>]
+</p>
+</dd>
+<dt><var>gctco</var></dt>
+<dd><p>matrix of GCT coordinates; order matches that of <code>GCTCoherentMetric()</code>
+</p>
+</dd>
+</dl>
+
+<span id="Options-9"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>t0</code></dt>
+<dd><p>value of <var>t0</var>, an overall reference time
+</p>
+</dd>
+<dt><code>T</code></dt>
+<dd><p>value of <var>T</var>, the coherent time span
+</p>
+</dd>
+<dt><code>detector</code></dt>
+<dd><p><var>detector</var> name, e.g. H1
+</p>
+</dd>
+<dt><code>fmax</code></dt>
+<dd><p>maximum frequency to assume when converting sky coordinates
+</p>
+</dd>
+<dt><code>sgndelta</code></dt>
+<dd><p>sign of declination when converting to physical coordinates [default: 1]
+</p>
+</dd>
+<dt><code>ephemerides</code></dt>
+<dd><p>Earth/Sun <var>ephemerides</var> from <code>loadEphemerides()</code>
+</p>
+</dd>
+<dt><code>ptolemaic</code></dt>
+<dd><p>use Ptolemaic orbital motion
+</p>
+</dd>
+</dl>
+
+<span id="Examples-46"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">alpha_ref = [1.1604229, 3.4494408, 0.3384569, 3.2528905, 4.2220307, 4.0216501, 4.4586725, 2.6643348, 4.5368049, 4.1968573, 1.0090024, 2.3518049, 6.1686511, 2.7418963, 5.7136839, 4.8999429, 3.5196677, 3.5462285];
+delta_ref = [0.1932254, 0.1094716,-0.9947154, 0.0326421, 0.8608284,-0.5364847,-0.7566707, 0.3503306,-0.5262539,-0.7215617,-0.2617862,-0.4193604,-1.0175479, 0.4204785,-0.2233229,-0.2677687,-0.1032384, 1.4105888];
+fndot_ref = [6.2948e-3, 1.3900e-3, 7.4630e-3, 3.4649e-3, 8.1318e-3, 4.6111e-3, 9.9765e-3, 2.4069e-3, 8.0775e-3, 6.0784e-3, 1.2569e-3, 8.3437e-3, 8.1557e-3, 4.2130e-3, 7.0748e-4, 4.0846e-3, 3.1204e-3, 3.8858e-3;
+             0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000,-1.859e-10,-1.7734e-9,-6.7179e-9,-7.6231e-9,-5.9919e-9,-4.7396e-9,-8.0516e-9,-4.0123e-9,-9.1149e-9,-5.3355e-9,-2.0422e-9,-7.7313e-9;
+             0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 2.596e-17, 9.455e-17, 1.913e-17, 6.869e-17, 2.286e-17, 1.743e-17];
+gctco_ref = [1.7085e+3, 3.7728e+2, 2.0258e+3, 9.4045e+2, 2.2072e+3, 1.2517e+3, 2.7081e+3, 6.5316e+2, 2.1921e+3, 1.6492e+3, 3.4180e+2, 2.2644e+3, 2.2141e+3, 1.1432e+3, 1.9251e+2, 1.1085e+3, 8.4669e+2, 1.0548e+3;
+             5.9246e-4,-1.4654e-4, 2.8904e-4,-3.4929e-4,-3.5437e-4,-4.7675e-4,-1.0908e+0,-1.0396e+1,-3.9393e+1,-4.4699e+1,-3.5128e+1,-2.7784e+1,-4.7212e+1,-2.3520e+1,-5.3450e+1,-3.1288e+1,-1.1973e+1,-4.5325e+1;
+             1.1578e-6, 1.3190e-7,-1.0014e-6, 4.9297e-7,-7.7033e-8,-6.1422e-7,-1.6373e-6, 4.2624e-6, 2.0069e-5, 2.8420e-5,-2.3158e-5, 8.9556e-6, 2.1817e-3, 7.9903e-3, 1.5984e-3, 5.8097e-3, 1.9400e-3, 1.4695e-3;
+            -1.1593e-3, 2.2515e-3,-1.2265e-3, 2.3005e-3, 8.7039e-4, 1.4456e-3, 6.2425e-4, 1.7776e-3, 5.9593e-4, 1.0377e-3,-1.4158e-3, 1.2768e-3,-1.1741e-3, 1.8152e-3,-1.7200e-3,-1.3115e-4, 2.2189e-3, 3.5332e-4;
+            -1.9392e-3, 4.0833e-4,-2.6143e-4,-3.9448e-5, 1.2223e-3, 1.3511e-3, 1.5531e-3,-1.2310e-3, 1.8993e-3, 1.3822e-3,-1.7147e-3,-1.6706e-3, 2.9104e-4,-1.0591e-3, 1.4427e-3, 2.2162e-3, 5.6570e-4, 1.0014e-4];
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+gctco = GCTCoordinates(&quot;togct&quot;, [alpha_ref; delta_ref; fndot_ref], &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;ptolemaic&quot;, false);
+assert(all(abs(gctco - gctco_ref) &lt; 1e-4 * abs(gctco_ref)));
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+gctco = GCTCoordinates(&quot;togct&quot;, [alpha_ref(1:16); delta_ref(1:16); fndot_ref(1:2, 1:16)], &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;ptolemaic&quot;, false);
+assert(all(abs(gctco - gctco_ref([1,2,4,5], 1:16)) &lt; 1e-4 * abs(gctco_ref([1,2,4,5], 1:16))));
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+gctco = GCTCoordinates(&quot;togct&quot;, [alpha_ref(1:8); delta_ref(1:8); fndot_ref(1:1, 1:8)], &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;ptolemaic&quot;, false);
+assert(all(abs(gctco - gctco_ref([1,4,5], 1:8)) &lt; 1e-3 * abs(gctco_ref([1,4,5], 1:8))));
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+phyco = GCTCoordinates(&quot;tophy&quot;, gctco_ref, &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;sgndelta&quot;, delta_ref, &quot;ptolemaic&quot;, false);
+assert(all(abs(phyco(1, :) - alpha_ref) &lt; 1e-4 * abs(alpha_ref)));
+assert(all(abs(phyco(2, :) - delta_ref) &lt; 2e-2 * abs(delta_ref)));
+for i = 1:3
+  assert(all(abs(phyco(2+i, :) - fndot_ref(i, :)) &lt; max(1e-10, 1e-4 * abs(fndot_ref(i, :)))));
+endfor
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+phyco = GCTCoordinates(&quot;tophy&quot;, gctco_ref(:, 1:16), &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;sgndelta&quot;, delta_ref(1:16), &quot;ptolemaic&quot;, false);
+assert(all(abs(phyco(1, 1:16) - alpha_ref(1:16)) &lt; 1e-4 * abs(alpha_ref(1:16))));
+assert(all(abs(phyco(2, 1:16) - delta_ref(1:16)) &lt; 2e-2 * abs(delta_ref(1:16))));
+for i = 1:2
+  assert(all(abs(phyco(2+i, 1:16) - fndot_ref(i, 1:16)) &lt; max(1e-10, 1e-4 * abs(fndot_ref(i, 1:16)))));
+endfor
+</pre></div>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+phyco = GCTCoordinates(&quot;tophy&quot;, gctco_ref(:, 1:8), &quot;t0&quot;, 987654321, &quot;T&quot;, 86400, &quot;detector&quot;, &quot;L1&quot;, &quot;fmax&quot;, 0.02, &quot;sgndelta&quot;, delta_ref(1:8), &quot;ptolemaic&quot;, false);
+assert(all(abs(phyco(1, 1:8) - alpha_ref(1:8)) &lt; 1e-4 * abs(alpha_ref(1:8))));
+assert(all(abs(phyco(2, 1:8) - delta_ref(1:8)) &lt; 2e-2 * abs(delta_ref(1:8))));
+for i = 1:1
+  assert(all(abs(phyco(2+i, 1:8) - fndot_ref(i, 1:8)) &lt; max(1e-10, 1e-4 * abs(fndot_ref(i, 1:8)))));
+endfor
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-GCTSemicoherentTaylorMetric">Function File: <em>g =</em> <strong>GCTSemicoherentTaylorMetric</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Computes the semicoherent global correlation transform metric, as
+given in Pletsch, PRD 82 042002 (2010), which Taylor-expands the
+Earth&rsquo;s orbital motion.
+</p>
+<span id="Arguments-17"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>g</var></dt>
+<dd><p>semicoherent GCT metric using Taylor-expanded phase model
+</p>
+</dd>
+</dl>
+
+<span id="Options-10"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>smax</code></dt>
+<dd><p>number of spindowns (up to second spindown)
+</p>
+</dd>
+<dt><code>tj_list</code></dt>
+<dd><p>list of values of tj, the mid-point of the coherent
+time span of each segment
+</p>
+</dd>
+<dt><code>t0</code></dt>
+<dd><p>value of t0, an overall reference time
+</p>
+</dd>
+<dt><code>T</code></dt>
+<dd><p>value of T, the coherent time span
+</p>
+</dd>
+<dt><code>Omega</code></dt>
+<dd><p>value of Omega, the Earth&rsquo;s angular rotation frequency
+[default: 2*pi / (sidereal day in seconds)]
+</p>
+</dd>
+</dl>
+
+<span id="Examples-47"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,0,8.2,0,0.31830988618379; ...
+  0,10.75555555555555,0,-0.20264236728467,0.0; ...
+  8.2,0,342.5428571428571,0.0,7.76423794799557; ...
+  0,-0.20264236728467,0.0,0.5,0; ...
+  0.31830988618379,0.0,7.76423794799557,0,0.5; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,0,32.2,0,0.31830988618379; ...
+  0,42.75555555555555,0,-0.20264236728467,0.0; ...
+  32.2,0,5286.542857142857,0.0,30.6825497532285; ...
+  0,-0.20264236728467,0.0,0.5,0; ...
+  0.31830988618379,0.0,30.6825497532285,0,0.5; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">[ ...
+  0.33333333333333,0.53333333333334,32.32800000000034,8.881784197001253e-17,0.016211389382774; ...
+  0.53333333333334,42.92622222222272,80.2005333333349,0.080754439908228,0.025938223012437; ...
+  32.32800000000034,80.2005333333349,4626.441737142834,0.19381065577974,1.609575867543293; ...
+  8.881784197001253e-17,0.080754439908228,0.19381065577974,0.48378861061722,8.639163721880971e-18; ...
+  0.016211389382774,0.025938223012437,1.609575867543293,8.639163721880971e-18,0.5; ...
+]);
+</pre></div>
+
+<div class="example">
+<pre class="example">T = 5;
+N = 10;
+t_j = ((1:N) - (N+1)/2)*T;
+for s = 1:2
+  GCT_semi = GCTSemicoherentTaylorMetric(&quot;smax&quot;, 1, &quot;tj_list&quot;, t_j, &quot;t0&quot;, mean(t_j), &quot;T&quot;, T, &quot;Omega&quot;, 2*pi);
+  GCT_coh = GCTCoherentTaylorMetric(&quot;smax&quot;, 1, &quot;tj&quot;, mean(t_j), &quot;t0&quot;, mean(t_j), &quot;T&quot;, T, &quot;Omega&quot;, 2*pi);
+  GCT_refine = sqrt(det(GCT_semi) / det(GCT_coh));
+  GCT_refine_ref = refinement(1, N);
+  assert(abs(GCT_refine - GCT_refine_ref) &lt; 0.005*GCT_refine_ref);
+endfor
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-metricBoundingBox">Function File: <em><var>bound_box</var> =</em> <strong>metricBoundingBox</strong> <em>( <var>metric</var>, <var>max_mismatch</var> )</em></dt>
+<dd>
+<p>Compute the <var>metric</var> ellipse bounding box, given a <var>metric</var> and <var>max_mismatch</var>.
+</p>
+<span id="Examples-48"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(metricBoundingBox([6,3;3,2], 0.77), [1.4329;2.4819], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-metricEllipseCrossSections">Function File: <em>[ <var>xcross</var>, <var>mucross</var> ] =</em> <strong>metricEllipseCrossSections</strong> <em>( <var>x</var>, <var>mu</var>, <var>metric</var>, <var>cross</var> )</em></dt>
+<dd>
+<p>Return the ellipse centers and mismatches for a template bank <var>cross</var> section.
+</p>
+<span id="Arguments-18"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>xcross</var></dt>
+<dd><p>Centers of <var>metric</var> ellipses in the <var>cross</var> section.
+</p>
+</dd>
+<dt><var>mucross</var></dt>
+<dd><p>Mismatches of <var>metric</var> ellipses in the <var>cross</var> section.
+</p>
+</dd>
+<dt><var>x</var></dt>
+<dd><p>Template bank to find <var>cross</var> section of.
+</p>
+</dd>
+<dt><var>mu</var></dt>
+<dd><p>Maximum mismatch of templates.
+</p>
+</dd>
+<dt><var>metric</var></dt>
+<dd><p>Parameter-space <var>metric</var>.
+</p>
+</dd>
+<dt><var>cross</var></dt>
+<dd><p>NAs indicate dimensions to <var>cross</var> section (only 2 allowed),
+otherwise give values of <var>cross</var> section in other dimensions
+</p>
+</dd>
+</dl>
+
+<span id="Examples-49"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[xcross,mucross] = metricEllipseCrossSections([1;2;3], 0.5, [6,4,4;4,4,2;4,2,1], [NA;2;NA]);
+assert(xcross, [1;3], 1e-3);
+assert(mucross, 0.5, 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-metricEllipsoid">Function File: <em>function [ <var>xx</var>, <var>yy</var>, <var>zz</var> ] =</em> <strong>metricEllipsoid</strong> <em>( <var>gij</var>, <var>mismatch</var>, <var>Nsteps</var>=20, <var>method</var>=1 )</em></dt>
+<dd>
+<p>return a metric iso-<var>mismatch</var> ellipsoid for given metric <var>gij</var> and <var>mismatch</var>, using
+&rsquo;<var>Nsteps</var> points per surface direction.
+The function can generate both 2D or 3D ellipses, depending on the input dimension of <var>gij</var>.
+using either <var>method</var>=1: Cholesky, or <var>method</var>=2: Eigenvectors
+</p>
+<p>The output in the 3D case is a meshgrid, which can be plotted using <code>mesh()</code>, <code>surface()</code>, ...
+</p>
+<p>The output in the 2D case lies in the x-y plane, <var>zz</var> is returned as zeros
+</p>
+<span id="Note-5"></span><h3 class="heading">Note</h3>
+
+<p>this function agrees with and supercedes the older <code>calcMetric2DEllipse()</code> and <code>plotMetricEllipse()</code>
+</p><span id="Examples-50"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">[xx, yy, zz] = metricEllipsoid([4,1;1,1], 0.25, 4);
+assert(xx, [0.25, -0.25, 0, 0.25], 1e-3);
+assert(yy, [0.0, 0.5, -0.5, 0.0], 1e-3);
+assert(zz, [0.0, 0.0, 0.0, 0.0], 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-NumberOfLatticeBankTemplates">Function File: <em>N =</em> <strong>NumberOfLatticeBankTemplates</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Estimate the number of templates in a lattice template bank.
+</p>
+<span id="Arguments-19"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>N</var></dt>
+<dd><p>Number of templates
+</p>
+</dd>
+</dl>
+
+<span id="Options-11"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>lattice</code></dt>
+<dd><p>Type of lattice; see <code>LatticeNormalizedThickness()</code>
+</p>
+</dd>
+<dt><code>metric</code></dt>
+<dd><p>Parameter-space metric
+</p>
+</dd>
+<dt><code>max_mismatch</code></dt>
+<dd><p>Maximum metric mismatch
+</p>
+</dd>
+<dt><code>param_vol</code></dt>
+<dd><p>Parameter space volume
+</p>
+</dd>
+</dl>
+
+<span id="Examples-51"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(round(NumberOfLatticeBankTemplates(&quot;lattice&quot;, &quot;Ans&quot;, &quot;metric&quot;, [5,1;1,1], &quot;max_mismatch&quot;, 0.2, &quot;param_vol&quot;, 100)), 385, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-projectMetric">Function File: <em><var>gOut_ij</var> =</em> <strong>projectMetric</strong> <em>( <var>g_ij</var>, <var>c</var> = 1 )</em></dt>
+<dd>
+<p>project out metric dimension <var>c</var> from the input n x n metric <var>g_ij</var>,
+by projecting onto the subspace orthogonal to the coordinate-axis of <var>c</var>, namely
+gOut_ij = <var>g_ij</var> - ( g_ic * g_jc / g_cc )
+</p>
+<p>Returns a &rsquo;projected&rsquo; n x n metric, where the projected-out dimension <var>c</var> is replaced
+by zeros, consistent with the behavior of <code>XLALProjectMetric()</code>
+</p>
+<span id="Examples-52"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(projectMetric(hadamard(4)), -[0,0,0,0;0,2,0,2;0,0,2,2;0,2,2,0], 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-projectMetric2Subspace">Function File: <em><var>gProj_ss</var> =</em> <strong>projectMetric2Subspace</strong> <em>( <var>g_ij</var>, <var>sSpace</var> )</em></dt>
+<dd>
+<p>function to compute the &rsquo;projection&rsquo; of a given symmetric metric <var>g_ij</var>&rsquo;
+onto the s-subspace defined by coordinates <var>sSpace</var> = [s1,s2,...], which is a vector of coordinate-indices
+</p>
+<p>If we denotes the indices of the projection-subspace as s and the remaining coordinates
+as k, such that for an n-dimensional space, writing vn = {1,2,...n}, we have k = vn \ <var>sSpace</var>,
+then the projection operation is defined as
+</p>
+<p>gProj_{ss&rsquo;} = g_{ss&rsquo;} - gkInv^{kk&rsquo;} g_{ks} g_{k&rsquo;s&rsquo;}
+</p>
+<p>where gkInv is the inverse matrix of g_{kk&rsquo;}, ie the inverse of g restricted to the k-subspace excluding coordinates &rsquo;s&rsquo;
+</p>
+<span id="Notes-2"></span><h3 class="heading">Notes</h3>
+<ol>
+<li> this function generalizes projectMetric(<var>g_ij</var>,k1) to projecting out more than one dimension k = [k1,k2,...],
+contrary to <code>projectMetric()</code>, we only return the projected metric of the subspace, ie gProj_{ss&rsquo;}
+
+</li><li> gProj_{ss&rsquo;} gives the smallest possible distance mMin = gProj_{ss&rsquo;} dl^{s} dl^{s&rsquo;} of the general distance
+function m = g_{ij} dl^{i} dl^{j} if we fix the offset in the s-subspace, if for fixed dl^{s}, if one can freely
+vary the remaining coordinate offsets dl^{k}
+
+</li><li> gProj_{ss&rsquo;} is just the Schur complement of g_{kk&rsquo;}, see https://en.wikipedia.org/wiki/Schur_complement
+
+</li></ol>
+
+<span id="Examples-53"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">rand(&quot;seed&quot;, 2); tmp = rand(4,4); gij = (tmp + tmp'); ## 4x4 pos-definite matrix, det~3.6, cond~9
+tol = 10*eps;
+</pre></div>
+
+<div class="example">
+<pre class="example">sSpace1 = [2,3,4]; g1_old = projectMetric ( gij, 1 )(sSpace1,sSpace1); g1_new = projectMetric2Subspace(gij, sSpace1);
+assert ( g1_old, g1_new, tol );
+</pre></div>
+
+<div class="example">
+<pre class="example">sSpace2 = [1,3,4]; g2_old = projectMetric ( gij, 2 )(sSpace2,sSpace2); g2_new = projectMetric2Subspace(gij, sSpace2);
+assert ( g2_old, g2_new, tol );
+</pre></div>
+
+<div class="example">
+<pre class="example">sSpace12 = [3,4]; g12_old = projectMetric( projectMetric ( gij, 2 ), 1)(sSpace12,sSpace12); g12_new = projectMetric2Subspace(gij, sSpace12);
+assert ( g12_old, g12_new, tol );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-projectSuperskyMetric2Sky">Function File: <em><var>g_aa</var> =</em> <strong>projectSuperskyMetric2Sky</strong> <em>( <var>g_nn</var>, <var>alpha0</var>, <var>delta0</var> )</em></dt>
+<dd>
+<p>returns metric in coordinates [a, ...] = [alpha, delta, ... ] at a given
+sky-position <var>alpha0</var>,<var>delta0</var>, for the given input &rsquo;supersky&rsquo; metric in coordinates
+[n, ...] = [ nx,ny,nz, ...].
+</p>
+<span id="Note-6"></span><h3 class="heading">Note</h3>
+
+<p>the supersky-coordinates n = [nx,ny,nz] must be the first 3 coordinates of theinput metric <var>g_nn</var> and the output metric has a = [alpha,delta] as the first 2 coordinates
+</p>
+<span id="Examples-54"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">## lalapps_FstatMetric_v2 -o gnn.dat --Alpha=1 --Delta=1 --coords=&quot;n3x_equ,n3y_equ,n3z_equ,freq,f1dot,f2dot&quot;
+## lalapps_FstatMetric_v2 -o gaa.dat --Alpha=1 --Delta=1 --coords=&quot;alpha,delta,freq,f1dot,f2dot&quot;
+gnn = [
+ 9.7162064407348633e+04,  1.6162401439666748e+05,  6.9920271533966064e+04,  2.0355045456878051e+07, -1.4588751710937500e+09,  6.5922495973127800e+14;
+ 1.6162401439666748e+05,  2.6886818181991577e+05,  1.1631187004089355e+05,  3.3860346089623548e+07, -1.2671848879843750e+09,  1.0971813972709620e+15;
+ 6.9920271533966064e+04,  1.1631187004089355e+05,  5.0317088542461395e+04,  1.4648181998421121e+07, -8.1788653728125000e+08,  4.7469871192193475e+14;
+ 2.0355045456878051e+07,  3.3860346089623548e+07,  1.4648181998421121e+07,  4.2643423299322696e+09, -2.4811145795203839e+11,  1.3819371887744971e+17;
+-1.4588751710937500e+09, -1.2671848879843750e+09, -8.1788653728125000e+08, -2.4811145795203839e+11,  9.2138764319991376e+16, -1.3400518435962927e+19;
+ 6.5922495973127800e+14,  1.0971813972709620e+15,  4.7469871192193475e+14,  1.3819371887744971e+17, -1.3400518435962927e+19,  5.3316716910947309e+24;
+];
+gaa = [
+ 9.4392684805173118e+01, -3.7432745970430642e+03,  6.3033986158817098e+05,  2.9335076680322605e+08,  2.0580635047683145e+13;
+-3.7432745970430642e+03,  1.5028899244227595e+05, -2.5315559717512231e+07,  1.1186296727757726e+09, -8.2011995357922125e+14;
+ 6.3033986158817098e+05, -2.5315559717512231e+07,  4.2643423299322696e+09, -2.4811145795203839e+11,  1.3819371887744971e+17;
+ 2.9335076680322605e+08,  1.1186296727757726e+09, -2.4811145795203839e+11,  9.2138764319991376e+16, -1.3400518435962927e+19;
+ 2.0580635047683145e+13, -8.2011995357922125e+14,  1.3819371887744971e+17, -1.3400518435962927e+19,  5.3316716910947309e+24;
+];
+alpha=1; delta=1;
+gaa2 = projectSuperskyMetric2Sky ( gnn, alpha, delta );
+tol = -1e-8;        ## relative tolerance passes as &lt;0 !
+assert ( gaa, gaa2, tol );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-RandMismatchPDF">Function File: <em><var>ret</var> =</em> <strong>RandMismatchPDF</strong> <em>( <var>mt</var>, <var>dim</var>, <var>falseDismissal</var> )</em></dt>
+<dd>
+<p>Return the mismatch probability density of &quot;relative effective mismatch&quot;
+mt = m/meff of a random-template bank with given false-dismissal probability
+</p>
+<span id="Note-7"></span><h3 class="heading">Note</h3>
+<p>can handle vector input in &rsquo;mis&rsquo;
+</p>
+<span id="Examples-55"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(RandMismatchPDF(0.5, 3, 0.01), 0.95877, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-RandNormalizedThickness">Function File: <em><var>ret</var> =</em> <strong>RandNormalizedThickness</strong> <em>( <var>dim</var>, <var>falseDismissal</var> )</em></dt>
+<dd>
+<p>Return the normalized thickness of an &rsquo;dim&rsquo;-dimensional random-template
+grid with given falseDismissal probability
+</p>
+<span id="Note-8"></span><h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<span id="Examples-56"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(RandNormalizedThickness(1, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandNormalizedThickness(2, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandNormalizedThickness(3, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandNormalizedThickness(4, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandNormalizedThickness(5, 0.05) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-RandThickness">Function File: <em><var>ret</var> =</em> <strong>RandThickness</strong> <em>( <var>dim</var>, <var>falseDismissal</var> )</em></dt>
+<dd>
+<p>Return the thickness of an <var>dim</var>-dimensional random-template
+grid with given <var>falseDismissal</var> probability
+</p>
+<span id="Note-9"></span><h3 class="heading">Note</h3>
+<p>can handle vector input in <var>dim</var>
+</p>
+<span id="Examples-57"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(RandThickness(1, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandThickness(2, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandThickness(3, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandThickness(4, 0.05) &gt; 0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(RandThickness(5, 0.05) &gt; 0)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-SuperskyMetricsCache">Function File: <em><var>cache_dir</var> =</em> <strong>SuperskyMetricsCache</strong> <em>( )</em></dt>
+<dt id="index-SuperskyMetricsCache-1">Function File: <em></em> <strong>SuperskyMetricsCache</strong> <em>&lsquo;<samp>action</samp>&rsquo;</em></dt>
+<dd>
+<p>Manage cache of computed supersky metrics
+</p>
+<span id="Arguments-20"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>cache_dir</var></dt>
+<dd><p>location of cache directory
+</p>
+</dd>
+<dt>&lsquo;<samp>action</samp>&rsquo;</dt>
+<dd><p>one of
+</p><dl compact="compact">
+<dt><code>install</code></dt>
+<dd><p>Install the precomputed cache from the OctApps repository
+</p>
+</dd>
+<dt><code>clear</code></dt>
+<dd><p>Clear the cache
+</p>
+</dd>
+<dt><code>copytorepo</code></dt>
+<dd><p>Copy the current cache to the OctApps repository
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<span id="Examples-58"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">cache_dir = SuperskyMetricsCache();
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002doptimal_002dsearch_002dsetup.html" accesskey="n" rel="next"><samp>cw-optimal-search-setup</samp></a>, Previous: <a href="cw_002dline_002dveto.html" accesskey="p" rel="prev"><samp>cw-line-veto</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

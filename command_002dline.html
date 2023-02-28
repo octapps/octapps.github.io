@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>command-line (OctApps Reference Manual)</title>
+
+<meta name="description" content="command-line (OctApps Reference Manual)">
+<meta name="keywords" content="command-line (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="condor_002djobs.html" rel="next" title="condor-jobs">
+<link href="array_002dhandling.html" rel="prev" title="array-handling">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="command_002dline"></span><div class="header">
+<p>
+Next: <a href="condor_002djobs.html" accesskey="n" rel="next"><samp>condor-jobs</samp></a>, Previous: <a href="array_002dhandling.html" accesskey="p" rel="prev"><samp>array-handling</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="command_002dline-1"></span><h3 class="section">2.2 <samp>command-line</samp></h3>
+
+<dl>
+<dt id="index-fevalstruct">Function File: <em></em> <strong>fevalstruct</strong> <em>( <var>name</var>, <var>argstruct</var> )</em></dt>
+<dt id="index-fevalstruct-1">Function File: <em></em> <strong>fevalstruct</strong> <em>( &hellip;, <var>property</var>, <var>value</var>, &hellip; )</em></dt>
+<dd><p>Evaluate the function named <var>name</var>, using the keyword-value
+arguments given by <var>argstruct</var>.
+</p>
+<p>If <var>property</var> &quot;stripempty&quot; is true, empty fields are first removed from <var>argstruct</var>.</p><span id="Examples-3"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">args = struct;
+args.real_strictpos_scalar = 1.23;
+args.integer_vector = [-5, 3];
+args.string = &quot;Hi&quot;;
+args.cell = {1, 9};
+fevalstruct(@__test_parseOptions__, args);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-parseOptions">Function File: <em></em> <strong>parseOptions</strong> <em>( <var>opts</var>, <var>optspec</var>, <var>optspec</var>, &hellip; )</em></dt>
+<dt id="index-parseOptions-1">Function File: <em><var>paropts</var> =</em> <strong>parseOptions</strong> <em>( &hellip; )</em></dt>
+<dt id="index-parseOptions-2">Function File: <em>[ &bull;, <var>paropts</var> ] =</em> <strong>parseOptions</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Kitchen-sink options parser.
+</p>
+<span id="Arguments"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>opts</var></dt>
+<dd><p>function options
+</p>
+</dd>
+<dt><var>optspec</var></dt>
+<dd><p>option specification, one of:
+</p>
+<dl compact="compact">
+<dt>required option</dt>
+<dd><p>{<var>name</var>, <var>types</var>}
+</p></dd>
+<dt>optional option</dt>
+<dd><p>{<var>name</var>, <var>types</var>, <var>defvalue</var>}
+</p></dd>
+</dl>
+
+<p>where:
+</p>
+<dl compact="compact">
+<dt><var>name</var></dt>
+<dd><p>name of option variable
+</p></dd>
+<dt><var>types</var></dt>
+<dd><p>datatype specification of option:
+&rsquo;type,type,&hellip;&rsquo;
+</p></dd>
+<dt><var>defvalue</var></dt>
+<dd><p>default value given to &lt;name&gt;
+</p></dd>
+</dl>
+
+</dd>
+<dt><var>paropts</var></dt>
+<dd><p>struct of parsed function options (optional)
+</p>
+</dd>
+</dl>
+
+<span id="Notes"></span><h3 class="heading">Notes</h3>
+
+<ul>
+<li> using the 1st or 3rd syntax, <var>name</var> will be assigned in the context of
+the calling function; using the 2nd or 3rd syntax, <var>name</var> will be
+assigned in the return struct.
+
+</li><li> each <code>type</code> in <var>types</var> must correspond to a function
+<code>istype()</code>: each function will be called to check that a value is
+valid. For example, if <var>types</var> = &rsquo;numeric,scalar&rsquo; then a value <var>x</var>
+must satisfy <code>isnumeric(x) &amp;&amp; isscalar(x)</code>
+
+</li><li> <var>opts</var> should contain options of the form
+<div class="example">
+<pre class="example">  reg, reg, ..., &quot;key&quot;, val, &quot;key&quot;, val, ...
+</pre></div>
+<p>where <var>reg</var> are regular options, and <var>key</var> and <var>val</var> are
+keyword-value option pairs. Regular options are assigned in the order they
+were given as <var>optspec</var>s; regular options may also be given as
+keyword-values.
+</p>
+</li></ul>
+
+<span id="Examples-4"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="parseOptions_0028_0029.html">tutorial on <code>parseOptions()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-writeCommandLineToFile">Function File: <em></em> <strong>writeCommandLineToFile</strong> <em>( <var>filename</var>, <var>params</var>, <var>scriptname</var> )</em></dt>
+<dd>
+<p>write an octapps_run commandline as an output file header
+&rsquo;params&rsquo; should be prepared by <code>parseOptions()</code> before
+</p>
+<span id="Note"></span><h3 class="heading">Note</h3>
+
+<p>use <code>save(&quot;-append&quot;,...)</code> later on to not overwrite this header
+</p><span id="Examples-5"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">args = struct;
+args.real_strictpos_scalar = 1.23;
+args.integer_vector = [-5, 3];
+args.string = &quot;Hi&quot;;
+writeCommandLineToFile(tempname(tempdir), args, &quot;__test_parseOptions__&quot;)
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="condor_002djobs.html" accesskey="n" rel="next"><samp>condor-jobs</samp></a>, Previous: <a href="array_002dhandling.html" accesskey="p" rel="prev"><samp>array-handling</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

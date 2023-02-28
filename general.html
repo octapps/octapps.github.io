@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>general (OctApps Reference Manual)</title>
+
+<meta name="description" content="general (OctApps Reference Manual)">
+<meta name="keywords" content="general (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="geometry.html" rel="next" title="geometry">
+<link href="file_002dhandling.html" rel="prev" title="file-handling">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="general"></span><div class="header">
+<p>
+Next: <a href="geometry.html" accesskey="n" rel="next"><samp>geometry</samp></a>, Previous: <a href="file_002dhandling.html" accesskey="p" rel="prev"><samp>file-handling</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="general-1"></span><h3 class="section">2.12 <samp>general</samp></h3>
+
+<dl>
+<dt id="index-cputic">Function File: <em></em> <strong>cputic</strong> <em>( <code>name</code> )</em></dt>
+<dt id="index-cputic-1">Function File: <em><var>t</var> =</em> <strong>cputic</strong> <em>( <code>name</code> )</em></dt>
+<dd>
+<p>Sets or retrieves the value of a named CPU time counter.
+</p>
+<span id="Examples-89"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">cputic(&quot;__test&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-cputoc">Function File: <em></em> <strong>cputoc</strong> <em>( <code>name</code> ) ;</em></dt>
+<dd>
+<p>Prints the elapsed CPU time since a named CPU time counter was set.
+</p>
+<span id="Examples-90"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">cputic(&quot;__test&quot;);
+cputoc(&quot;__test&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DebugLevel">Function File: <em></em> <strong>DebugLevel</strong> <em><var>level</var></em></dt>
+<dt id="index-DebugLevel-1">Function File: <em></em> <strong>DebugLevel</strong> <em>( <var>level</var> )</em></dt>
+<dt id="index-DebugLevel-2">Function File: <em><var>level</var> =</em> <strong>DebugLevel</strong> <em>( )</em></dt>
+<dd>
+<p>Sets and/or returns the OctApps debug level <var>level</var>.
+</p>
+<span id="Examples-91"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(DebugLevel() == 0);
+DebugLevel 1;
+assert(DebugLevel() == 1);
+DebugLevel(2);
+assert(DebugLevel() == 2);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DebugPrintf">Function File: <em></em> <strong>DebugPrintf</strong> <em>( <var>level</var>, <var>args</var>&hellip; )</em></dt>
+<dd>
+<p>If <code>DebugLevel()</code> &gt;= <var>level</var>, then print <var>args</var>&hellip; using
+<code>fprintf()</code> to <samp>stdout</samp>.
+</p>
+<span id="Examples-92"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">DebugLevel(1);
+DebugPrintf(0, &quot;Hi there\n&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-funcName">Function File: <em><var>name</var> =</em> <strong>funcName</strong> <em>( )</em></dt>
+<dd>
+<p>Returns the name of the currently executing function.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-getoptfield">Function File: <em>[ <var>val</var> ] =</em> <strong>getoptfield</strong> <em>( <var>def</var>, <var>S</var>, &hellip; )</em></dt>
+<dd>
+<p>Return getfield (<var>S</var>, &hellip;), if it exists, otherwise return <var>def</var>.
+</p>
+<span id="Examples-93"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(getoptfield(1, []), 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(getoptfield([], struct(&quot;a&quot;, 1), &quot;a&quot;), 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(getoptfield([], struct(&quot;a&quot;, 1), &quot;b&quot;), [])
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-isInteractive">Function File: <em><var>f</var> =</em> <strong>isInteractive</strong> <em>( )</em></dt>
+<dd>
+<p>Returns whether the calling Octave script is being run from
+an interactive session, as opposed to from the command line.
+If calling function is not a script, return empty.
+</p>
+<span id="Examples-94"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isInteractive());
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-native">Function File: <em>[ <var>x1</var>, <var>x2</var>, &hellip; ] =</em> <strong>native</strong> <em>( <var>x1</var>, <var>x2</var>, &hellip; )</em></dt>
+<dd>
+<p>Converts its arguments from foreign objects (e.g. SWIG-wrapped objects)
+to native Octave objects, if possible. Native objects are passed though.
+</p>
+<span id="Examples-95"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isscalar(native(rand())))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octapps_005fconfig_005finfo">Function File: <em></em> <strong>octapps_config_info</strong></dt>
+<dd>
+<p>Backwards compatible replacement for &rsquo;octave_config_info()&rsquo; function, which
+in newer octave versions has been renamed to &rsquo;__octave_config_info__()&rsquo;
+see https://octave.org/doc/v6.4.0/Obsolete-Functions.html#Obsolete-Functions
+</p>
+<span id="Examples-96"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">octapps_config_info();
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-printProgress">Function File: <em><var>prog</var> =</em> <strong>printProgress</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Prints a progress message at decreasing intervals, displaying
+the number of tasks completed, CPU usage, time elasped/remaining
+</p>
+<span id="Example-2"></span><h3 class="heading">Example</h3>
+<div class="example">
+<pre class="example">prog = [];
+for i = 1:5000
+  for j = 1:5
+    doSomeTask(i, j, ...);
+    prog = printProgress(prog, &quot;inner loop&quot;, [i, j], [5000, 5]);
+  endfor
+  prog = printProgress(prog, [i, j], [5000, 5]);
+endfor
+</pre></div>
+
+</dd></dl>
+
+
+<dl>
+<dt id="index-runCode">Function File: <em></em> <strong>runCode</strong> <em>( <var>params</var>, <var>code</var>, [ <var>verbose</var> = false ] )</em></dt>
+<dt id="index-runCode-1">Function File: <em><var>output</var> =</em> <strong>runCode</strong> <em>( &hellip; )</em></dt>
+<dd>
+<p>Generic code-running driver: run <var>code</var>, passing any command-line
+options in the struct <var>params</var>, which are passed to <var>code</var>
+in &mdash;name=val format. Use <var>params</var>.LAL_DEBUG_LEVEL to set the LAL
+debug level. If <var>verbose</var> is true, print command before running it.
+</p><span id="Examples-97"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">runCode(struct(&quot;c&quot;, 'echo &quot;This is a test of runCode()&quot;'), &quot;/bin/sh&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-sortStructFields">Function File: <em>[ <var>s</var> ] =</em> <strong>sortStructFields</strong> <em>( <var>s</var> )</em></dt>
+<dd>
+<p>Return the struct <var>S</var> with its fields sorted alphabetically.
+</p>
+<span id="Examples-98"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">S1 = struct('name', {'Peter', 'Hannah', 'Robert'}, 'age', {23, 16, 3});
+S2 = sortStructFields(S1);
+assert(all(strcmp({S1.name}, {S2.name})));
+assert(all([S1.age] == [S2.age]));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-unmanglePATH">Function File: <em></em> <strong>unmanglePATH</strong></dt>
+<dd>
+<p>Aaargh Octave! At startup it prepends PATH with directories containing
+Octave executables - which if it&rsquo;s installed in <samp>/usr/bin</samp> include
+<samp>/usr/bin</samp>. This will clobber any existing paths in PATH that were meant
+to override <samp>/usr/bin</samp>, such as e.g. custom installation of LALSuite!
+</p>
+<p>This script undoes the damage.
+</p>
+<span id="Examples-99"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">unmanglePATH();
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="geometry.html" accesskey="n" rel="next"><samp>geometry</samp></a>, Previous: <a href="file_002dhandling.html" accesskey="p" rel="prev"><samp>file-handling</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

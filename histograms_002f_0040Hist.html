@@ -1,0 +1,972 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>histograms/@Hist (OctApps Reference Manual)</title>
+
+<meta name="description" content="histograms/@Hist (OctApps Reference Manual)">
+<meta name="keywords" content="histograms/@Hist (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="lattices.html" rel="next" title="lattices">
+<link href="histograms.html" rel="prev" title="histograms">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="histograms_002f_0040Hist"></span><div class="header">
+<p>
+Next: <a href="lattices.html" accesskey="n" rel="next"><samp>lattices</samp></a>, Previous: <a href="histograms.html" accesskey="p" rel="prev"><samp>histograms</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="histograms_002f_0040Hist-1"></span><h3 class="section">2.15 <samp>histograms/@Hist</samp></h3>
+
+<dl>
+<dt id="index-addDataToHist">Function File: <em><var>hgrm</var> =</em> <strong>addDataToHist</strong> <em>( <var>hgrm</var>, <var>data</var> )</em></dt>
+<dd>
+<p>Adds the given input <var>data</var> to the histogram.
+If the histogram is too small, more bins are added.
+</p>
+<span id="Arguments-53"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>data</var></dt>
+<dd><p>input histogram data
+</p>
+</dd>
+</dl>
+
+<span id="Examples-118"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}), -2), 1, &quot;finite&quot;, &quot;bins&quot;)', -2:0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}), -1), 1, &quot;finite&quot;, &quot;bins&quot;)', -1:0)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  0), 1, &quot;finite&quot;, &quot;bins&quot;)',  0:1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  1), 1, &quot;finite&quot;, &quot;bins&quot;)',  0:2)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  2), 1, &quot;finite&quot;, &quot;bins&quot;)',  0:3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histProbs(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}), -2), &quot;finite&quot;)', [1 0])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histProbs(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}), -1), &quot;finite&quot;)', [1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histProbs(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  0), &quot;finite&quot;)', [1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histProbs(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  1), &quot;finite&quot;)', [0 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histProbs(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 1}),  2), &quot;finite&quot;)', [0 0 1])
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;log&quot;, &quot;binsper10&quot;, 1}), 0.9), 1, &quot;finite&quot;, &quot;bins&quot;)', -1:1, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;log&quot;, &quot;binsper10&quot;, 10}), 0.9), 1, &quot;finite&quot;, &quot;bins&quot;)', -1:0.1:1, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 1, &quot;binsper10&quot;, 10}), 0.9), 1, &quot;finite&quot;, &quot;bins&quot;)', -1:0.1:1, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 1, &quot;binsper10&quot;, 10}), 1.1), 1, &quot;finite&quot;, &quot;bins&quot;)', [-1:0.1:1, 2:10], 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histBins(addDataToHist(Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 1, &quot;binsper10&quot;, 10}), -10.1), 1, &quot;finite&quot;, &quot;bins&quot;)', [-100:10:-10, -9:-2, -1:0.1:1], 1e-6)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-addHists">Function File: <em><var>hgrmt</var> =</em> <strong>addHists</strong> <em>( <var>addop</var>, <var>hgrms</var>&hellip; )</em></dt>
+<dd>
+<p>Add multiple histograms together.
+</p>
+<span id="Arguments-54"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>addop</var></dt>
+<dd><p>operation used to add histograms:
+</p><dl compact="compact">
+<dt><code>count</code></dt>
+<dd><p>sum histogram counts
+</p>
+</dd>
+<dt><code>prob</code></dt>
+<dd><p>sum histogram probabilities
+</p></dd>
+</dl>
+
+</dd>
+<dt><var>hgrms</var></dt>
+<dd><p>histograms to add; <code>[]</code> arguments are ignored
+</p>
+</dd>
+<dt><var>hgrmt</var></dt>
+<dd><p>total histogram
+</p>
+</dd>
+</dl>
+
+<span id="Examples-119"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm1 = addDataToHist(Hist(1, 0:12), 0.5 + (0:11)');
+hgrm2 = addDataToHist(Hist(1, 0:3:12), 0.5 + (0:11)');
+hgrmt = addHists(&quot;count&quot;, hgrm1, hgrm2);
+p = histProbs(hgrmt);
+assert(length(p) == 14 &amp;&amp; p(2:end-1) == 1/12);
+</pre></div>
+
+<div class="example">
+<pre class="example">hgrms = arrayfun(@(x) addDataToHist(Hist(1, 0:12), 0.5 + x), 0:11, &quot;UniformOutput&quot;, false);
+hgrmt = addHists(&quot;count&quot;, hgrms{:});
+p = histProbs(hgrmt);
+assert(length(p) == 14 &amp;&amp; p(2:end-1) == 1/12);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-contractHist">Function File: <em><var>hgrm</var> =</em> <strong>contractHist</strong> <em>( <var>hgrm</var>, <var>newdims</var> )</em></dt>
+<dd>
+<p>Contract a histogram by summing counts over dimensions.
+</p>
+<span id="Arguments-55"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>newdims</var></dt>
+<dd><p>dimensions that will remain after contraction;
+counts in other dimensions will be summed.
+</p>
+</dd>
+</dl>
+
+<span id="Examples-120"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(0, 1, 1e6, 1), rand(1e6, 1)]);
+hgrm1 = contractHist(hgrm, 1);
+hgrm2 = contractHist(hgrm, 2);
+</pre></div>
+
+<div class="example">
+<pre class="example">p2 = histProbs(hgrm2); c2 = histBinGrids(hgrm2, 1, &quot;centre&quot;);
+assert(mean(abs(p2(isfinite(c2)) - 1.0)) &lt; 1e-2);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-display">Function File: <em></em> <strong>display</strong> <em>( <var>hgrm</var> )</em></dt>
+<dd>
+<p>Display a histogram object.
+</p>
+<span id="Arguments-56"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+</dl>
+
+<span id="Examples-121"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">display(Hist())
+display(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}))
+display(Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}))
+display(Hist(3, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}))
+display(Hist(4, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}))
+display(Hist(5, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-drawFromHist">Function File: <em><var>x</var> =</em> <strong>drawFromHist</strong> <em>( <var>hgrm</var>, <var>N</var> )</em></dt>
+<dd>
+<p>Generates random values drawn from the
+probability distribution given by the histogram.
+</p>
+<span id="Arguments-57"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>N</var></dt>
+<dd><p>number of random values to generate
+</p>
+</dd>
+<dt><var>x</var></dt>
+<dd><p>generated random values
+</p>
+</dd>
+</dl>
+
+<span id="Examples-122"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrmA = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrmB = Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 0.1, &quot;binsper10&quot;, 8});
+hgrmC = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;log&quot;, &quot;minrange&quot;, 1.0, &quot;binsper10&quot;, 8});
+N = 1e6;
+do
+  x = randn(N, 2);
+  oldhgrmA = hgrmA;
+  hgrmA = addDataToHist(hgrmA, x(:,1));
+  hgrmB = addDataToHist(hgrmB, x(:,1));
+  hgrmC = addDataToHist(hgrmC, x(:,1:2));
+  histerr = histDistance(oldhgrmA, hgrmA);
+until histerr &lt; 1e-2
+</pre></div>
+
+<div class="example">
+<pre class="example">thgrmA = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+x = drawFromHist(hgrmA, N);
+thgrmA = addDataToHist(thgrmA, x);
+assert(histDistance(hgrmA, thgrmA) &lt; 0.01);
+</pre></div>
+
+<div class="example">
+<pre class="example">thgrmC = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;log&quot;, &quot;minrange&quot;, 1.0, &quot;binsper10&quot;, 8});
+x = drawFromHist(hgrmC, 20*N);
+thgrmC = addDataToHist(thgrmC, x);
+assert(histDistance(hgrmC, thgrmC) &lt; 0.01);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-Hist">Function File: <em><var>hgrm</var> =</em> <strong>Hist</strong> <em>( <var>dim</var>, <var>type</var>&hellip; )</em></dt>
+<dd>
+<p>Create a new object representing a multi-dimensional histogram.
+</p>
+<span id="Arguments-58"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>dim</var></dt>
+<dd><p>dimensionality of the histogram
+</p>
+</dd>
+<dt><var>type</var></dt>
+<dd><p>bin types, one per dimension; possible types:
+</p><ul>
+<li> {<code>lin</code>, <code>dbin</code>, &lsquo;<samp>bin width</samp>&rsquo;, &hellip;,
+<code>bin0</code>, &lsquo;<samp>starting bin (default 0)</samp>&rsquo;}
+
+</li><li> {<code>log</code>, <code>minrange</code>, &lsquo;<samp>starting minimal bin range (default: auto)</samp>&rsquo;, &hellip;,
+<code>binsper10</code>, &lsquo;<samp>number of bins to add per decade</samp>&rsquo;}
+
+</li><li> [&lsquo;<samp>bin</samp>&rsquo;, &lsquo;<samp>bin</samp>&rsquo;, &hellip;]
+
+<p>Fixed array of bins, cannot be extended
+</p>
+</li></ul>
+
+</dd>
+</dl>
+
+<span id="Examples-123"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="Hist.html">tutorial on <code>Hist</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histBinsGrids">Function File: <em>[ <var>binq</var>, &hellip; ] =</em> <strong>histBinsGrids</strong> <em>( <var>hgrm</var>, <var>k</var>, <code>type</code>, &hellip; )</em></dt>
+<dd>
+<p>Return quantities relating to the histogram bin boundaries,
+in gridded arrays of the same size as the probability array.
+</p>
+<span id="Arguments-59"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension along which to return bin quantities
+</p>
+</dd>
+<dt><var>type</var></dt>
+<dd><p>see <code>histBins()</code>
+</p>
+</dd>
+<dt><var>binq</var></dt>
+<dd><p>bin quantities
+</p>
+</dd>
+</dl>
+
+<span id="Examples-124"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = restrictHist(addDataToHist(Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}), octforge_unifrnd(0, 1, 1e6, 2)));
+sert(histBinGrids(hgrm, 1, &quot;lower&quot;), [-inf, 0:0.1:0.9, inf]' * ones(1, 12), 1e-3)
+sert(histBinGrids(hgrm, 1, &quot;centre&quot;), [-inf, 0.05:0.1:0.95, inf]' * ones(1, 12), 1e-3)
+sert(histBinGrids(hgrm, 1, &quot;upper&quot;), [-inf, 0.1:0.1:1.0, inf]' * ones(1, 12), 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histBins">Function File: <em>[ <var>binq</var>, &hellip; ] =</em> <strong>histBins</strong> <em>( <var>hgrm</var>, <var>k</var>, <code>type</code>, &hellip; )</em></dt>
+<dt id="index-histBins-1">Function File: <em>[ <var>fbinq</var>, &hellip; ] =</em> <strong>histBins</strong> <em>( <var>hgrm</var>, <var>k</var>, <code>finite</code>, <code>type</code>, &hellip; )</em></dt>
+<dd>
+<p>Return quantities relating to the histogram bin boundaries.
+</p>
+<span id="Arguments-60"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension along which to return bin quantities
+</p>
+</dd>
+<dt><var>type</var></dt>
+<dd><p>one of:
+</p><dl compact="compact">
+<dt><code>bins</code></dt>
+<dd><p>bin boundaries
+</p>
+</dd>
+<dt><code>lower</code></dt>
+<dd><p><var>lower</var> bin boundary
+</p>
+</dd>
+<dt><code>upper</code></dt>
+<dd><p><var>upper</var> bin boundary
+</p>
+</dd>
+<dt><code>centre</code></dt>
+<dd><p>bin centre
+</p>
+</dd>
+<dt><code>width</code></dt>
+<dd><p>bin width
+</p>
+</dd>
+</dl>
+
+</dd>
+<dt><var>binq</var></dt>
+<dd><p>bin quantities
+</p>
+</dd>
+<dt><var>fbinq</var></dt>
+<dd><p><code>finite</code> bin quantities
+</p>
+</dd>
+</dl>
+
+<span id="Examples-125"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = restrictHist(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}), octforge_unifrnd(0, 1, 1e6, 1)));
+sert(histBins(hgrm, 1, &quot;lower&quot;),  [-inf, 0:0.1:0.9, inf]', 1e-3)
+sert(histBins(hgrm, 1, &quot;centre&quot;), [-inf, 0.05:0.1:0.95, inf]', 1e-3)
+sert(histBins(hgrm, 1, &quot;upper&quot;), [-inf, 0.1:0.1:1.0, inf]', 1e-3)
+sert(histBins(hgrm, 1, &quot;finite&quot;, &quot;lower&quot;),  [0:0.1:0.9]', 1e-3)
+sert(histBins(hgrm, 1, &quot;finite&quot;, &quot;centre&quot;), [0.05:0.1:0.95]', 1e-3)
+sert(histBins(hgrm, 1, &quot;finite&quot;, &quot;upper&quot;), [0.1:0.1:1.0]', 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histBinUnions">Function File: <em><var>ubins</var> =</em> <strong>histBinUnions</strong> <em>( <var>hgrms</var>&hellip; )</em></dt>
+<dd>
+<p>Return the unions of bins of the given histograms in each dimension.
+</p>
+<span id="Arguments-61"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>ubins</var></dt>
+<dd><p>cell array of union of bins in each dimension
+</p>
+</dd>
+<dt><var>hgrms</var></dt>
+<dd><p>histograms
+</p>
+</dd>
+</dl>
+
+<span id="Examples-126"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm1 = restrictHist(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}), octforge_unifrnd(0, 1, 1e6, 1)));
+hgrm2 = restrictHist(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}), octforge_unifrnd(1, 2, 1e6, 1)));
+hgrm3 = restrictHist(addDataToHist(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}), octforge_unifrnd(2, 3, 1e6, 1)));
+sert(histBinUnions(hgrm1, hgrm2), {[0:0.1:2]}, 1e-3)
+sert(histBinUnions(hgrm1, hgrm3), {[0:0.1:1, 2:0.1:3]}, 1e-3)
+sert(histBinUnions(hgrm2, hgrm3), {[1:0.1:3]}, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histDim">Function File: <em><var>dim</var> =</em> <strong>histDim</strong> <em>( <var>hgrm</var> )</em></dt>
+<dd>
+<p>Returns the dimensionality of a histogram object.
+</p>
+<span id="Arguments-62"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>dim</var></dt>
+<dd><p>dimensionality of the histogram
+</p>
+</dd>
+</dl>
+
+<span id="Examples-127"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(histDim(Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1})), 1)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histDim(Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1})), 2)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histDim(Hist(3, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1})), 3)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histDim(Hist(4, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1})), 4)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(histDim(Hist(5, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1})), 5)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histDistance">Function File: <em>[ <var>d</var>, <var>KLD</var>, <var>JSD</var> ] =</em> <strong>histDistance</strong> <em>( <var>hgrm1</var>, <var>hgrm2</var> )</em></dt>
+<dd>
+<p>Computes different distance measures between histograms
+</p>
+<span id="Arguments-63"></span><h3 class="heading">Arguments</h3>
+<dl compact="compact">
+<dt><var>hgrm1</var></dt>
+<dt><var>hgrm2</var></dt>
+<dd><p>histogram objects
+</p>
+</dd>
+<dt><var>d</var></dt>
+<dd><p>defined to be the sum of the absolute difference in probability density in
+each bin (for a common bin set), multiplied by the bin area.
+</p>
+</dd>
+<dt><var>KLD</var></dt>
+<dd><p>is the (non-symmetric) KullbackâLeibler divergence D_KL(<var>hgrm1</var> || <var>hgrm2</var>) &gt;= 0
+https://en.wikipedia.org/wiki/Kullback-Leibler_divergence
+</p>
+</dd>
+<dt><var>JSD</var></dt>
+<dd><p>is the (symmetric) JensenâShannon divergence 0 &lt;= JDS &lt;= 1
+https://en.wikipedia.org/wiki/Jensen-Shannon_divergence
+</p>
+</dd>
+</dl>
+
+<span id="Examples-128"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm1 = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+hgrm2 = createGaussianHist(7.3, 3.4, &quot;binsize&quot;, 0.1);
+sert(histDistance(hgrm1, hgrm1), 0.00, 1e-3)
+sert(histDistance(hgrm1, hgrm2), 1.26, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histProbs">Function File: <em><var>prob</var> =</em> <strong>histProbs</strong> <em>( <var>hgrm</var> )</em></dt>
+<dt id="index-histProbs-1">Function File: <em><var>fprob</var> =</em> <strong>histProbs</strong> <em>( <var>hgrm</var>, <code>finite</code> )</em></dt>
+<dd>
+<p>Return the probabily densities of each histogram bin
+</p>
+<span id="Arguments-64"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>prob</var></dt>
+<dd><p>probability densities of all bins
+</p>
+</dd>
+<dt><var>fprob</var></dt>
+<dd><p>probability densities of <code>finite</code> bins
+</p>
+</dd>
+</dl>
+
+<span id="Examples-129"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm1 = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.01});
+hgrm1 = addDataToHist(hgrm1, octforge_normrnd(0, 1, 1e6, 1));
+hgrm2 = Hist(1, {&quot;log&quot;, &quot;minrange&quot;, 0.5, &quot;binsper10&quot;, 50});
+hgrm2 = addDataToHist(hgrm2, octforge_normrnd(0, 1, 1e6, 1));
+</pre></div>
+
+<div class="example">
+<pre class="example">p2 = histProbs(hgrm2); c2 = histBinGrids(hgrm2, 1, &quot;centre&quot;);
+assert(mean(abs(p2 - octforge_normpdf(c2, 0, 1))) &lt; 0.005);
+</pre></div>
+
+<div class="example">
+<pre class="example">hgrm3 = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm3 = addDataToHist(hgrm3, rand(1e6, 2));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histRange">Function File: <em>[ <var>rng</var>, <var>nbins</var> ] =</em> <strong>histRange</strong> <em>( <var>hgrm</var>, [ <var>kk</var> = 1:dim ] )</em></dt>
+<dt id="index-histRange-1">Function File: <em>[ <var>frng</var>, <var>fnbins</var> ] =</em> <strong>histRange</strong> <em>( <var>hgrm</var>, [ <var>kk</var> = 1:dim ] , <code>finite</code> )</em></dt>
+<dd>
+<p>Returns the ranges of a histogram object, which are finite
+if the histogram is non-empty and NaNs otherwise, and the
+number of bins in each range.
+</p>
+<span id="Arguments-65"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>kk</var></dt>
+<dd><p>dimensions for which to return ranges; defaults to all
+</p>
+</dd>
+<dt><var>rng</var></dt>
+<dd><p>ranges of the histogram
+</p>
+</dd>
+<dt><var>nbins</var></dt>
+<dd><p>number of bins in each range
+</p>
+</dd>
+<dt><var>frng</var></dt>
+<dd><p><code>finite</code> ranges of the histogram
+</p>
+</dd>
+<dt><var>fnbins</var></dt>
+<dd><p>number of <code>finite</code> bins in each range
+</p>
+</dd>
+</dl>
+
+<span id="Examples-130"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm0 = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+rand(&quot;seed&quot;, 1);  # avoid random surprises exceeding tolerance
+sert(histRange(addDataToHist(hgrm0, octforge_unifrnd(1.2, 9.7, 1000, 2))), [1.2, 9.7; 1.2, 9.7], 0.25)
+sert(histRange(addDataToHist(hgrm0, [octforge_unifrnd(2.3, 11.3, 1000, 1), octforge_unifrnd(67.9, 103.5, 1000, 1)]), 1), [2.3, 11.3], 0.25)
+sert(histRange(addDataToHist(hgrm0, [octforge_unifrnd(2.3, 11.3, 1000, 1), octforge_unifrnd(67.9, 103.5, 1000, 1)]), 2), [67.9, 103.5], 0.25)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-histTotalCount">Function File: <em><var>total</var> =</em> <strong>histTotalCount</strong> <em>( <var>hgrm</var> )</em></dt>
+<dd>
+<p>Returns the <var>total</var> number of counts in a histogram object.
+</p>
+<span id="Arguments-66"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>total</var></dt>
+<dd><p><var>total</var> number of counts
+</p>
+</dd>
+</dl>
+
+<span id="Examples-131"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, 4.3, 13579, 1), rand(13579, 1)]);
+assert(histTotalCount(hgrm), 13579);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-initHistFromFunc">Function File: <em><var>hgrm</var> =</em> <strong>initHistFromFunc</strong> <em>( <var>hgrm</var>, <var>F</var>, [ <var>xl_1</var>, <var>xh_1</var> ] , ..., [ <var>xl_dim</var>, <var>xh_dim</var> ] )</em></dt>
+<dd>
+<p>Initialise a histogram directly from a given function.
+</p>
+<span id="Arguments-67"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>F</var></dt>
+<dd><p>function used to initialise histogram
+</p>
+</dd>
+<dt><var>xl_k</var></dt>
+<dt><var>xh_k</var></dt>
+<dd><p>range in dimension &rsquo;k&rsquo; to evaluate <var>F</var> over
+</p>
+</dd>
+</dl>
+
+<span id="Examples-132"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = initHistFromFunc(hgrm, @(x) octforge_normpdf(x, 1.3, 2.7), [-20, 20]);
+assert(abs(meanOfHist(hgrm) - 1.3) &lt; 1e-3);
+assert(abs(stdvOfHist(hgrm) - 2.7) &lt; 1e-3);
+</pre></div>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = initHistFromFunc(hgrm, @(x, y) octforge_normpdf(x, y, 1.0), [-20, 20], [0, 10]);
+assert(abs(meanOfHist(hgrm, 1) - linspace(0.05, 9.95, 100)) &lt; 1e-4);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-resampleHist">Function File: <em><var>hgrm</var> =</em> <strong>resampleHist</strong> <em>( <var>hgrm</var>, <var>k</var>, <var>newbins_k</var> )</em></dt>
+<dt id="index-resampleHist-1">Function File: <em><var>hgrm</var> =</em> <strong>resampleHist</strong> <em>( <var>hgrm</var>, <var>newbins_1</var>, &hellip;, <var>newbins_dim</var> )</em></dt>
+<dd>
+<p>Resamples a histogram to a new set of bins
+</p>
+<span id="Arguments-68"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension along which to resample
+</p>
+</dd>
+<dt><var>newbins_k</var></dt>
+<dd><p>new bins in dimension <var>k</var> (dim = number of dimensions)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-133"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.01}, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+hgrm = addDataToHist(hgrm, [octforge_normrnd(1.7, 4.3, 1e6, 1), rand(1e6, 1)]);
+assert(meanOfHist(hgrm, 1), meanOfHist(resampleHist(hgrm, 1, -30:0.2:30), 1), 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-rescaleHistBins">Function File: <em><var>hgrm</var> =</em> <strong>rescaleHistBins</strong> <em>( <var>hgrm</var>, <var>s</var> )</em></dt>
+<dd>
+<p>Rescale the bins of a histogram.
+</p>
+<span id="Arguments-69"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>s</var></dt>
+<dd><p>strictly positive scale to apply to bin in each dimension
+</p>
+</dd>
+</dl>
+
+<span id="Examples-134"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+sert(meanOfHist(rescaleHistBins(hgrm, 64.2)), 1.2 * 64.2, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-restrictHist">Function File: <em><var>rhgrm</var> =</em> <strong>restrictHist</strong> <em>( <var>hgrm</var>, <var>k</var>, [ <var>xl_k</var>, <var>xh_k</var> ] )</em></dt>
+<dt id="index-restrictHist-1">Function File: <em><var>rhgrm</var> =</em> <strong>restrictHist</strong> <em>( <var>hgrm</var>, [ <var>xl_1</var>, <var>xh_1</var> ] , &hellip;, [ <var>xl_dim</var>, <var>xh_dim</var> ] )</em></dt>
+<dt id="index-restrictHist-2">Function File: <em><var>rhgrm</var> =</em> <strong>restrictHist</strong> <em>( <var>hgrm</var> )</em></dt>
+<dt id="index-restrictHist-3">Function File: <em><var>rhgrm</var> =</em> <strong>restrictHist</strong> <em>( &hellip;, <var>discard</var> )</em></dt>
+<dd>
+<p>Extract histogram restricted to subrange of bins, as determined by
+the ranges [<var>xl_k</var>, <var>xh_k</var>]. Samples outside of these ranges are moved
+to the histogram boundary bins [-\inf,<var>xl_k</var>] and [<var>xh_k</var>,\inf], unless
+the string &quot;<var>discard</var>&quot; is given as the last argument. If no ranges are
+given, <code>histRange()</code> is used to find the minimum ranges.
+</p>
+<span id="Arguments-70"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>rhgrm</var></dt>
+<dd><p>restricted histogram object
+</p>
+</dd>
+<dt><var>hgrm</var></dt>
+<dd><p>original histogram object
+</p>
+</dd>
+<dt><var>k</var></dt>
+<dd><p>dimension along which to restrict histogram range
+</p>
+</dd>
+<dt><var>xl_k</var></dt>
+<dt><var>xh_k</var></dt>
+<dd><p>range in dimension <var>k</var> to restrict range to
+</p>
+</dd>
+</dl>
+
+<span id="Examples-135"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, {&quot;lin&quot;, 0.01}, {&quot;lin&quot;, 0.01});
+hgrm = addDataToHist(hgrm, rand(50000,2));
+hgrmx = restrictHist(hgrm, 1, [0, 0.5]);
+hgrmy = restrictHist(hgrm, 2, [0, 0.3]);
+assert(abs(meanOfHist(contractHist(hgrm, 1)) - 0.5) &lt; 1e-2);
+assert(abs(meanOfHist(contractHist(hgrm, 2)) - 0.5) &lt; 1e-2);
+assert(abs(meanOfHist(contractHist(hgrmx, 1)) - 0.25) &lt; 1e-2);
+assert(abs(meanOfHist(contractHist(hgrmx, 2)) - 0.5) &lt; 1e-2);
+assert(abs(meanOfHist(contractHist(hgrmy, 1)) - 0.5) &lt; 1e-2);
+assert(abs(meanOfHist(contractHist(hgrmy, 2)) - 0.15) &lt; 1e-2);
+</pre></div>
+
+<div class="example">
+<pre class="example">hgrm = Hist(2, -1.0:0.1:2.0, -1.0:0.1:2.0);
+hgrm = addDataToHist(hgrm, rand(50000,2));
+count = histTotalCount(hgrm);
+hgrmx = restrictHist(hgrm, 1, [0.0, 1.0]);
+hgrmy = restrictHist(hgrm, 2, [-0.5, 1.5]);
+hgrmxy = restrictHist(hgrm, [0, 0.5], [0, 0.5]);
+assert(histTotalCount(hgrmx) == count);
+assert(histTotalCount(hgrmy) == count);
+assert(histTotalCount(hgrmxy) == count);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-thresholdHist">Function File: <em><var>thgrm</var> =</em> <strong>thresholdHist</strong> <em>( <var>hgrm</var>, <var>pth</var> )</em></dt>
+<dd>
+<p>Set a threshold on the histogram probability of each bin; bins with
+probability below the threshold have their count set to zero.
+</p>
+<span id="Arguments-71"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>thgrm</var></dt>
+<dd><p>thresholded histogram object
+</p>
+</dd>
+<dt><var>hgrm</var></dt>
+<dd><p>original histogram object
+</p>
+</dd>
+<dt><var>pth</var></dt>
+<dd><p>probability threshold
+</p>
+</dd>
+</dl>
+
+<span id="Examples-136"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrm = createGaussianHist(1.2, 3.4, &quot;binsize&quot;, 0.1);
+assert(meanOfHist(thresholdHist(hgrm, 1e-10)), 1.2, 1e-3);
+assert(meanOfHist(thresholdHist(hgrm, 0.1)), 1.2, 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-transformHist">Function File: <em><var>hgrm</var> =</em> <strong>transformHist</strong> <em>( <var>hgrm</var>, <var>F</var>, [ <var>err</var> ] )</em></dt>
+<dd>
+<p>Transform the contents of a histogram.
+</p>
+<span id="Arguments-72"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>hgrm</var></dt>
+<dd><p>histogram object
+</p>
+</dd>
+<dt><var>F</var></dt>
+<dd><p>function to apply to histogram samples:
+</p><ul>
+<li> should accept column vectors as inputs and return
+an array whose columns are vectorised outputs
+</li><li> number of input/output arguments must match
+histogram dimensionality
+</li></ul>
+
+</dd>
+<dt><var>err</var></dt>
+<dd><p>convergence requirement on histogram (default = 1e-2)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-137"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">hgrmA = hgrmA1 = hgrmA2 = hgrmA3 = Hist(1, {&quot;lin&quot;, &quot;dbin&quot;, 0.1});
+N = 1e6;
+do
+  x = randn(N, 1);
+  oldhgrmA = hgrmA;
+  hgrmA = addDataToHist(hgrmA, x);
+  hgrmA1 = addDataToHist(hgrmA1, abs(x));
+  hgrmA2 = addDataToHist(hgrmA2, x.^2 - 3);
+  hgrmA3 = addDataToHist(hgrmA3, sin(x));
+  histerr = histDistance(oldhgrmA, hgrmA);
+until histerr &lt; 1e-2
+</pre></div>
+
+<div class="example">
+<pre class="example">t_hgrmA = transformHist(hgrmA, @(x) x);
+assert(histDistance(hgrmA, t_hgrmA) &lt; 0.01);
+</pre></div>
+
+<div class="example">
+<pre class="example">t_hgrmA2 = transformHist(hgrmA, @(x) x.^2 - 3);
+assert(histDistance(hgrmA2, t_hgrmA2) &lt; 0.05);
+</pre></div>
+
+<div class="example">
+<pre class="example">hgrmB = hgrmB1 = hgrmB2 = hgrmB3 = Hist(2, {&quot;lin&quot;, &quot;dbin&quot;, 0.1}, {&quot;log&quot;, &quot;minrange&quot;, 1.0, &quot;binsper10&quot;, 8});
+N = 1e7;
+do
+  x = randn(N, 1);
+  y = sign(x) .* 10.^(-1 + 3*rand(N, 1));
+  oldhgrmB = hgrmB;
+  hgrmB = addDataToHist(hgrmB, [x, y]);
+  hgrmB1 = addDataToHist(hgrmB1, [abs(x), 10.*y]);
+  hgrmB2 = addDataToHist(hgrmB2, [x.^2 - 3, y.^3]);
+  hgrmB3 = addDataToHist(hgrmB3, [sin(x), cos(y)]);
+  histerr = histDistance(oldhgrmB, hgrmB);
+until histerr &lt; 1e-2
+</pre></div>
+
+<div class="example">
+<pre class="example">t_hgrmB = transformHist(hgrmB, @(x,y) [x, y]);
+assert(histDistance(hgrmB, t_hgrmB) &lt; 0.05)
+</pre></div>
+
+<div class="example">
+<pre class="example">t_hgrmB2 = transformHist(hgrmB, @(x,y) [x.^2 - 3, y.^3]);
+assert(histDistance(hgrmB2, t_hgrmB2) &lt; 0.1);
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="lattices.html" accesskey="n" rel="next"><samp>lattices</samp></a>, Previous: <a href="histograms.html" accesskey="p" rel="prev"><samp>histograms</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

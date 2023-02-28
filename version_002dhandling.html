@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>version-handling (OctApps Reference Manual)</title>
+
+<meta name="description" content="version-handling (OctApps Reference Manual)">
+<meta name="keywords" content="version-handling (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="Function-Index.html" rel="next" title="Function Index">
+<link href="text_002dhandling.html" rel="prev" title="text-handling">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="version_002dhandling"></span><div class="header">
+<p>
+Previous: <a href="text_002dhandling.html" accesskey="p" rel="prev"><samp>text-handling</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="version_002dhandling-1"></span><h3 class="section">2.21 <samp>version-handling</samp></h3>
+
+<dl>
+<dt id="index-format_005fgitID">Function File: <em><var>IDstring</var> =</em> <strong>format_gitID</strong> <em>( <var>ID</var>, &hellip; )</em></dt>
+<dd>
+<p>Formats a git version information string from the git ID structs <var>ID</var>.
+SWIG-wrapped LAL VCSInfo structs and octapps_gitID() structs are supported.
+</p><span id="Examples-230"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">format_gitID(octapps_gitID());
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-getLalAppsVersionInfo">Function File: <em><var>version_string</var> =</em> <strong>getLalAppsVersionInfo</strong> <em>( <var>lalapps_command</var> ) ;</em></dt>
+<dd>
+<p>get version info from the given lalapps code
+</p>
+<span id="Examples-231"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">if isempty(file_in_path(getenv(&quot;PATH&quot;), &quot;lalapps_ComputeFstatistic_v2&quot;))
+  disp(&quot;skipping test: LALApps programs not available&quot;); return;
+endif
+getLalAppsVersionInfo(&quot;lalapps_ComputeFstatistic_v2&quot;);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-octapps_005fgitID">Function File: <em><var>ID</var> =</em> <strong>octapps_gitID</strong> <em>( [ <var>directory</var>, [ <var>name</var> ] ] )</em></dt>
+<dd>
+<p>Returns the git-tag (commitID, date, etc) information for the
+specified git repository containing <var>directory</var>. If <var>directory</var>
+is missing, the location of the OctApps git repository is assumed.
+<var>ID</var> is a struct with fields: name, vcsId, vcsDate, vcsAuthor, vcsStatus.
+</p><span id="Examples-232"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">octapps_gitID();
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-versionstr2hex">Function File: <em><var>hex</var> =</em> <strong>versionstr2hex</strong> <em>( <var>str</var> )</em></dt>
+<dd>
+<p>Convert a version string into a hexadecimal number for easy comparisons.
+</p>
+<span id="Examples-233"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(versionstr2hex(&quot;2.10.99.3&quot;), 0x02109903)
+</pre></div>
+</dd></dl>
+
+
+
+
+
+</body>
+</html>

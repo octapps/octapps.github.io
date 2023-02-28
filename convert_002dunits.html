@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>convert-units (OctApps Reference Manual)</title>
+
+<meta name="description" content="convert-units (OctApps Reference Manual)">
+<meta name="keywords" content="convert-units (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002ddata_002danalysis.html" rel="next" title="cw-data-analysis">
+<link href="condor_002djobs.html" rel="prev" title="condor-jobs">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="convert_002dunits"></span><div class="header">
+<p>
+Next: <a href="cw_002ddata_002danalysis.html" accesskey="n" rel="next"><samp>cw-data-analysis</samp></a>, Previous: <a href="condor_002djobs.html" accesskey="p" rel="prev"><samp>condor-jobs</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="convert_002dunits-1"></span><h3 class="section">2.4 <samp>convert-units</samp></h3>
+
+<dl>
+<dt id="index-dms_005fto_005frad">Function File: <em><var>ret</var> =</em> <strong>dms_to_rad</strong> <em>( <var>degs</var> )</em></dt>
+<dd>
+<p>convert degrees in the format &quot;deg:min:sec.xx&quot; into radians
+</p>
+<span id="Examples-9"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;10:11:12.345&quot; );
+rads0 = (10 + 11/60 + 12.345/3600)*pi/180;
+assert ( rads, rads0, eps );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert ( sig, 1 ); assert ( dd, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;-10:11:12.345&quot; );
+rads0 = -(10 + 11/60 + 12.345/3600)*pi/180;
+assert ( rads, rads0, eps );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert (sig, -1 ); assert ( dd, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;-0:11:12.345&quot; );
+rads0 = -(11/60 + 12.345/3600)*pi/180;
+assert ( rads, rads0, eps );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert ( sig, -1 ); assert ( dd, 0 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-gps_005fto_005futc">Function File: <em><var>utc</var> =</em> <strong>gps_to_utc</strong> <em>( <var>gps</var> )</em></dt>
+<dt id="index-gps_005fto_005futc-1">Function File: <em></em> <strong>gps_to_utc</strong> <em><var>gps</var></em></dt>
+<dd>
+<p>Convert GPS times to UTC date strings (using LAL functions)
+</p>
+<span id="Arguments-3"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>utc</var></dt>
+<dd><p>cell array of UTC date strings (or a single string)
+</p>
+</dd>
+<dt><var>gps</var></dt>
+<dd><p>matrix of GPS times
+</p>
+</dd>
+</dl>
+
+<span id="Examples-10"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+assert(strcmp(gps_to_utc(800000000), &quot;13-May-2005 06:13:07&quot;));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-hms_005fto_005frad">Function File: <em><var>ret</var> =</em> <strong>hms_to_rad</strong> <em>( <var>hms</var> )</em></dt>
+<dd>
+<p>convert an &quot;hour:minute:second.xxx&quot; string into radians
+</p>
+<span id="Examples-11"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">rads = hms_to_rad ( &quot;10:11:12.345&quot; );
+rads0 = (10 + 11/60 + 12.345/3600)*pi/12;
+assert ( rads, rads0, eps );
+[hh, mm, ss] = rad_to_hms ( rads );
+assert ( hh, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e4*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = hms_to_rad ( &quot;0:11:12.345&quot; );
+rads0 = (11/60 + 12.345/3600)*pi/12;
+assert ( rads, rads0, eps );
+[hh, mm, ss] = rad_to_hms ( rads );
+assert ( hh, 0 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e4*eps );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-MJDtdb_005fto_005fGPS">Function File: <em><var>GPS</var> =</em> <strong>MJDtdb_to_GPS</strong> <em>( <var>MJD_tdb</var> )</em></dt>
+<dd>
+<p>convert MJD (based on TDB) into GPS seconds
+translated from LAL-function <code>LALTDBMJDtoGPS()</code> in BinaryPulsarTiming.c
+</p>
+<span id="Examples-12"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(MJDtt_to_GPS(45123), 75945548.816, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(MJDtt_to_GPS(123456), 6843916748.816, 1e-6)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-MJDtt_005fto_005fGPS">Function File: <em><var>GPS</var> =</em> <strong>MJDtt_to_GPS</strong> <em>( <var>MJDtt</var> )</em></dt>
+<dd>
+<p>convert MJD (based on TT) into GPS seconds
+translated from LAL-function <code>LALTTMJDtoGPS()</code> in BinaryPulsarTiming.c
+</p>
+<span id="Examples-13"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(MJDtt_to_GPS(45123), 75945548.816, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(MJDtt_to_GPS(123456), 6843916748.816, 1e-6)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-MJDutc_005fto_005fGPS">Function File: <em><var>GPS</var> =</em> <strong>MJDutc_to_GPS</strong> <em>( <var>MJDutc</var> )</em></dt>
+<dd>
+<p>convert MJD (based on UTC) into GPS seconds
+translated from lalapps-CVS/src/pulsar/TDS_isolated/TargetedPulsars.c
+This conversion corresponds to what <code>lalapps_tconvert</code> does, but
+is NOT the right thing for pulsar timing, as pulsar-epochs are typically
+given in MJD(TDB) ! ==&gt; use MJDtdb_to_GPS.m for that purpose!
+</p>
+<span id="Examples-14"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(MJDutc_to_GPS(45123), 75945613, 1e-6)
+</pre></div>
+
+<div class="example">
+<pre class="example">assert(MJDutc_to_GPS(123456), 6843916813, 1e-6)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-rad_005fto_005fdms">Function File: <em>[ <var>sig</var>, <var>degs</var>, <var>mins</var>, <var>secs</var> ] =</em> <strong>rad_to_dms</strong> <em>( <var>rads</var> )</em></dt>
+<dd>
+<p>convert radians &rsquo;rads&rsquo; into degrees &quot;&lt;sig&gt;degs:minutes:secs&quot;, where &lt;sig&gt; is either +1 or -1
+</p>
+<span id="Examples-15"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;10:11:12.345&quot; );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert ( sig, 1 ); assert ( dd, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;-10:11:12.345&quot; );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert (sig, -1 ); assert ( dd, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = dms_to_rad ( &quot;-0:11:12.345&quot; );
+[sig, dd,mm,ss] = rad_to_dms ( rads );
+assert ( sig, -1 ); assert ( dd, 0 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e5*eps );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-rad_005fto_005fhms">Function File: <em>[ <var>hours</var>, <var>mins</var>, <var>secs</var> ] =</em> <strong>rad_to_hms</strong> <em>( <var>rads</var> )</em></dt>
+<dd>
+<p>convert radians into hours:minutes:seconds format
+</p>
+<span id="Examples-16"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">rads = hms_to_rad ( &quot;10:11:12.345&quot; );
+[hh, mm, ss] = rad_to_hms ( rads );
+assert ( hh, 10 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e4*eps );
+</pre></div>
+
+<div class="example">
+<pre class="example">rads = hms_to_rad ( &quot;0:11:12.345&quot; );
+[hh, mm, ss] = rad_to_hms ( rads );
+assert ( hh, 0 ); assert ( mm, 11 ); assert ( ss, 12.345, 1e4*eps );
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-utc_005fto_005fgps">Function File: <em>[ <var>gps</var>, <var>gpsns</var> ] =</em> <strong>utc_to_gps</strong> <em>( <var>utc</var> )</em></dt>
+<dt id="index-utc_005fto_005fgps-1">Function File: <em></em> <strong>utc_to_gps</strong> <em>utc</em></dt>
+<dd>
+<p>Convert UTC date strings to GPS times (using LAL functions)
+</p>
+<span id="Arguments-4"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>gps</var></dt>
+<dd><p>matrix of GPS times (integer seconds)
+</p>
+</dd>
+<dt><var>gpsns</var></dt>
+<dd><p>matrix of GPS times (nanoseconds)
+</p>
+</dd>
+<dt><var>utc</var></dt>
+<dd><p>cell array of UTC date strings
+</p>
+</dd>
+</dl>
+
+<span id="Examples-17"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+assert(utc_to_gps(&quot;13-May-2005 06:13:07&quot;) == 800000000);
+[s, ns] = utc_to_gps(&quot;2011-04-24T04:25:06.123456789&quot;);
+assert(s == 987654321 &amp;&amp; ns == 123456789);
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002ddata_002danalysis.html" accesskey="n" rel="next"><samp>cw-data-analysis</samp></a>, Previous: <a href="condor_002djobs.html" accesskey="p" rel="prev"><samp>condor-jobs</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

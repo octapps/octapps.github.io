@@ -1,0 +1,838 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cw-data-analysis (OctApps Reference Manual)</title>
+
+<meta name="description" content="cw-data-analysis (OctApps Reference Manual)">
+<meta name="keywords" content="cw-data-analysis (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Directory-Index.html" rel="up" title="Directory Index">
+<link href="cw_002dline_002dveto.html" rel="next" title="cw-line-veto">
+<link href="convert_002dunits.html" rel="prev" title="convert-units">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<span id="cw_002ddata_002danalysis"></span><div class="header">
+<p>
+Next: <a href="cw_002dline_002dveto.html" accesskey="n" rel="next"><samp>cw-line-veto</samp></a>, Previous: <a href="convert_002dunits.html" accesskey="p" rel="prev"><samp>convert-units</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="cw_002ddata_002danalysis-1"></span><h3 class="section">2.5 <samp>cw-data-analysis</samp></h3>
+
+<dl>
+<dt id="index-amplitudeParams2Vect">Function File: <em><var>Amu</var> =</em> <strong>amplitudeParams2Vect</strong> <em>( <var>Amp</var> )</em></dt>
+<dd>
+<p>compute the amplitude-vector {A^mu} for given amplitude-params, which can follow
+</p><ul>
+<li> either the MLDC convention {Amplitude, Inclination, Polarization, IntialPhase },
+</li><li> or in LIGO convention {h0, cosi, psi, phi0}: this will be auto-detected and properly
+converted.
+</li></ul>
+<p>multiple signals must correspond to different *lines* in those fields, i.e. column-vectors!
+the output consists of 4D line vectors Amu(,1:4), multiple lines corresponding to multiple signals
+</p>
+<span id="Examples-18"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">p0 = struct(&quot;h0&quot;, 1e-24, &quot;cosi&quot;, 0, &quot;psi&quot;, 0.33 * pi/4, &quot;phi0&quot;, pi/5);
+p = amplitudeVect2Params(amplitudeParams2Vect(p0));
+assert(p.h0, p0.h0, 1e-3);
+assert(p.cosi, p0.cosi, 1e-3);
+assert(p.psi, p0.psi, 1e-3);
+assert(p.phi0, p0.phi0, 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-amplitudeVect2Params">Function File: <em><var>Amp</var> =</em> <strong>amplitudeVect2Params</strong> <em>( <var>Amu</var>, <var>convention</var> )</em></dt>
+<dd>
+<p>compute amplitude-vector {A^mu} from (MLDC) amplitudes {Amplitude, Inclination, Polarization, InitialPhase }
+</p>
+<p>Amu is a row-vector for each signal, multiple signals being stored in multiple rows ,
+the resulting fields in Amp are also column-vectors for multiple signals
+</p><ul>
+<li> if convention == &quot;LIGO&quot;, return {h0,cosi,psi.iota} and {aPlus,aCross},
+</li><li> if convention == &quot;MLDC&quot; return {Amplitude,Inclination,Polarization, InitialPhase} using MLDC conventions
+</li><li> the default = &quot;LIGO&quot; if not specified
+</li></ul>
+
+<span id="Note-1"></span><h3 class="heading">Note</h3>
+<p>Adapted from algorithm in <code>LALEstimatePulsarAmplitudeParams()</code>
+</p>
+<span id="Examples-19"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">A0 = 1e-24 * randn(1, 4);
+sert(amplitudeParams2Vect(amplitudeVect2Params(A0, &quot;LIGO&quot;)), A0, 1e-3)
+sert(amplitudeParams2Vect(amplitudeVect2Params(A0, &quot;MLDC&quot;)), A0, 1e-3)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-checkAmplitudeParams">Function File: <em>[ <var>convention</var>, <var>numSignals</var> ] =</em> <strong>checkAmplitudeParams</strong> <em>( <var>Amp</var> )</em></dt>
+<dd>
+<p>check syntactic correctness of amplitude-parameter struct,
+and determine its convention: &quot;LIGO&quot; || &quot;MLDC&quot;, depending
+on whether fields {Amplitude, Inclination, Polarization, InitialPhase},
+or {h0, cosi, psi, phi0} are present.
+The presence of both types of fields is an error.
+</p>
+<span id="Examples-20"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(checkAmplitudeParams(struct(&quot;h0&quot;, 1e-24, &quot;cosi&quot;, 0, &quot;psi&quot;, pi/4, &quot;phi0&quot;, pi/5)), &quot;LIGO&quot;)
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-DoFstatInjections">Function File: <em><var>results</var> =</em> <strong>DoFstatInjections</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Perform full software injections in generated SFTs using LALPulsar functions.
+</p>
+<span id="Arguments-5"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>result</var></dt>
+<dd><p>results structure
+</p>
+</dd>
+</dl>
+
+<span id="Options-_0028starred-options-are-returned-in-results_0029"></span><h3 class="heading">Options (starred options are returned in results)</h3>
+
+<dl compact="compact">
+<dt><code>ref_time</code></dt>
+<dd><p>reference time in GPS seconds
+</p>
+</dd>
+<dt><code>start_time</code></dt>
+<dd><p>start time in GPS seconds (default: ref_time - 0.5*time_span)
+</p>
+</dd>
+<dt><code>time_span</code></dt>
+<dd><p>observation time-span in seconds
+</p>
+</dd>
+<dt><code>detectors</code></dt>
+<dd><p>comma-separated list of detector names
+</p>
+</dd>
+<dt><code>det_sqrt_sqrtSX</code></dt>
+<dd><p>sqrt(single-sided noise sqrtSX) to assume for each detector
+</p>
+</dd>
+<dt><code>ephemerides</code></dt>
+<dd><p>Earth/Sun ephemerides from <code>loadEphemerides()</code>
+</p>
+</dd>
+<dt><code>sft_time_span</code></dt>
+<dd><p>SFT time-span in seconds (default: 1800)
+</p>
+</dd>
+<dt><code>sft_overlap</code></dt>
+<dd><p>SFT overlap in seconds (default: 0)
+</p>
+</dd>
+<dt><code>sft_noise_window</code></dt>
+<dd><p>number of bins used when estimating SFT noise (default: 50)
+</p>
+</dd>
+<dt><code>inj_sqrt_sqrtSX</code></dt>
+<dd><p>inject Gaussian random noise with sqrt(single-sided noise sqrtSX) for each detector
+</p>
+</dd>
+<dt><code>*inj_h0</code></dt>
+<dd><p>injected h0 strain amplitude (default: 1.0)
+</p>
+</dd>
+<dt><code>*inj_cosi</code></dt>
+<dd><p>injected cosine of inclination angle (default: random)
+</p>
+</dd>
+<dt><code>*inj_psi</code></dt>
+<dd><p>injected polarisation angle (default: random)
+</p>
+</dd>
+<dt><code>*inj_phi0</code></dt>
+<dd><p>injected initial phase (default: random)
+</p>
+</dd>
+<dt><code>*inj_alpha</code></dt>
+<dd><p>injected right ascension (default: random)
+</p>
+</dd>
+<dt><code>*inj_delta</code></dt>
+<dd><p>injected declination (default: random)
+</p>
+</dd>
+<dt><code>*inj_fndot</code></dt>
+<dd><p>injected frequency/spindowns (default: 100 Hz)
+</p>
+</dd>
+<dt><code>*sch_alpha</code></dt>
+<dd><p>searched right ascension (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_delta</code></dt>
+<dd><p>searched declination (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_fndot</code></dt>
+<dd><p>searched frequency/spindowns (default: same as injected)
+</p>
+</dd>
+<dt><code>OrbitParams</code></dt>
+<dd><p>option that needs to be set to &rsquo;true&rsquo; to be able to specify the orbital parameters (default: false)
+</p>
+</dd>
+<dt><code>*inj_orbitasini</code></dt>
+<dd><p>injected orbital projected semi-major axis (normalised by the speed of light) in seconds (default: random)
+</p>
+</dd>
+<dt><code>*inj_orbitEcc</code></dt>
+<dd><p>injected orbital eccentricity (default: random)
+</p>
+</dd>
+<dt><code>*inj_orbitTpSSB</code></dt>
+<dd><p>injected (SSB) time of periapsis passage (in seconds) (default: random)
+</p>
+</dd>
+<dt><code>*inj_orbitPeriod</code></dt>
+<dd><p>injected orbital period (seconds) (default: random)
+</p>
+</dd>
+<dt><code>*inj_orbitArgp</code></dt>
+<dd><p>injected argument of periapsis (radians) (default: random)
+</p>
+</dd>
+<dt><code>*sch_orbitasini</code></dt>
+<dd><p>searched orbital projected semi-major axis (normalised by the speed of light) in seconds (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_orbitEcc</code></dt>
+<dd><p>searched orbital eccentricity (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_orbitTpSSB</code></dt>
+<dd><p>searched (SSB) time of periapsis passage (in seconds) (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_orbitPeriod</code></dt>
+<dd><p>searched orbital period (seconds) (default: same as injected)
+</p>
+</dd>
+<dt><code>*sch_orbitArgp</code></dt>
+<dd><p>searched argument of periapsis (radians) (default: same as injected)
+</p>
+</dd>
+<dt><code>Dterms</code></dt>
+<dd><p>number of Dirichlet terms to use in <code>ComputeFstat()</code> (default: number used by optimised hotloops)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-21"></span><h3 class="heading">Examples</h3>
+
+<p>See the <a href="DoFstatInjections_0028_0029.html">tutorial on <code>DoFstatInjections()</code></a>.
+</p>
+</dd></dl>
+
+
+<dl>
+<dt id="index-getDetectorPosVel">Function File: <em>[ <var>p</var>, <var>v</var>, <var>sp</var>, <var>sv</var>, <var>op</var>, <var>ov</var> ] =</em> <strong>getDetectorPosVel</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Compute the spin, orbital, and total components of a detector&rsquo;s
+position and velocity at a list of GPS times, using LALPulsar
+</p>
+<span id="Arguments-6"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>p</var></dt>
+<dd><p>detector positions, in equatorial coordinates
+</p>
+</dd>
+<dt><var>v</var></dt>
+<dd><p>detector velocities, in equatorial coordinates
+</p>
+</dd>
+<dt><var>sp</var></dt>
+<dd><p>spin components of detector positions
+</p>
+</dd>
+<dt><var>sv</var></dt>
+<dd><p>spin components of detector velocities
+</p>
+</dd>
+<dt><var>op</var></dt>
+<dd><p>orbital components of detector positions
+</p>
+</dd>
+<dt><var>ov</var></dt>
+<dd><p>orbital components of detector velocities
+</p>
+</dd>
+</dl>
+
+<span id="Options-3"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>gps_times</code></dt>
+<dd><p>list of GPS times
+</p>
+</dd>
+<dt><code>detector</code></dt>
+<dd><p>name of detector (default: H1)
+</p>
+</dd>
+<dt><code>motion</code></dt>
+<dd><p>type of motion (default: spin+orbit)
+</p>
+</dd>
+<dt><code>ephemerides</code></dt>
+<dd><p>Earth/Sun ephemerides from <code>loadEphemerides()</code>
+</p>
+</dd>
+</dl>
+
+<span id="Examples-22"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+[p, v, sp, sv, op, ov] = getDetectorPosVel(&quot;gps_times&quot;, 800000000 + 100*(0:5));
+assert(p, sp + op, 1e-3);
+assert(v, sv + ov, 1e-3);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-injectionRecoveryGCT">Function File: <em><var>results</var> =</em> <strong>injectionRecoveryGCT</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Perform signal injection and (area-search) recovery using <code>HierarchSearchGCT</code>
+</p>
+<span id="Arguments-7"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>results</var></dt>
+<dd><p>structure containing various histograms of measured statistics and mismatches from the injection+recovery runs, and
+</p>
+</dd>
+</dl>
+
+<span id="Options-4"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>Ntrials</code></dt>
+<dd><p>(optional) number of repeated injection+recovery trials to perform [default: 1]
+</p>
+</dd>
+<dt><code>timestampsFiles</code></dt>
+<dd><p>CSV list of SFT timestamp filenames
+</p>
+</dd>
+<dt><code>IFOs</code></dt>
+<dd><p>CSV list of IFO names (eg &quot;H1,L1,...&quot;)
+</p>
+</dd>
+<dt><code>segmentList</code></dt>
+<dd><p>filename of segment list (containing lines of the form &quot;startGPS endGPS\n&quot;)
+</p>
+</dd>
+<dt><code>inj_sqrtSX</code></dt>
+<dd><p>injections: (optional) CSV list of per-detector noise-floor sqrt(PSD) to generate
+</p>
+</dd>
+<dt><code>inj_h0</code></dt>
+<dd><p>injections: signal amplitude &rsquo;h0&rsquo; of signals
+</p>
+</dd>
+<dt><code>inj_SNR</code></dt>
+<dd><p>injections: alternative: signal-to-noise ratio &rsquo;SNR&rsquo; of signals
+</p>
+</dd>
+<dt><code>inj_AlphaRange</code></dt>
+<dd><p>injections: range of sky-position alpha to (isotropically) draw from [default: [0, 2pi]]
+</p>
+</dd>
+<dt><code>inj_DeltaRange</code></dt>
+<dd><p>injections: range of sky-position delta to (isotropically) draw from [default: [-pi/2, pi/2]]
+</p>
+</dd>
+<dt><code>inj_FreqRange</code></dt>
+<dd><p>injections: range of signal frequencies to draw from
+</p>
+</dd>
+<dt><code>inj_fkdotRange</code></dt>
+<dd><p>injections: [numSpindowns x 2] ranges of spindown-values to draw from [default: []]
+</p>
+</dd>
+<dt><code>dFreq</code></dt>
+<dd><p>search: frequency resolution
+</p>
+</dd>
+<dt><code>dfkdot</code></dt>
+<dd><p>search: numSpindowns vector of spindown resolutions to use in search
+</p>
+</dd>
+<dt><code>gammaRefine</code></dt>
+<dd><p>search: numSpindowns vector of &rsquo;gammeRefine[s]&rsquo; refinement factors to use
+</p>
+</dd>
+<dt><code>skyGridFile</code></dt>
+<dd><p>search: sky-grid file to use
+</p>
+</dd>
+<dt><code>sch_Nsky</code></dt>
+<dd><p>search-box: number of nearest-neighbor skygrid points to use around injection
+</p>
+</dd>
+<dt><code>sch_Nfreq</code></dt>
+<dd><p>search-box: number of frequency bins to use around injection frequency
+</p>
+</dd>
+<dt><code>sch_Nfkdot</code></dt>
+<dd><p>search-box: number of spindown-bins to use around injection spindown-value
+</p>
+</dd>
+<dt><code>FstatMethod</code></dt>
+<dd><p>search: F-statistic method to use: &quot;DemodBest&quot;, &quot;ResampBest&quot;, ...
+</p>
+</dd>
+<dt><code>computeBSGL</code></dt>
+<dd><p>search: additionally compute and histogram B_S/GL statistic values
+</p>
+</dd>
+<dt><code>Fstar0</code></dt>
+<dd><p>search: BSGL parameter &rsquo;Fstar0sc&rsquo;
+</p>
+</dd>
+<dt><code>nCand</code></dt>
+<dd><p>search: number of toplist candidates to keep
+</p>
+</dd>
+<dt><code>GCT_binary</code></dt>
+<dd><p>which GCT executable to use for searching
+</p>
+</dd>
+<dt><code>cleanup</code></dt>
+<dd><p>boolean: remove intermediate output files at the end or not
+</p>
+</dd>
+</dl>
+
+<span id="Examples-23"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">if isempty(file_in_path(getenv(&quot;PATH&quot;), &quot;lalapps_HierarchSearchGCT&quot;))
+  disp(&quot;skipping test: LALApps programs not available&quot;); return;
+endif
+output = nthargout(2, @system, &quot;lalapps_HierarchSearchGCT --version&quot;);
+LALApps_version = versionstr2hex(nthargout(5, @regexp, output, &quot;LALApps: ([0-9.]+)&quot;){1}{1,1});
+if LALApps_version &lt;= 0x06210000
+  disp(&quot;cannot run test as version of lalapps_HierarchSearchGCT is too old&quot;); return;
+endif
+oldpwd = pwd;
+basedir = mkpath(tempname(tempdir));
+unwind_protect
+  cd(basedir);
+  args = struct;
+  args.timestampsFiles = &quot;H1.txt&quot;;
+  args.IFOs = &quot;H1&quot;;
+  args.segmentList = &quot;segs.txt&quot;;
+  args.inj_sqrtSX = 1.0;
+  args.inj_h0 = 1.0;
+  args.inj_AlphaRange = [0, 2*pi];
+  args.inj_DeltaRange = [-pi/2, pi/2];
+  args.inj_FreqRange = [100, 100.01];
+  args.inj_fkdotRange = [-1e-8, 0];
+  args.dFreq = 1e-7;
+  args.dfkdot = 1e-11;
+  args.gammaRefine = 100;
+  args.skyGridFile = &quot;sky.txt&quot;;
+  args.sch_Nsky = 5;
+  args.sch_Nfreq = 5;
+  args.sch_Nfkdot = 5;
+  args.FstatMethod = &quot;DemodBest&quot;;
+  args.cleanup = true;
+  fid = fopen(args.timestampsFiles, &quot;w&quot;);
+  for i = 1:10
+    fprintf(fid, &quot;%i\n&quot;, 800000000 + 1800*i);
+  endfor
+  fclose(fid);
+  fid = fopen(args.segmentList, &quot;w&quot;);
+  fprintf(fid, &quot;%i %i\n&quot;, 800000000 + 1800*[0, 5]);
+  fprintf(fid, &quot;%i %i\n&quot;, 800000000 + 1800*[5, 10]);
+  fclose(fid);
+  fid = fopen(args.skyGridFile, &quot;w&quot;);
+  for i = 1:50
+    fprintf(fid, &quot;%.5f %.5f\n&quot;, octforge_unifrnd(0+eps, 2*pi-eps), octforge_unifrnd(-pi/2+eps, pi/2-eps));
+  endfor
+  fclose(fid);
+  fevalstruct(@injectionRecoveryGCT, args);
+unwind_protect_cleanup
+  cd(oldpwd);
+end_unwind_protect
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-loadCandidateFile">Function File: <em></em> <strong>loadCandidateFile</strong> <em>( <var>fname</var> )</em></dt>
+<dd>
+<p>loads a &rsquo;candidate-file&rsquo; from <code>lalapps_ComputeFStatistic_v2 --outputLoudest=cand.file</code>
+and returns a struct containing the data
+</p>
+<span id="Examples-24"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">if isempty(file_in_path(getenv(&quot;PATH&quot;), &quot;lalapps_ComputeFstatistic_v2&quot;))
+  disp(&quot;skipping test: LALApps programs not available&quot;); return;
+endif
+output = nthargout(2, @system, &quot;lalapps_ComputeFstatistic_v2 --version&quot;);
+LALApps_version = versionstr2hex(nthargout(5, @regexp, output, &quot;LALApps: ([0-9.]+)&quot;){1}{1,1});
+if LALApps_version &lt;= 0x06210000
+  disp(&quot;cannot run test as version of lalapps_ComputeFstatistic_v2 is too old&quot;); return;
+endif
+args = struct;
+args.Alpha = 1.2;
+args.Delta = 3.4;
+args.Freq = 100;
+args.f1dot = -1e-8;
+args.Tsft = 1800;
+args.IFOs = &quot;H1&quot;;
+args.injectSqrtSX = 1.0;
+args.timestampsFiles = tempname(tempdir);
+args.outputLoudest = tempname(tempdir);
+fid = fopen(args.timestampsFiles, &quot;w&quot;);
+fprintf(fid, &quot;800000000\n800001800\n800003600\n&quot;);
+fclose(fid);
+runCode(args, &quot;lalapps_ComputeFstatistic_v2&quot;);
+cand_file = loadCandidateFile(args.outputLoudest);
+assert(isstruct(cand_file));
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-loadEphemerides">Function File: <em><var>ephemerides</var> =</em> <strong>loadEphemerides</strong> <em>( <var>opt</var>, <var>val</var>, &hellip; )</em></dt>
+<dd>
+<p>Load Earth and Sun ephemerides from LALPulsar.
+</p>
+<span id="Arguments-8"></span><h3 class="heading">Arguments</h3>
+
+<dl compact="compact">
+<dt><var>ephemerides</var></dt>
+<dd><p>structure containing ephemerides
+</p>
+</dd>
+</dl>
+
+<span id="Options-5"></span><h3 class="heading">Options</h3>
+
+<dl compact="compact">
+<dt><code>earth_file</code></dt>
+<dd><p>Earth ephemerides file (default: <samp>earth00-40-DE405.dat.gz</samp>)
+</p>
+</dd>
+<dt><code>sun_file</code></dt>
+<dd><p>Sun ephemerides file (default: <samp>sun00-40-DE405.dat.gz</samp>)
+</p>
+</dd>
+</dl>
+
+<span id="Examples-25"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+ephemerides = loadEphemerides();
+ephemerides = loadEphemerides();
+ephemerides = loadEphemerides();
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-predictFstatTimeAndMemory">Function File: <em>[ <var>resampInfo</var>, <var>demodInfo</var> ] =</em> <strong>predictFstatTimeAndMemory</strong> <em>( <var>varargin</var> )</em></dt>
+<dd>
+<p>Predict <strong>single-segment</strong> F-statistic computation time per frequency bin per detector (<code>tauF_core</code> and <code>tauF_buffer</code>)
+and corresponding memory requirements (<code>MBWorkspace</code>, <code>MBDataPerDetSeg</code>) for both <em>Resampling</em> and <em>Demod</em> Fstat methods.
+</p>
+<p>See the F-stat timing notes at https://dcc.ligo.org/LIGO-T1600531-v4 for a detailed description of the F-statistic timing model
+and notation.
+</p>
+<span id="Note-2"></span><h3 class="heading">Note</h3>
+
+<p>The estimate is for <strong>one</strong> coherent segment of length <code>Tcoh</code>, while<code>Tspan</code> is only used to correctly deal with the GCT code&rsquo;s handling of multi-segment searches, which
+can affect timing and memory requirements for each segment. In the case of <em>Weave</em>, however, use Tspan = Tcoh [default].
+</p>
+<span id="Input-parameters"></span><h3 class="heading">Input parameters</h3>
+
+<dl compact="compact">
+<dt><code>Tcoh</code></dt>
+<dd><p>coherent segment length
+</p>
+</dd>
+<dt><code>Tspan</code></dt>
+<dd><p>total data time-span [Default: Tcoh].
+<strong>Note</strong>: this is used to estimate the total memory in the case of the GCT search code,
+which load the full frequency band of data over all segments. In the case of the
+Weave code, the SFT frequency band is computed for each segment separately, so
+in this case one should use <code>Tspan</code>==<code>Tcoh</code> to correctly estimate the timing and memory!
+</p>
+</dd>
+<dt><code>Freq0</code></dt>
+<dd><p>start search frequency
+</p>
+</dd>
+<dt><code>FreqBand</code></dt>
+<dd><p>search frequency band
+</p>
+</dd>
+<dt><code>dFreq</code></dt>
+<dd><p>search frequency spacing
+</p>
+</dd>
+</dl>
+
+<span id="Optional-arguments"></span><h3 class="heading">Optional arguments</h3>
+
+<dl compact="compact">
+<dt><code>f1dot0</code></dt>
+<dt><code>f1dotBand</code></dt>
+<dd><p>first-order spindown range [f1dot0, f1dot0+f1dotBand]  [Default: 0]
+</p>
+</dd>
+<dt><code>f2dot0</code></dt>
+<dt><code>f2dotBand</code></dt>
+<dd><p>2nd-order spindown range [f2dot0,f2dot0+f2dotBand]    [Default: 0]
+</p>
+</dd>
+<dt><code>Dterms</code></dt>
+<dd><p>number of <em>Dterms</em> used in sinc-interpolation  [Default: 8]
+</p>
+</dd>
+<dt><code>Nsft</code></dt>
+<dd><p>number of SFTs (for single segment, single detector) [Default: Nsft=Tcoh/Tsft]
+</p>
+</dd>
+<dt><code>Tsft</code></dt>
+<dd><p>SFT length [Default: 1800]
+</p>
+</dd>
+<dt><code>refTimeShift</code></dt>
+<dd><p>offset of reference time from starttime, measured in units of <var>Tspan</var>, ie <var>refTimeShift</var> = (<var>refTime</var> - <var>startTime</var>)/<var>Tspan</var> [Default: 0.5]
+</p>
+</dd>
+<dt><code>binaryMaxAsini</code></dt>
+<dd><p>Maximum projected semi-major axis a*sini/c (= 0 for isolated sources) [Default: 0]
+</p>
+</dd>
+<dt><code>binaryMinPeriod</code></dt>
+<dd><p>Minimum orbital period (s); must be 0 for isolated signals [Default: 0]
+</p>
+</dd>
+<dt><code>binaryMaxEcc</code></dt>
+<dd><p>Maximal binary eccentricity: must be 0 for isolated signals [Default: 0]
+</p>
+</dd>
+<dt><code>resampFFTPowerOf2</code></dt>
+<dd><p>enforce FFT length to be a power of two (by rounding up) [Default: true]
+</p>
+</dd>
+</dl>
+
+<span id="Resampling-timing-model-coefficients"></span><h3 class="heading">Resampling timing model coefficients</h3>
+
+<dl compact="compact">
+<dt><code>tau0_Fbin</code></dt>
+<dd><p>Resampling timing coefficient for contributions scaling with output frequency bins NFbin
+</p>
+</dd>
+<dt><code>tau0_FFT</code></dt>
+<dd><p>Resampling timing coefficient for FFT performance. Can be 2-element vector [<var>t1</var>, <var>t2</var>]: use <var>t1</var> if log2(NsampFFT) &lt;= 18, <var>t2</var> otherwise
+</p>
+</dd>
+<dt><code>tau0_spin</code></dt>
+<dd><p>Resampling timing coefficient for applying spin-down corrections
+</p>
+</dd>
+<dt><code>tau0_bary</code></dt>
+<dd><p>Resampling timing coefficient (buffered) barycentering (contributes to tauF_buffer)
+</p>
+</dd>
+</dl>
+
+<span id="Demod-timing-model-coefficients"></span><h3 class="heading">Demod timing model coefficients</h3>
+
+<dl compact="compact">
+<dt><code>tau0_coreLD</code></dt>
+<dd><p>Demod timing coefficient for core F-stat time
+</p>
+</dd>
+<dt><code>tau0_bufferLD</code></dt>
+<dd><p>Demod timing coefficient for computation of buffered quantities
+</p>
+</dd>
+</dl>
+
+<span id="Return-values"></span><h3 class="heading">Return values</h3>
+
+<p>Two structs <var>resampInfo</var> and <var>demodInfo</var> with fields:
+</p>
+<dl compact="compact">
+<dt><code>tauF_core</code></dt>
+<dd><p>Fstat time per frequency bin per detector excluding time to compute buffered quantities (eg barycentering) [in seconds]
+</p>
+</dd>
+<dt><code>tauF_buffer</code></dt>
+<dd><p>Fstat time per frequency bin per detector for computing all the buffered quantities once [in seconds]
+The effective F-stat time per frequency bin per detector is therefore
+tauF_eff = tauF_core + b * tauF_buffer, where b = 1/N_{f1,f2,...} is the fraction of calls to <code>XLALComputeFstat()</code> where the buffer can be re-used
+</p>
+</dd>
+<dt><code>l2NsampFFT</code></dt>
+<dd><p><strong>resamp only</strong> log_2(NsampFFT) where NsampFFT is the number of FFT samples
+</p>
+</dd>
+<dt><code>MBWorkspace</code></dt>
+<dd><p><strong>resamp only</strong> memory for (possibly shared) workspace [in MBytes]
+</p>
+</dd>
+<dt><code>MBDataPerDetSeg</code></dt>
+<dd><p>memory to hold all data <strong>per detector</strong>, <strong>per-segment</strong> (original+buffered) [in MBytes]
+ie total data memory would be
+</p><div class="example">
+<pre class="example">  memData[all] = Nseg * Ndet * memDataPerDetSeg
+</pre></div>
+
+</dd>
+</dl>
+
+<span id="Examples-26"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">try
+  lal; lalpulsar;
+catch
+  disp(&quot;skipping test: LALSuite bindings not available&quot;); return;
+end_try_catch
+[resampInfo, demodInfo] = predictFstatTimeAndMemory(&quot;Tcoh&quot;, 86400, &quot;Freq0&quot;, 100, &quot;FreqBand&quot;, 1e-2, &quot;dFreq&quot;, 1e-7);
+assert(isstruct(resampInfo));
+assert(isfield(resampInfo, &quot;tauF_core&quot;));
+assert(resampInfo.tauF_core &gt; 0);
+assert(isfield(resampInfo, &quot;tauF_buffer&quot;));
+assert(resampInfo.tauF_buffer &gt; 0);
+assert(isfield(resampInfo, &quot;MBDataPerDetSeg&quot;));
+assert(resampInfo.MBDataPerDetSeg &gt; 0);
+assert(isstruct(demodInfo));
+assert(isfield(demodInfo, &quot;tauF_core&quot;));
+assert(demodInfo.tauF_core &gt; 0);
+assert(isfield(demodInfo, &quot;tauF_buffer&quot;));
+assert(demodInfo.tauF_buffer &gt; 0);
+assert(isfield(demodInfo, &quot;MBDataPerDetSeg&quot;));
+assert(demodInfo.MBDataPerDetSeg &gt; 0);
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-randSignalParams">Function File: <em><var>ret</var> =</em> <strong>randSignalParams</strong> <em>( <var>ranges</var>, [ <var>numSignals</var> ] )</em></dt>
+<dd>
+<p>generate random-parameters for &rsquo;numSignals&rsquo; (default=1, returns a colunm-vector)
+signals within given ranges and return the signal-parameters in a struct
+sigparams = [h0, cosi, psi, phi0, alpha, delta, f, f1dot, f2dot, f3dot]
+</p>
+<span id="Examples-27"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">assert(isstruct(randSignalParams(struct(&quot;h0&quot;, 1e-24, &quot;cosi&quot;, 0, &quot;psi&quot;, pi/4, &quot;phi0&quot;, pi/5))))
+</pre></div>
+</dd></dl>
+
+
+<dl>
+<dt id="index-readSFT">Function File: <em><var>ret</var> =</em> <strong>readSFT</strong> <em>( <var>fname</var> )</em></dt>
+<dd>
+<p>read a given SFT-file and return its meta-info (header) and data as a struct:
+ret = {version; epoch; Tsft; f0; Band; SFTdata }
+</p>
+<span id="C_002dtype-of-SFTs"></span><h3 class="heading">C-type of SFTs</h3>
+
+<pre class="verbatim">typedef struct tagSFTHeader {
+   REAL8  version;              /* SFT version-number (currently only 1.0 allowed )*/
+   INT4   gpsSeconds;           /* gps start-time */
+   INT4   gpsNanoSeconds;
+   REAL8  timeBase;             /* length of data-stretch in seconds */
+   INT4   fminBinIndex;         /* first frequency-index contained in SFT */
+   INT4   length;               /* number of frequency bins */
+
+   /* v2-specific part: */
+   INT8 crc64;                  /* 64 bits */
+   CHAR detector[2];
+   CHAR padding[2];
+   INT comment_length;
+} SFTHeader;
+CHAR[comment_length] comment;
+</pre>
+<span id="Examples-28"></span><h3 class="heading">Examples</h3>
+
+<div class="example">
+<pre class="example">sft = readSFT(fullfile(fileparts(file_in_loadpath(&quot;readSFT.m&quot;)), &quot;SFT-good&quot;));
+</pre></div>
+</dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="cw_002dline_002dveto.html" accesskey="n" rel="next"><samp>cw-line-veto</samp></a>, Previous: <a href="convert_002dunits.html" accesskey="p" rel="prev"><samp>convert-units</samp></a>, Up: <a href="Directory-Index.html" accesskey="u" rel="up">Directory Index</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

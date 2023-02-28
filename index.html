@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This document is the reference manual for OctApps.
+
+Copyright (C) 2018 The Authors of OctApps.
+
+Copying and distribution of this document, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Top (OctApps Reference Manual)</title>
+
+<meta name="description" content="Top (OctApps Reference Manual)">
+<meta name="keywords" content="Top (OctApps Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="Function-Index.html" rel="index" title="Function Index">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="https://github.com/octapps/octapps" rel="up" title="(dir)">
+<link href="Tutorials.html" rel="next" title="Tutorials">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">OctApps Reference Manual</h1>
+
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-Tutorials-1" href="Tutorials.html#Tutorials">1 Tutorials</a>
+  <ul class="no-bullet">
+    <li><a id="toc-General_002dPurpose-Functions-1" href="General_002dPurpose-Functions.html#General_002dPurpose-Functions">1.1 General-Purpose Functions</a>
+    <ul class="no-bullet">
+      <li><a id="toc-parseOptions_0028_0029-1" href="parseOptions_0028_0029.html#parseOptions_0028_0029">1.1.1 <code>parseOptions()</code></a></li>
+      <li><a id="toc-Hist-1" href="Hist.html#Hist">1.1.2 <code>Hist</code></a></li>
+    </ul></li>
+    <li><a id="toc-Continuous_002dWave-Functions-1" href="Continuous_002dWave-Functions.html#Continuous_002dWave-Functions">1.2 Continuous-Wave Functions</a>
+    <ul class="no-bullet">
+      <li><a id="toc-DoFstatInjections_0028_0029-1" href="DoFstatInjections_0028_0029.html#DoFstatInjections_0028_0029">1.2.1 <code>DoFstatInjections()</code></a></li>
+      <li><a id="toc-ComputeDopplerMetric_0028_0029-1" href="ComputeDopplerMetric_0028_0029.html#ComputeDopplerMetric_0028_0029">1.2.2 <code>ComputeDopplerMetric()</code></a></li>
+      <li><a id="toc-LatticeMismatchHist_0028_0029-1" href="LatticeMismatchHist_0028_0029.html#LatticeMismatchHist_0028_0029">1.2.3 <code>LatticeMismatchHist()</code></a></li>
+      <li><a id="toc-SensitivityDepthStackSlide_0028_0029-1" href="SensitivityDepthStackSlide_0028_0029.html#SensitivityDepthStackSlide_0028_0029">1.2.4 <code>SensitivityDepthStackSlide()</code></a></li>
+      <li><a id="toc-OptimalSolution4StackSlide_005fv2_0028_0029-1" href="OptimalSolution4StackSlide_005fv2_0028_0029.html#OptimalSolution4StackSlide_005fv2_0028_0029">1.2.5 <code>OptimalSolution4StackSlide_v2()</code></a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-Directory-Index-1" href="Directory-Index.html#Directory-Index">2 Directory Index</a>
+  <ul class="no-bullet">
+    <li><a id="toc-array_002dhandling-1" href="array_002dhandling.html#array_002dhandling">2.1 <samp>array-handling</samp></a></li>
+    <li><a id="toc-command_002dline-1" href="command_002dline.html#command_002dline">2.2 <samp>command-line</samp></a></li>
+    <li><a id="toc-condor_002djobs-1" href="condor_002djobs.html#condor_002djobs">2.3 <samp>condor-jobs</samp></a></li>
+    <li><a id="toc-convert_002dunits-1" href="convert_002dunits.html#convert_002dunits">2.4 <samp>convert-units</samp></a></li>
+    <li><a id="toc-cw_002ddata_002danalysis-1" href="cw_002ddata_002danalysis.html#cw_002ddata_002danalysis">2.5 <samp>cw-data-analysis</samp></a></li>
+    <li><a id="toc-cw_002dline_002dveto-1" href="cw_002dline_002dveto.html#cw_002dline_002dveto">2.6 <samp>cw-line-veto</samp></a></li>
+    <li><a id="toc-cw_002dmetric_002dtemplate_002dbanks-1" href="cw_002dmetric_002dtemplate_002dbanks.html#cw_002dmetric_002dtemplate_002dbanks">2.7 <samp>cw-metric-template-banks</samp></a></li>
+    <li><a id="toc-cw_002doptimal_002dsearch_002dsetup-1" href="cw_002doptimal_002dsearch_002dsetup.html#cw_002doptimal_002dsearch_002dsetup">2.8 <samp>cw-optimal-search-setup</samp></a></li>
+    <li><a id="toc-cw_002dsensitivity-1" href="cw_002dsensitivity.html#cw_002dsensitivity">2.9 <samp>cw-sensitivity</samp></a></li>
+    <li><a id="toc-cw_002dweave_002dmodels-1" href="cw_002dweave_002dmodels.html#cw_002dweave_002dmodels">2.10 <samp>cw-weave-models</samp></a></li>
+    <li><a id="toc-file_002dhandling-1" href="file_002dhandling.html#file_002dhandling">2.11 <samp>file-handling</samp></a></li>
+    <li><a id="toc-general-1" href="general.html#general">2.12 <samp>general</samp></a></li>
+    <li><a id="toc-geometry-1" href="geometry.html#geometry">2.13 <samp>geometry</samp></a></li>
+    <li><a id="toc-histograms-1" href="histograms.html#histograms">2.14 <samp>histograms</samp></a></li>
+    <li><a id="toc-histograms_002f_0040Hist-1" href="histograms_002f_0040Hist.html#histograms_002f_0040Hist">2.15 <samp>histograms/@Hist</samp></a></li>
+    <li><a id="toc-lattices-1" href="lattices.html#lattices">2.16 <samp>lattices</samp></a></li>
+    <li><a id="toc-mathematical-1" href="mathematical.html#mathematical">2.17 <samp>mathematical</samp></a></li>
+    <li><a id="toc-plotting-1" href="plotting.html#plotting">2.18 <samp>plotting</samp></a></li>
+    <li><a id="toc-statistics-1" href="statistics.html#statistics">2.19 <samp>statistics</samp></a></li>
+    <li><a id="toc-text_002dhandling-1" href="text_002dhandling.html#text_002dhandling">2.20 <samp>text-handling</samp></a></li>
+    <li><a id="toc-version_002dhandling-1" href="version_002dhandling.html#version_002dhandling">2.21 <samp>version-handling</samp></a></li>
+  </ul></li>
+  <li><a id="toc-Function-Index-1" href="Function-Index.html#Function-Index" rel="index">3 Function Index</a></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Next: <a href="Tutorials.html" accesskey="n" rel="next">Tutorials</a>, Up: <a href="https://github.com/octapps/octapps" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="OctApps-Reference-Manual"></span><h1 class="top">OctApps Reference Manual</h1>
+
+<p><em>OctApps</em> provides various functions intended to aid research scientists who perform searches for continuous gravitational waves.
+In also provides various general-purpose functions which may be of broader interest to users of Octave.
+Please see the <a href="https://github.com/octapps/octapps">project homepage</a> for further information on <em>OctApps</em>.
+</p>
+<p>This manual provides a series of <a href="Tutorials.html">tutorials</a> which illustrate some of the functionality of <em>OctApps</em>.
+It also provides indexes of <em>OctApps</em> functions organised by <a href="Directory-Index.html">directory</a>, as well as <a href="Function-Index.html">alphabetically</a>.
+</p>
+<p>This manual was generated from <em>OctApps</em> commit <tt>b152349d2a73b059e23af5fe095b173c18780fb6</tt>, Tue, 28 Feb 2023 11:31:52 +1100.
+</p>
+<span id="Acknowledgement"></span><h3 class="heading">Acknowledgement</h3>
+
+<p>If you make use of <em>OctApps</em>, please cite our <a href="https://doi.org/10.21105/joss.00707">paper</a> in the <a href="http://joss.theoj.org">Journal of Open Source Software</a>:
+</p>
+<pre class="verbatim">@article{octapps,
+  author = {Karl Wette and Reinhard Prix and David Keitel and Matthew Pitkin and Christoph Dreissigacker and John T. Whelan and Paola Leaci},
+  title = {{OctApps: a library of Octave functions for continuous gravitational-wave data analysis}},
+  journal = {Journal of Open Source Software},
+  year = {2018},
+  volume = {3},
+  number = {26},
+  pages = {707},
+  doi = {10.21105/joss.00707},
+}
+</pre>
+<span id="Chapters"></span><h3 class="heading">Chapters</h3>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Tutorials.html" accesskey="1">Tutorials</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tutorials illustrating <em>OctApps</em> functionality.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Directory-Index.html" accesskey="2">Directory Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions in each <em>OctApps</em> directory.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Function-Index.html" rel="index" accesskey="3">Function Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Index of all functions in <em>OctApps</em>.
+</td></tr>
+</table>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Tutorials.html" accesskey="n" rel="next">Tutorials</a>, Up: <a href="https://github.com/octapps/octapps" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
